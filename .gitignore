@@ -4,3 +4,4 @@ __pycache__
 *.aux
 *.pdf
 /secret_config.py
+/docs/visualization
