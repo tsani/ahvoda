@@ -1,0 +1,124 @@
+@import url(http://fonts.googleapis.com/css?family=Playfair+Display);
+
+@base-green: #b8f0b2;
+@base-blue:  #6683b6;
+@base-beige: #fffe83;
+
+@light-green: lighten(@base-green, 10%);
+@light-blue:  lighten(@base-blue, 10%);
+@light-beige: lighten(@base-beige, 10%);
+
+@lighter-green: lighten(@base-green, 20%);
+@lighter-blue:  lighten(@base-blue, 20%);
+@lighter-beige: lighten(@base-beige, 20%);
+
+@dark-green: darken(@base-green, 10%);
+@dark-blue:  darken(@base-blue, 10%);
+@dark-beige: darken(@base-beige, 10%);
+
+@darker-green: darken(@base-green, 20%);
+@darker-blue:  darken(@base-blue, 20%);
+@darker-beige: darken(@base-beige, 20%);
+
+body {
+    font-size: 14px;
+    background-color: @light-beige;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, p {
+    margin: 0.75em 0;
+}
+
+h1 {
+    font-size: 300%;
+}
+
+h2 {
+    font-size: 200%;
+}
+
+h3 {
+    font-size: 100%;
+}
+
+#banner {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    background-color: #b8f0b2;
+
+    padding: 1em;
+
+    h1 {
+        font-family: "Playfair Display", serif;
+    }
+
+    img {
+        height: 100%;
+    }
+}
+
+#main-container {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 1em;
+
+    section {
+        padding: 1em;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        min-height: 33vh;
+
+        div.header {
+            font-family: "Playfair Display", serif;
+            padding: 1em;
+        }
+
+        div.content {
+            padding: 1em;
+        }
+    }
+
+    section:nth-child(6n + 0) {
+        background-color: spin(@base-green, 60);
+    }
+
+    section:nth-child(6n + 1) {
+        background-color: spin(@base-green, 120);
+    }
+
+    section:nth-child(6n + 2) {
+        background-color: spin(@base-green, 180);
+    }
+    
+    section:nth-child(6n + 3) {
+        background-color: spin(@base-green, 240);
+    }
+
+    section:nth-child(6n + 4) {
+        background-color: spin(@base-green, 300);
+    }
+
+    section:nth-child(6n + 5) {
+        background-color: spin(@base-green, 360);
+    }
+}
+
+@media (max-width: 800px) {
+    #main-container {
+        section {
+            flex-flow: column nowrap;
+        }
+    }
+
+    body {
+        font-size: 12px;
+    }
+}
+
