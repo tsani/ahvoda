@@ -1,0 +1,41 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans|Merriweather:400,700);
+
+body {
+    height:100%;
+    width:100%;
+    background-image: url("Montreal2.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+    color: black;
+    display: flex;
+    flex-flow: column nowrap;
+    font-family: "Open Sans", sans;
+}
+
+h1 {
+    font-family: "Merriweather", serif;
+}
+
+#main {
+    flex-grow: 1;
+
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#main section {
+    text-align: center;
+    padding: 1em;
+    background-color: rgba(192, 192, 192, 0.65);
+    max-width: 40%;
+}
+
+#main section form {
+    text-align:center;
+}
+
+#main section form .help-block {
+    color: inherit;
+}
