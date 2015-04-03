@@ -1,19 +1,36 @@
-<html>
+<html lang='en'>
 
 <head>
-<!-- Latest compiled and minified CSS -->
+<meta charset='utf-8'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- jQuery -->
+<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+
+<!-- Bootstrap -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
-<!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
-<link rel="stylesheet" href="/static/css/style.css">
-
-<!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+<!-- Our styles -->
+<link rel="stylesheet" href="/static/css/style.css">
+<script src='/static/js/env.js'></script>
+
 </head>
 
 <body>
+
+<div class='carousel'>
+    <img src='/static/img/carousel/fill_bike.jpg'>
+    <img src='/static/img/carousel/fill_cups.jpg'>
+    <img src='/static/img/carousel/fill_bridge.jpg'>
+    <img src='/static/img/carousel/fill_bus.jpg'>
+    <img src='/static/img/carousel/fill_highway.jpg'>
+    <img src='/static/img/carousel/fill_desk.jpg'>
+</div>
 
 <div class="navbar navbar-inverse">
     <div class="container">
@@ -34,15 +51,94 @@
 
 
 <div id="main">
-    <section>
-        <h1>Ahvoda? Ahvoda.</h1>
-        <p>Tinder for part time jobs.<br>Coming soon to Montreal.</p>
-
-        <form style="text-align:center">
-            <input type="text" class="form-control">
-                <span class="help-block">Be the first to know when we launch; leave us your email address</span>
-            </input>
-        </form>
+    <section id="email">
+        <div class="contents">
+            <h1>Ahvoda? Ahvoda.</h1>
+            <p>
+            Tinder for part time jobs.<br>
+            Coming soon to Montreal.
+            </p>
+            <p>
+            Be the first to know when we launch;<br>
+            leave us your e-mail address.
+            </p>
+            <form>
+                <input type="text" class="form-control">
+                <button type='submit' class='btn btn-success'>
+                    <i class='fa fa-paper-plane'></i>
+                </button>
+            </form>
+        </div>
+    </section>
+    <section id="about">
+    </section>
+    <section id="team">
+        <div class="contents">
+            <h1>The Team</h1>
+        </div>
+        <div class='contents'>
+            <div class='circle-img-container'>
+                <img src="/static/img/Jacob.jpg"
+                alt="picture of Jacob Errington">
+            </div>
+            <h2>Jacob Errington</h2>
+            <p>
+            Computer science and math major. Born and raised in Montreal.
+            Programming guru. Passionate about technology and code.
+            Currently a part-time research assistant at the McGill
+            University and Génome Québec Research Centre.
+            </p>
+            <p class='email-address'><i class='fa fa-paper-plane'></i> 
+            <a href='mailto:jake@mail.ahvoda.com'>jake@mail.ahvoda.com</a>
+            </p> 	
+        </div>
+        <div class='contents'>
+            <div class='circle-img-container'>
+                <img src="/static/img/kevin.jpg"
+                alt="picture of Kevin Li">
+            </div>
+            <h2>Kevin Li</h2>
+            <p class='description'>
+            Finance and entrepreneurship major. Hustler. Passionate about
+            entrepreneurship. Competed in several case competitions and
+            won first place in the strategy stream in the 2014 Desautels
+            Case Competition. Executes with speed and precision.
+            </p>
+            <p class='email-address'><i class='fa fa-paper-plane'></i> 
+            <a href='mailto:kevin@mail.ahvoda.com'>kevin@mail.ahvoda.com</a>
+            </p>
+        </div>
+        <div class='contents'>
+            <div class='circle-img-container'>
+                <img src="/static/img/woo.jpg"
+                alt="picture of WooVin Daniel Han">
+            </div>
+            <h2>WooVin Daniel Han</h2>
+            <p class='description'>
+            Original Founder and marketing major. Idea guy. Participated
+            in the 2014 Dobson Cup as the team manager of Visual Vogue and
+            made it to the final round. Won first place in the 2014 McGill
+            Thinkathon with the concept of Ahvoda. The man behind the
+            Ahvoda brand.
+            </p>
+            <p class='email-address'><i class='fa fa-paper-plane'></i> 
+            <a href='mailto:woo@ahvoda.com</p'>woo@ahvoda.com</p></a>
+        </div>
+        <div class='contents'>
+            <div class='circle-img-container'>
+                <img src="/static/img/ajwad2.jpg"
+                    alt='picture of Ajwad Anwar'>
+            </div>
+            <h2>Ajwad Anwar</h2>
+            <p class='description'>
+            Computer science and biology major. Passionate about start-ups
+            and programming. Liaison between the business side and the
+            technology side of Ahvoda.
+            </p>
+            <p class='email-address'><i class='fa fa-paper-plane'></i> 
+            <a href='mailto:ajwad@mail.ahvoda.com'>ajwad@mail.ahvoda.com</a>
+            </p>
+        </div>
     </section>
 </div>
 
