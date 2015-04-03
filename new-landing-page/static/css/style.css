@@ -3,7 +3,7 @@
 body {
     height:100%;
     width:100%;
-    background-image: url("Montreal2.jpg");
+    background-image: url("/static/img/Montreal2.jpg");
     background-repeat:no-repeat;
     background-size:cover;
     color: black;
