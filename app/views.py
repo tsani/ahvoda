@@ -1,6 +1,7 @@
 from app import app
 
+from flask import render_template
+
 @app.route('/')
-@app.route('/index')
 def index():
-    return 'coming soon'
+    return render_template('landing-page.html')

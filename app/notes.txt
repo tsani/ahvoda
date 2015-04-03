@@ -1,0 +1,53 @@
+Full workflow
+=============
+
+1. Create a position.
+2. Create shifts for that position.
+3. Create postings for that shift.
+
+Position editor/creator
+=======================
+
+Choose name for the position, and add/remove employees from it.
+
+Shift editor/creator
+====================
+
+To create a shift, we go to the calendar-main view. We go to the appropriate
+day when we want to create the shift, and select a box in the schedule by
+dragging. This opens the shift editor.
+
+The shift editor lets you choose the position associated with this shift, and
+thus the color of the box. The hours of the shift are determined by the region
+dragged in the schedule UI, but these values can be adjusted in the shift
+editor.
+
+Then, we see a listing of everyone in the workforce whose position matches the
+position of the shift, and they can be added via checkboxes.
+
+A save button is at the bottom as well as a discard button.
+
+Creating a job posting
+======================
+
+1. Separate interface that will use the mini-calendar UI.
+    The mini-calendar UI will be reduced in the sense that there will be no
+    dates attached to the week.  It will augmented in the sense that clicking
+    on an employee will replace them with the "Posted" ghost worker.  And there
+    will be a plus glyphicon to add a new worker to the shift.  Shifts and
+    positions are created a priori, before creating a posting.
+
+2. The employer will choose the position for this position for this posting,
+    and will then be able to select the shifts that they would like the
+    potential employee to fill by clicking in the augmented mini-calendar UI.
+
+    Once the employer has clicked on a day in the mini-calendar UI, there will
+    be several options for selecting shifts:
+     * Choose to add a new worker to that shift, by clicking a '+' glyphicon
+     * Choose to replace an existing worker (because e.g. they want less hours,
+         are fired, have left, etc.)
+
+3. The employer will click save or discard to emit the job posting into the
+    database.
+
+Workforce
