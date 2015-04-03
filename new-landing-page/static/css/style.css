@@ -17,45 +17,48 @@ h1 {
     font-family: "Merriweather", serif;
 }
 
-#main {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-
+section {
     width: 100%;
-    height: 100%;
-}
-
-#main section {
-    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
 }
 
-#email {
-    min-height: 100vh;
+.contents a {
+    color: inherit;
+    text-decoration: underline;
+    transition: 0.4s all ease;
 }
 
-#main section .contents {
+.contents a:hover {
+    color: blue;
+}
+
+section .contents {
     text-align: center;
     padding: 1em;
     background-color: rgba(32, 32, 32, 0.65);
     margin: 0.5em auto;
 }
 
-#main section .contents {
-    max-width: 40%;
+section .contents {
+    max-width: 45%;
 }
 
 @media (max-width: 600px) {
-    #main section .contents {
+    section .contents {
         max-width: 90%;
     }
 }
 
-#main section form {
+section .contents h1 {
+    width: 100%;
+}
+
+section form {
     text-align: center;
     display: flex;
     flex-flow: row nowrap;
@@ -63,15 +66,15 @@ h1 {
     justify-content: center;
 }
 
-#main section form * {
+section form * {
     margin: 0.25em;
 }
 
-#main section form .help-block {
+section form .help-block {
     color: inherit;
 }
 
-#main section .contents .circle-img-container {
+section .contents .circle-img-container {
     height: 15em;
     width: 15em;
     display: inline-block;
@@ -82,7 +85,7 @@ h1 {
     position: relative;
 }
 
-#main section .contents .circle-img-container img {
+section .contents .circle-img-container img {
     min-width: 100%;
     min-height: 100%;
     position: absolute;
@@ -91,12 +94,13 @@ h1 {
             transform: translateX(-50%);
 }
 
-#team .contents {
-    width: 100%;
+section .flex-row {
+    display: flex;
+    flex-flow: row wrap;
 }
 
-.email-address a {
-    color: inherit;
+#team .contents {
+    width: 100%;
 }
 
 .carousel img {
