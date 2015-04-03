@@ -8,8 +8,6 @@ body {
     background-size: cover;
     background-attachment: fixed;
     color: white;
-    display: flex;
-    flex-flow: column nowrap;
     font-family: "Open Sans", sans;
 }
 
@@ -19,12 +17,15 @@ h1 {
 
 section {
     width: 100%;
-    margin: 0 auto;
-    min-height: 100vh;
+    min-height: 100%;
+    margin: 5em 0;
+}
+
+.total-centering {
     display: flex;
     flex-flow: column nowrap;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .contents a {
@@ -58,6 +59,14 @@ section .contents h1 {
     width: 100%;
 }
 
+section .contents p.description {
+    text-align: left;
+}
+
+section .contents .email-address {
+    text-align: center;
+}
+
 section form {
     text-align: center;
     display: flex;
@@ -87,7 +96,7 @@ section .contents .circle-img-container {
 
 section .contents .circle-img-container img {
     min-width: 100%;
-    min-height: 100%;
+    min-height: 90%;
     position: absolute;
     -webkit-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
