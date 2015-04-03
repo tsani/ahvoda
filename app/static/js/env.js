@@ -31,9 +31,23 @@ function registerEmail() {
     var email = $('#email-field').val();
     $.post('/api/addemail', JSON.stringify({email: email}), function(data) {
         emailSent = true;
-        $('#email .contents').append("<p>Gotcha! We'll keep you posted.</p>");
+        $('#register-result-message').text("Gotcha! We'll keep you posted.");
     }, 'json').fail(function(data) {
-        $('#email .contents').append("<p>Uh oh! Something's up. Have you already registered for updates? " +
-            data.message + "</p>");
+        data = JSON.parse(data.responseText);
+        console.log(JSON.stringify(data));
+        if(data.message === 'email too long') {
+            $('#register-result-message').text(
+                "Looks like the email address you gave is a bit too long!");
+        }
+        else if(data.message === 'user already exists') {
+            $('#register-result-message').text(
+                "Looks like you've already given us your email. Thanks!");
+        }
+        else {
+            $('#register-result-message').html([
+                "Something went wrong adding your email address;",
+                "try again later, or if this keeps happening, contact",
+                "<a href='mailto:jake@mail.ahvoda.com'>Jake</a>"].join(' '));
+        }
     });
 }
