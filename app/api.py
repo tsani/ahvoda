@@ -4,9 +4,7 @@ from flask import jsonify, request, abort
 
 import psycopg2
 
-import sys
 
-eprint = lambda *args, **kwargs: print(*args, file=sys.stderr, **kwargs)
 
 @app.route('/api/addemail', methods=['POST'])
 def add_email():
@@ -38,4 +36,3 @@ def add_email():
                 'VALUES ( %s, %s );',
                 (email, request.remote_addr))
         return jsonify({'message': 'ok'})
-
