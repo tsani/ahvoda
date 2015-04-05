@@ -43,6 +43,10 @@ function registerEmail() {
             $('#register-result-message').text(
                 "Looks like you've already given us your email. Thanks!");
         }
+        else if(data.message === 'invalid email address') {
+            $('#register-result-message').text(
+                "Uh oh, that email address doesn't look valid!");
+        }
         else {
             $('#register-result-message').html([
                 "Something went wrong adding your email address;",
