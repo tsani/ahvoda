@@ -7,6 +7,21 @@ setInterval(function() {
 }, 4000);
 
 $(function() {
+    function scrollFadeCheck() {
+        /* Check the location of each desired element */
+        $('.scrollfade').each( function(i){
+            var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+            var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+            /* If the object is completely visible in the window, fade it it */
+            if( bottom_of_window > bottom_of_object ){
+                $(this).animate({
+                    'opacity':'1'
+                }, 500);
+            }
+        });
+    }
+
     $('a[href*=#]:not([href=#])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
             var target = $(this.hash);
@@ -19,6 +34,10 @@ $(function() {
             }
         }
     });
+    /* Every time the window is scrolled ... */
+    $(window).scroll(scrollFadeCheck);
+
+    scrollFadeCheck();
 });
 
 var emailSent = false;
@@ -32,6 +51,7 @@ function registerEmail() {
     $.post('/api/addemail', JSON.stringify({email: email}), function(data) {
         emailSent = true;
         $('#register-result-message').text("Gotcha! We'll keep you posted.");
+        $('#survey-request').show();
     }, 'json').fail(function(data) {
         data = JSON.parse(data.responseText);
         console.log(JSON.stringify(data));

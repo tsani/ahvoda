@@ -23,47 +23,30 @@
 <link rel="stylesheet" href="/static/css/style.css">
 <script src='/static/js/env.js'></script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61551511-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
 </head>
 
 <body>
 
-<div class='carousel'>
-    <img src='/static/img/carousel/fill_bike.jpg'>
-    <img src='/static/img/carousel/fill_cups.jpg'>
-    <img src='/static/img/carousel/fill_bridge.jpg'>
-    <img src='/static/img/carousel/fill_bus.jpg'>
-    <img src='/static/img/carousel/fill_highway.jpg'>
-    <img src='/static/img/carousel/fill_desk.jpg'>
-</div>
-
-<div class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-brand">Ahvoda</div>
-        <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
-        </button>
-
-        <div class="collapse navbar-collapse navHeaderCollapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#email">Top</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#team">The Team</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-
 <section id="email" class='total-centering'>
-    <div class="contents">
+    <div class="contents scrollfade">
         <h1>Ahvoda? Ahvoda.</h1>
         <p>
         Tinder for part time jobs.<br>
         Coming soon to Montreal.
         </p>
         <p>
-        Be the first to know when we launch;<br>
-        leave us your e-mail address.
+        Interested in joining Ahvoda?<br>
+        Leave us your email address, and we'll consider you for our private beta!
         </p>
         <form action="javascript:void(0);" onsubmit="registerEmail();">
             <input id="email-field" type="text" class="form-control">
@@ -72,11 +55,33 @@
             </button>
         </form>
         <p id='register-result-message'></p>
+        <p id='survey-request'>
+        In the meantime, do you mind filling out a short
+        <a
+            href='https://docs.google.com/forms/d/1rkj-71-Li4wGHEFkYQUiSWGpJInAhe5sSjkbK5bPOkw/viewform'>survey</a>
+        on your past job experiences?</p>
     </div>
 </section>
 <section id="about">
-    <div class="contents">
-        <h1>Never look for a job again</h1>
+    <div class="contents scrollfade">
+        <h1>Talent deserves opportunity</h1>
+        <p class='description'>
+        With our job matching technology, we give you the opportunities that
+        you wish you'd always had.
+        </p>
+        <p class='description'>
+        Apply to a job with a simple click; all your job related information is
+        easily accessible.
+        </p>
+        <strong>We get you hired.</strong>
+        </p>
+    </div>
+    <div class="contents scrollfade">
+        <h1>Goodbye job-hunting.</h1>
+        <p class='description'>
+        No need to search. No need to get frustrated. No need to invest hours
+        of your time.
+        </p>
         <p class='description'>
         Ahvoda is a platform for connecting people with part-time jobs.
         </p>
@@ -86,8 +91,8 @@
         receive notifications directly when jobs are posted.
         </p>
     </div>
-    <div class="contents">
-        <h1>Effortless management</h1>
+    <div class="contents scrollfade">
+        <h1>Effortless management.</h1>
         <p class='description'>
         After you're hired, Ahvoda is a platform for interacting with your
         manager and your coworkers.
@@ -97,10 +102,13 @@
         glance the whole workforce of your job.
         </p>
     </div>
-    <div class="contents">
+    <div class="contents scrollfade">
         <h1>Level up!</h1>
         <p class='description'>
-        Simply by holding a job on Ahvoda, you earn experience. Experience
+        Simply by holding a job on Ahvoda, you earn experience.
+        </p>
+        <p class='description'>
+        Experience
         distinguishes you from other candidates, and might make the difference
         between being hired or not, just like in the old-fashioned job market.
         </p>
@@ -108,33 +116,13 @@
         Various other perks are awarded to highly-experienced users!
         </p>
     </div>
-    <div class="contents">
-        <h1>The Ahvoda mission</h1>
-        <h2>We believe in making people happy.</h2>
-        <p class='description'>
-        With our job matching technology, we give you the opportunities that
-        you wish you'd always had.
-        </p>
-        <p class='description'>
-        Apply to a job with a simple click; all your job related information is
-        easily accessible.
-        </p>
-        <h2>Goodbye job-hunting</h2>
-        <p class='description'>
-        No need to search. No need to get frustrated. No need to invest hours
-        of your time.
-        </p>
-        <p>
-        <strong>We get you hired.</strong>
-        </p>
-    </div>
 </section>
 <section id="team">
-    <div class="contents">
+    <div class="contents scrollfade">
         <h1>The Team</h1>
     </div>
     <div class='flex-row'>
-        <div class='contents'>
+        <div class='contents scrollfade'>
             <div class='circle-img-container'>
                 <img src="/static/img/Jacob.jpg"
                 alt="picture of Jacob Errington">
@@ -150,7 +138,7 @@
             <a href='mailto:jake@mail.ahvoda.com'>jake@mail.ahvoda.com</a>
             </p>
         </div>
-        <div class='contents'>
+        <div class='contents scrollfade'>
             <div class='circle-img-container'>
                 <img src="/static/img/kevin.jpg"
                 alt="picture of Kevin Li">
@@ -166,7 +154,7 @@
             <a href='mailto:kevin@mail.ahvoda.com'>kevin@mail.ahvoda.com</a>
             </p>
         </div>
-        <div class='contents'>
+        <div class='contents scrollfade'>
             <div class='circle-img-container'>
                 <img src="/static/img/woo.jpg"
                 alt="picture of WooVin Daniel Han">
@@ -182,7 +170,7 @@
             <a href='mailto:woo@mail.ahvoda.com</p'>woo@mail.ahvoda.com</a>
             </p>
         </div>
-        <div class='contents'>
+        <div class='contents scrollfade'>
             <div class='circle-img-container'>
                 <img src="/static/img/ajwad2.jpg"
                     alt='picture of Ajwad Anwar'>
@@ -200,13 +188,30 @@
     </div>
 </section>
 <section id='contact' class='total-centering'>
-    <div class='contents'>
+    <div class='contents scrollfade'>
         <h1>Questions?</h1>
         <p>
-        Don't hesitate to <a href='mailto:hello@mail.ahvoda.com'>contact us</a>
+        Don't hesitate to
+        <i class='fa fa-paper-plane'></i>
+        <a href='mailto:hello@mail.ahvoda.com'>
+            contact us.
+        </a>
         </p>
     </div>
 </section>
+
+<div class='carousel'>
+    <img src='/static/img/carousel/fill_bike.jpg'>
+    <img src='/static/img/carousel/fill_cups.jpg'>
+    <img src='/static/img/carousel/fill_bridge.jpg'>
+    <img src='/static/img/carousel/fill_bus.jpg'>
+    <img src='/static/img/carousel/fill_highway.jpg'>
+    <img src='/static/img/carousel/fill_desk.jpg'>
+</div>
+
+<div id='footer'>
+    <p>Ahvoda Recuitment / Recrutement Ahvoda Inc. 2015</p>
+</div>
 
 </body>
 </html>
