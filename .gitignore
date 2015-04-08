@@ -3,5 +3,6 @@ __pycache__
 *.log
 *.aux
 *.pdf
+*.pyc
 /secret_config.py
 /docs/visualization
