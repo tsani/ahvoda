@@ -1,0 +1,72 @@
+{% extends "landing-page-layout.html" %}
+
+{% from "_form_helpers.html" import 
+    render_field_label, render_errors_ul, render_field_dl %}
+
+{% block contents %}
+
+<section id='registration'>
+    <div class="contents scrollfade">
+        <h1>Sign up to the Ahvoda Beta</h1>
+        <p>
+        Description of the Ahvoda Beta TODO
+        </p>
+        <form action='/' method='POST'>
+            <div>
+                <h2>Contact information</h3>
+                {{ render_field_label(form.cv) }}
+                <dl>
+                    {{ render_field_dl(form.first_name) }}
+                    {{ render_field_dl(form.last_name) }}
+                    {{ render_field_dl(form.email_address) }}
+                    {{ render_field_dl(form.gender) }}
+                    {{ render_field_dl(form.date_of_birth) }}
+                    {{ render_field_dl(form.address_line_1) }}
+                    {{ render_field_dl(form.address_line_2) }}
+                    {{ render_field_dl(form.postal_code) }}
+                    {{ render_field_dl(form.phone_number) }}
+                </dl>
+            </div>
+            <div>
+                <h2>Languages</h3>
+                <div>
+                    <h3>Spoken languages</h3>
+                    <dl>
+                        {{ render_field_dl(form.spoken_english) }}
+                        {{ render_field_dl(form.spoken_french) }}
+                        {{ render_field_dl(form.spoken_other) }}
+                        {{ render_field_dl(form.spoken_other_names) }}
+                    </dl>
+                </div>
+                <div>
+                    <h3>Written languages</h3>
+                    <dl>
+                        {{ render_field_dl(form.written_english) }}
+                        {{ render_field_dl(form.written_french) }}
+                        {{ render_field_dl(form.written_other) }}
+                        {{ render_field_dl(form.written_other_names) }}
+                    </dl>
+                </div>
+            </div>
+            <div>
+                <h2>Study information</h2>
+                {{ render_field_label(form.is_student) }}
+                <dl>
+                    {{ render_field_dl(form.faculty) }}
+                    {{ render_field_dl(form.year) }}
+                </dl>
+            </div>
+            <div>
+                <h2>General</h2>
+                <dl>
+                    {{ render_field_dl(form.canadian_citizen) }}
+                    {{ render_field_dl(form.canadian_work) }}
+                </dl>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+

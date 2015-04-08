@@ -6,4 +6,4 @@ app.config.from_object('secret_config')
 
 db = SQLAlchemy(app)
 
-from app import views, models, api
+from app import views, models, api, forms
