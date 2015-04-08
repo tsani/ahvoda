@@ -1,21 +1,50 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans|Merriweather:400,700);
 
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
 body {
+    margin: 0;
+    padding: 0;
     height: 100%;
     width: 100%;
     background-color: white;
     color: white;
     font-family: "Open Sans", sans;
     z-index: 0;
+    line-height: 1.45em;
+    font-size: 14px;
+    overflow-x: hidden;
 }
 
 body * {
     z-index: 1;
 }
 
-h1 {
+h1, h2, h3 {
     font-family: "Merriweather", serif;
 }
+
+h1 {
+    font-size: 225%;
+    line-height: 1.2em;
+}
+
+h2 {
+    font-size: 175%;
+    line-height: 1.2em;
+}
+
+h3 {
+    font-size: 125%;
+    line-height: 1.2em;
+}
+
 
 section {
     width: 100%;
@@ -64,6 +93,10 @@ section .contents {
 }
 
 @media (max-width: 600px) {
+    body {
+        font-size: 12px;
+    }
+
     section .contents {
         max-width: 90%;
     }
@@ -81,27 +114,8 @@ section .contents .email-address {
     text-align: center;
 }
 
-section form {
-    text-align: center;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
 .btn {
     padding: 0.25em;
-}
-
-section form * {
-    margin: 0.25em !important;
-    padding: 0.25em;
-    font-size: 14px;
-    line-height: 1.5em;
-}
-
-section form .help-block {
-    color: inherit;
 }
 
 section .contents .circle-img-container {
@@ -178,6 +192,87 @@ section .flex-row {
     display: none;
 }
 
+form#give-us-your-email {
+    text-align: center;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+form#give-us-your-email * {
+    margin: 0.25em;
+}
+
+form#registration {
+
+}
+
+button {
+    color: #ccc;
+}
+
+.button-success {
+    background-image: linear-gradient(to bottom, #5cb85c 0px, #419641 100%);
+    background-repeat: repeat-x;
+    border: 1px solid #3e8f3e;
+    border-radius: 4px;
+    box-shadow: 0 0 0 transparent ;
+    transition: box-shadow 0.15s ease-in-out;
+    padding: 0.25em;
+}
+
+.button-success:hover {
+    box-shadow: 0 0 5px rgba(200, 255, 200, 0.75);
+}
+
+input[type='text'] {
+    border-radius: 4px;
+    color: #555;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: 0px 0px 0px white;
+    transition: box-shadow 0.15s ease-in-out;
+    width: 100%;
+    padding: 0.25em;
+}
+
+input[type='text']:focus {
+    box-shadow: 0px 0px 10px rgba(200, 200, 255, 0.75);
+}
+
+select {
+    padding: 0.25em;
+    width: 100%;
+    background-color: white;
+    border: none;
+}
+
+option {
+    padding: 0.25em;
+    border: none;
+}
+
+dl dt {
+    text-align: left;
+}
+
+dl dd {
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+ul {
+    padding-left: 1em;
+    text-align: left;
+    list-style-type: none;
+}
+
 .scrollfade {
     opacity: 0;
+}
+
+.errors {
+    color: #faa;
 }

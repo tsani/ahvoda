@@ -11,10 +11,10 @@
         <p>
         Description of the Ahvoda Beta TODO
         </p>
-        <form action='/' method='POST'>
+        <form action='/register' method='POST'>
             <div>
                 <h2>Contact information</h3>
-                {{ render_field_label(form.cv) }}
+                {{ render_field_label(form.cv, label_first=True) }}
                 <dl>
                     {{ render_field_dl(form.first_name) }}
                     {{ render_field_dl(form.last_name) }}
@@ -31,26 +31,42 @@
                 <h2>Languages</h3>
                 <div>
                     <h3>Spoken languages</h3>
-                    <dl>
-                        {{ render_field_dl(form.spoken_english) }}
-                        {{ render_field_dl(form.spoken_french) }}
-                        {{ render_field_dl(form.spoken_other) }}
-                        {{ render_field_dl(form.spoken_other_names) }}
-                    </dl>
+                    <ul>
+                        <li>
+                        {{ render_field_label(form.spoken_english) }}
+                        </li>
+                        <li>
+                        {{ render_field_label(form.spoken_french) }}
+                        </li>
+                        <li>
+                        {{ render_field_label(form.spoken_other) }}
+                        </li>
+                    </ul>
+                    {{ render_field_label(form.spoken_other_names) }}
                 </div>
                 <div>
                     <h3>Written languages</h3>
-                    <dl>
-                        {{ render_field_dl(form.written_english) }}
-                        {{ render_field_dl(form.written_french) }}
-                        {{ render_field_dl(form.written_other) }}
-                        {{ render_field_dl(form.written_other_names) }}
-                    </dl>
+                    <ul>
+                        <li>
+                        {{ render_field_label(form.written_english) }}
+                        </li>
+                        <li>
+                        {{ render_field_label(form.written_french) }}
+                        </li>
+                        <li>
+                        {{ render_field_label(form.written_other) }}
+                        </li>
+                    </ul>
+                    {{ render_field_label(form.written_other_names) }}
                 </div>
             </div>
             <div>
                 <h2>Study information</h2>
-                {{ render_field_label(form.is_student) }}
+                <ul>
+                    <li>
+                    {{ render_field_label(form.is_student) }}
+                    </li>
+                </ul>
                 <dl>
                     {{ render_field_dl(form.faculty) }}
                     {{ render_field_dl(form.year) }}
@@ -58,12 +74,21 @@
             </div>
             <div>
                 <h2>General</h2>
-                <dl>
-                    {{ render_field_dl(form.canadian_citizen) }}
-                    {{ render_field_dl(form.canadian_work) }}
-                </dl>
+                <ul>
+                    <li>
+                    {{ render_field_label(form.canadian_citizen) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.canadian_work) }}
+                    </li>
+                </ul>
             </div>
-        </div>
+            <div>
+                <button type='submit' class='button-success'>
+                    Submit
+                </button>
+            </div>
+        </form>
     </div>
 </section>
 

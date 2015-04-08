@@ -8,26 +8,16 @@ setInterval(function() {
 
 $(function() {
     function scrollFadeCheck() {
-        /* Check the location of each desired element */
-        $('.scrollfade').each( function(i){
+        // Check the location of each desired element
+        $('.scrollfade').each( function(i) {
             var top_of_object = $(this).offset().top;
             var bottom_of_window = $(window).scrollTop() + $(window).height();
 
-            /* If the object is completely visible in the window, fade it it */
-            if( bottom_of_window > top_of_object ){
-                var original_top = $(this).offset().top;
-                $(this).offset({
-                    top: original_top + 50,
-                    left: $(this).offset().left
-                });
-
+            // If the object is completely visible in the window, fade it it
+            if( bottom_of_window > top_of_object ) {
                 $(this).animate({
                     opacity: 1,
                 }, 500);
-
-                $(this).animate({
-                    top: original_top
-                }, 1000);
 
                 $(this).removeClass('scrollfade');
             }

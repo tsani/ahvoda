@@ -11,6 +11,7 @@
 {% macro render_field_dl(field) %}
 <dt> {{ field.label }} </dt>
 <dd> {{ field(**kwargs)|safe }} </dd>
+{{ render_errors_ul(field) }}
 {% endmacro %}
 
 {% macro render_field_label(field, label_first=False) %}

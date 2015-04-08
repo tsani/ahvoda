@@ -11,6 +11,5 @@ def index():
 def registration():
     form = forms.RegistrationForm()
     if form.validate_on_submit():
-        form.email_address.data
-        pass
+        return "it worked"
     return render_template('registration.html', form=form)

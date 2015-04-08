@@ -38,7 +38,7 @@ class RegistrationForm(Form):
     address_line_2 = StringField('Address line 2')
     postal_code = StringField('Postal code (e.g. Z3Q4J7)', validators=[
         Regexp(r'[a-zA-Z]\d[a-zA-Z]\d[a-zA-Z]\d')])
-    phone_number = StringField('Phone number', validators=[
+    phone_number = StringField('Phone number (e.g. 1234567890)', validators=[
         Regexp(r'\d{10}')])
 
     cv = FileField('Your CV', validators=[InputRequired()])
@@ -46,18 +46,20 @@ class RegistrationForm(Form):
     spoken_english = BooleanField('English')
     spoken_french = BooleanField('French')
     spoken_other = BooleanField('Other(s)')
-    spoken_other_names = StringField()
+    spoken_other_names = StringField(
+            'Other spoken languages (comma-separated)')
 
     written_english = BooleanField('English')
     written_french = BooleanField('French')
     written_other = BooleanField('Other(s)')
-    written_other_names = StringField()
+    written_other_names = StringField(
+            'Other written languages (comma-separated)')
 
     is_student = BooleanField('Are you currently a student?')
 
     faculty = SelectField('Faculty of study',
             validators=[RequiredIf('is_student'), InputRequired()],
-            choices=sorted([
+            choices=[('', 'None')] + sorted([
                 ('science', 'Science'), ('commerce', 'Commerce'),
                 ('arts', 'Arts'), ('medecine', 'Medecine'),
                 ('engineering', 'Engineering'), ('education', 'Education'),
@@ -67,7 +69,7 @@ class RegistrationForm(Form):
                 ('continuing', 'Continuing Studies')]) + [('other', 'Other')])
 
     year = SelectField('Year of study', validators=[RequiredIf('is_student')],
-            choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
+            choices=[('', 'None'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
                 ('5', '5+'), ('grad', 'Graduate school'),
                 ('postdoc', 'Post-doctoral')])
 
