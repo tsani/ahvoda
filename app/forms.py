@@ -53,7 +53,7 @@ class RegistrationForm(Form):
     is_student = BooleanField('Are you currently a student?')
 
     faculty = SelectField('Faculty of study',
-            validators=[RequiredIf('is_student'), InputRequired()],
+            validators=[RequiredIf('is_student')],
             choices=[('', 'None')] + sorted([
                 ('science', 'Science'), ('commerce', 'Commerce'),
                 ('arts', 'Arts'), ('medecine', 'Medecine'),
