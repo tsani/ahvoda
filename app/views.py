@@ -63,8 +63,11 @@ def registration():
                 pass
             return render_template('message.html', title='Uh, oh!',
                     message='Adding your information to the database failed. '
-                    'Please report this error to <a '
-                    'href="mailto:jake@mail.ahvoda.com">Jake</a>')
+                    '<br> <code> %s </code> '
+                    '<br> If this keeps happening, please report this error '
+                    'to <a '
+                    'href="mailto:jake@mail.ahvoda.com">Jake</a>' % (
+                        str(e)))
         else:
             if r is None:
                 return render_template('message.html', title='Uh, oh!',
