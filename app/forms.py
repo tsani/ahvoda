@@ -41,19 +41,14 @@ class RegistrationForm(Form):
     phone_number = StringField('Phone number (e.g. 1234567890)', validators=[
         Regexp(r'\d{10}')])
 
-    cv = FileField('Your CV', validators=[InputRequired()])
+    cv = FileField('Your CV', validators=[InputRequired(),
+        ])
 
     spoken_english = BooleanField('English')
     spoken_french = BooleanField('French')
     spoken_other = BooleanField('Other(s)')
     spoken_other_names = StringField(
-            'Other spoken languages (comma-separated)')
-
-    written_english = BooleanField('English')
-    written_french = BooleanField('French')
-    written_other = BooleanField('Other(s)')
-    written_other_names = StringField(
-            'Other written languages (comma-separated)')
+            'Other languages (comma-separated)')
 
     is_student = BooleanField('Are you currently a student?')
 
@@ -66,13 +61,47 @@ class RegistrationForm(Form):
                 ('religion', 'Religious Studies'),
                 ('environment', 'Agriculture and Environmental Sciences'),
                 ('dentistry', 'Dentistry'), ('law', 'Law'), ('music', 'Music'),
-                ('continuing', 'Continuing Studies')]) + [('other', 'Other')])
+                ('continuing', 'Continuing Studies')], key=lambda s: s[0]) +
+            [('other', 'Other')])
 
     year = SelectField('Year of study', validators=[RequiredIf('is_student')],
             choices=[('', 'None'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
                 ('5', '5+'), ('grad', 'Graduate school'),
                 ('postdoc', 'Post-doctoral')])
 
-    canadian_citizen = BooleanField('Are you a Canadian citizen?')
+    availability = SelectField('How soon can you work?',
+            validators=[InputRequired()],
+            choices=[('asap', 'As soon as possible'),
+                ('emay', 'Early May'),
+                ('mmay', 'Mid May'),
+                ('ejun', 'Early June'),
+                ('mjun', 'Mid June'),
+                ('ejul', 'Early July'),
+                ('mjul', 'Mid July'),
+                ('eaug', 'Early August'),
+                ('maug', 'Mid August'),
+                ('sep', 'September or later')])
 
+    industry_1 = SelectField('#1',
+            validators=[InputRequired()],
+            choices=[
+                ('fooddrink', 'Food and Drink'),
+                ('sales', 'Retail and Sales'),
+                ('nightlife', 'Nightlife and Entertainment')])
+
+    industry_2 = SelectField('#2',
+            validators=[InputRequired()],
+            choices=[
+                ('fooddrink', 'Food and Drink'),
+                ('sales', 'Retail and Sales'),
+                ('nightlife', 'Nightlife and Entertainment')])
+
+    industry_3 = SelectField('#3',
+            validators=[InputRequired()],
+            choices=[
+                ('fooddrink', 'Food and Drink'),
+                ('sales', 'Retail and Sales'),
+                ('nightlife', 'Nightlife and Entertainment')])
+
+    canadian_citizen = BooleanField('Are you a Canadian citizen?')
     canadian_work = BooleanField('Are you legally able to work in Canada?')

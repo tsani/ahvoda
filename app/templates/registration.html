@@ -15,7 +15,8 @@
         convenient for you to start, we’ll make a best effort to score an
         interview!
         </p>
-        <form action='/register' method='POST'>
+        <form action='/register' method='POST' enctype='multipart/form-data'>
+            {{ form.hidden_tag() }}
             <div>
                 <h2>Contact information</h3>
                 {{ render_field_label(form.cv, label_first=True) }}
@@ -33,36 +34,21 @@
             </div>
             <div>
                 <h2>Languages</h3>
-                <div>
-                    <h3>Spoken languages</h3>
-                    <ul>
-                        <li>
-                        {{ render_field_label(form.spoken_english) }}
-                        </li>
-                        <li>
-                        {{ render_field_label(form.spoken_french) }}
-                        </li>
-                        <li>
-                        {{ render_field_label(form.spoken_other) }}
-                        </li>
-                    </ul>
-                    {{ render_field_label(form.spoken_other_names) }}
-                </div>
-                <div>
-                    <h3>Written languages</h3>
-                    <ul>
-                        <li>
-                        {{ render_field_label(form.written_english) }}
-                        </li>
-                        <li>
-                        {{ render_field_label(form.written_french) }}
-                        </li>
-                        <li>
-                        {{ render_field_label(form.written_other) }}
-                        </li>
-                    </ul>
-                    {{ render_field_label(form.written_other_names) }}
-                </div>
+                <p>
+                What languages would you feel comfortable working in?
+                </p>
+                <ul>
+                    <li>
+                    {{ render_field_label(form.spoken_english) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.spoken_french) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.spoken_other) }}
+                    </li>
+                </ul>
+                {{ render_field_label(form.spoken_other_names) }}
             </div>
             <div>
                 <h2>Study information</h2>
@@ -84,6 +70,23 @@
                     </li>
                     <li>
                     {{ render_field_label(form.canadian_work) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.availability) }}
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h2>Industries of Interest</h2>
+                <ul>
+                    <li>
+                    {{ render_field_label(form.industry_1, label_first=True) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.industry_2, label_first=True) }}
+                    </li>
+                    <li>
+                    {{ render_field_label(form.industry_3, label_first=True) }}
                     </li>
                 </ul>
             </div>
