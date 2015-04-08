@@ -28,8 +28,9 @@ def registration():
             for lang in form.spoken_other_names.data.split(','):
                 languages.append(lang.strip())
 
-        form.cv.data.save(
-                os.path.join(app.config['UPLOAD_FOLDER'], random_filename))
+        p = os.path.join(app.config['UPLOAD_FOLDER'], random_filename)
+
+        form.cv.data.save(p)
 
         try:
             r = database.TestLogin.create_if_not_exists(
@@ -56,7 +57,10 @@ def registration():
                     form.industry_3.data,
                     conn=None)
         except Exception as e:
-            os.remove(random_filename)
+            try:
+                os.remove(p)
+            except:
+                pass
             return render_template('message.html', title='Uh, oh!',
                     message='Adding your information to the database failed. '
                     'Please report this error to <a '
