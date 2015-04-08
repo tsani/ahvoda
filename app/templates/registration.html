@@ -1,6 +1,6 @@
 {% extends "landing-page-layout.html" %}
 
-{% from "_form_helpers.html" import 
+{% from "_form_helpers.html" import
     render_field_label, render_errors_ul, render_field_dl %}
 
 {% block contents %}
@@ -78,6 +78,10 @@
             </div>
             <div>
                 <h2>Industries of Interest</h2>
+                <p>
+                Rank the three industries that Ahvoda will primarily be dealing
+                with during the beta.
+                </p>
                 <ul>
                     <li>
                     {{ render_field_label(form.industry_1, label_first=True) }}
