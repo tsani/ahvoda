@@ -13,7 +13,8 @@ def _connect():
 @contextmanager
 def maybe_connect(conn=None):
     if conn is None:
-        yield _connect()
+        with _connect() as conn:
+            yield conn
     else:
         yield conn
 
@@ -217,13 +218,15 @@ class TestLogin:
                 cur = conn.cursor()
                 cur.execute('SELECT * FROM TestLogin WHERE id=%s;',
                         (id,))
-                return bool(cur.rowcount)
+                r = cur.fetchone()
+                return r is not None
         elif email_address is not None:
             with maybe_connect(conn) as conn:
                 cur = conn.cursor()
                 cur.execute('SELECT * FROM TestLogin WHERE email_address=%s;',
                         (email_address,))
-                return bool(cur.rowcount)
+                r = cur.fetchone()
+                return r is not None
 
     @staticmethod
     def create_if_not_exists(first_name, last_name, email_address, gender_name,
@@ -312,6 +315,9 @@ class TestLogin:
                 cur.execute('INSERT INTO LanguageTestLoginAssociation '
                         '( language_id, login_id ) VALUES ( %s, %s );',
                         (lang.id, login_id))
+
+            print(login_id)
+            return login_id
 
 _industries = Industry.get_list(conn=None)
 _availabilities = Availability.get_list(conn=None)

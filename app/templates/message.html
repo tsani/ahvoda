@@ -1,0 +1,16 @@
+{% extends "landing-page-layout.html" %}
+
+{% block contents %}
+
+<section id='message' class='total-centering'>
+    <div class='contents'>
+        <h1>
+            {{ title | safe }}
+        </h1>
+        <p>
+        {{ message | safe }}
+        </p>
+    </div>
+</section>
+
+{% endblock %}

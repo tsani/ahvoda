@@ -31,7 +31,7 @@ def registration():
                 os.path.join(app.config['UPLOAD_FOLDER'], random_filename))
 
         try:
-            database.TestLogin.create_if_not_exists(
+            r = database.TestLogin.create_if_not_exists(
                     form.first_name.data,
                     form.last_name.data,
                     form.email_address.data,
@@ -56,10 +56,19 @@ def registration():
                     conn=None)
         except Exception as e:
             os.remove(random_filename)
-            return str(e)
+            return render_template('message.html', title='Uh, oh!',
+                    message='Adding your information to the database failed. '
+                    'Please report this error to <a '
+                    'href="mailto:jake@mail.ahvoda.com">Jake</a>')
+        else:
+            if r is None:
+                return render_template('message.html', title='Uh, oh!',
+                        message="It looks like that email address is already "
+                                "in use.")
 
-        return "it worked"
-    else:
-        print('validation failed')
+        return render_template('message.html', title='Woot!',
+                message="Thanks for registering to the Ahvoda Beta! We'll "
+                        "keep you posted regarding the decisions; you "
+                        "should hear back from us in a week or so.")
 
     return render_template('registration.html', form=form)
