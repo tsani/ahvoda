@@ -1,8 +1,10 @@
+.ackrc
 venv
 __pycache__
 *.log
 *.aux
 *.pdf
 *.pyc
+/dumps/
 /secret_config.py
 /docs/visualization
