@@ -1,0 +1,101 @@
+<!doctype html>
+
+<html lang='en' ng-app='app'>
+
+<head>
+<title> Ahvoda | Jobs </title>
+
+<link rel='stylesheet' href='/static/css/user.css'>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.2.js"></script>
+<script src="/static/js/user.js"></script>
+</head>
+
+<body>
+
+<h1 class='main-header'>
+    Your opportunities
+</h1>
+
+<div class='swipe-container'>
+    <div class='button-option button-option-no' onclick="user.shift('left');">
+        <i class='fa fa-remove'></i>
+    </div>
+
+    <div id='card-list' ng-controller='SwipeController'>
+        <div class='card-container' ng-repeat='card in cards'>
+            <div class='card-image-container'>
+            </div>
+
+            <div class='business-main'>
+                <div class='name'>
+                    <h2> {{ card.name }} </h2>
+                    <div class='address'>
+                        <p class='exact'> {{ card.address }} </p>
+                        <p class='approximate'> {{ card.distance }} </p>
+                    </div>
+                </div>
+                <div class='position'>
+                    <h2>
+                        <span class='position-name'> {{ card.position }} </span> <br>
+                        <span class='industry'> {{ card.industry }} </span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class='duties'>
+                <div>
+                    Duties
+                </div>
+                <p ng-if='!card.duties'>
+                No extra info.
+                </p>
+                <ul ng-repeat='duty in card.duties'>
+                    <li> {{ duty }} </li>
+                </ul>
+            </div>
+
+            <div class='qualities'>
+                <div>
+                    Qualities
+                </div>
+                <p ng-if='!card.qualities'>
+                No extra info.
+                </p>
+                <ul ng-repeat='quality in card.qualities'>
+                    <li> {{ quality }} </li>
+                </ul>
+            </div>
+
+            <div class='extra-info'>
+                <div>
+                    Extra info
+                </div>
+                <p ng-if='!card.extraInfo'>
+                No extra info.
+                </p>
+                <ul ng-repeat='extra in card.extraInfo'>
+                    <li> {{ extra }} </li>
+                </ul>
+            </div>
+        </div>
+        <div id='last-card' class='card-container'>
+            <div class='inner-last-card'>
+                <h2>
+                There are no more opportunities for now.
+                <br>
+                Try again tomorrow.
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class='button-option button-option-yes' onclick='user.shift("right");'>
+        <i class='fa fa-check'></i>
+    </div>
+</div>
+
+</body>
+
+</html>
