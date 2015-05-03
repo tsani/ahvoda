@@ -1,0 +1,69 @@
+section {
+    .flex-row {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .contents {
+        text-align: center;
+        padding: 1em;
+        background-color: rgba(32, 32, 32, 0.65);
+        margin: 1em auto;
+        max-width: 45%;
+
+        h1 {
+            width: 100%;
+        }
+
+        p.description {
+            text-align: center;
+        }
+
+        .email-address {
+            text-align: center;
+        }
+
+        .circle-img-container {
+            height: 15em;
+            width: 15em;
+            display: inline-block;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0px 0px 5px white;
+            overflow: hidden;
+            position: relative;
+
+            img {
+                min-width: 100%;
+                min-height: 90%;
+                position: absolute;
+                -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                     -o-transform: translateX(-50%);
+                        transform: translateX(-50%);
+            }
+        }
+
+        a {
+            color: inherit;
+            text-decoration: underline;
+            transition: 0.4s all ease;
+
+            :hover {
+                color: blue;
+            }
+        }
+    }
+}
+
+section#about {
+    .contents {
+        margin: 4em auto;
+    }
+}
+
+section#team {
+    .contents {
+        width: 100%;
+    }
+}
