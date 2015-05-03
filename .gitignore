@@ -8,3 +8,4 @@ __pycache__
 /dumps/
 /secret_config.py
 /docs/visualization
+/app/static/css
