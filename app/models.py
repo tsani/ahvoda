@@ -39,10 +39,46 @@ class TestLogin(db.Model):
     __tablename__ = 'testlogin'
 
     id = db.Column(db.Integer, primary_key=True)
+    email_address = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=True)
+    password_salt = db.Column(db.String, nullable=True)
+
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
+    gender_id = db.Column(db.Integer, ForeignKey('gender'))
+    gender = relationship('gender')
+    date_of_birth = db.Column(db.DateTime, nullable=False)
 
-    email_address = db.Column(db.String, nullable=False)
+    address_line_1 = db.Column(db.String, nullable=False)
+    address_line_2 = db.Column(db.Stirng, nullable=False)
+    postal_code = db.Column(db.String, nullable=False)
+    phone_number = db.Column(db.String, nullable=False)
+
+    cv_original_name = db.Column(db.String, nullable=False)
+    cv_name = db.Column(db.String, nullable=False)
+
+    is_student = db.Column(db.Boolean, nullable=False)
+    faculty_id = db.Column(db.Integer, nullable=True)
+    faculty = relationship('SchoolFaculty')
+    year = db.Column(db.Integer, nullable=True)
+
+    canadian_citizen(db.Boolean, nullable=False)
+    canadian_work(db.Boolean, nullable=False)
+
+    availability_id = db.Column(
+            db.Integer, ForeignKey('availability'), nullable=False)
+    availability = relationship('availability')
+
+    industry_1_id = db.Column(
+            db.Integer, ForeignKey('industry'), nullable=False)
+    # TODO figure out how to separate these
+    industry_1 = relationship('industry')
+    industry_2_id = db.Column(
+            db.Integer, ForeignKey('industry'), nullable=False)
+    industry_2 = relationship('industry')
+    industry_3_id = db.Column(
+            db.Integer, ForeignKey('industry'), nullable=False)
+    industry_3 = relationship('industry')
 
 
 class Company(db.Model):
