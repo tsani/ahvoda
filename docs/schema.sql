@@ -28,22 +28,22 @@
 
 START TRANSACTION;
 
-DROP TABLE IF EXISTS Job;
-DROP TABLE IF EXISTS ShiftSet;
-DROP TABLE IF EXISTS Shift;
-DROP TABLE IF EXISTS Position;
-DROP TABLE IF EXISTS Employee;
-DROP TABLE IF EXISTS ManagerSet;
-DROP TABLE IF EXISTS Manager;
-DROP TABLE IF EXISTS Login;
-DROP TABLE IF EXISTS Gender;
-DROP TABLE IF EXISTS Business;
-DROP TABLE IF EXISTS Company;
+DROP TABLE IF EXISTS job;
+DROP TABLE IF EXISTS shift_set;
+DROP TABLE IF EXISTS shift;
+DROP TABLE IF EXISTS position;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS manager_set;
+DROP TABLE IF EXISTS manager;
+DROP TABLE IF EXISTS login;
+DROP TABLE IF EXISTS gender;
+DROP TABLE IF EXISTS business;
+DROP TABLE IF EXISTS company;
 
 -- A Company is an entity used to tie together multiple Businesses, which we
 -- consider to be instances of that Company.
 -- e.g. Tim Horton's
-CREATE TABLE Company (
+CREATE TABLE company (
     companyId
         SERIAL
         PRIMARY KEY,
@@ -53,7 +53,7 @@ CREATE TABLE Company (
     );
 
 -- A Business is a type of account in Ahvoda
-CREATE TABLE Business (
+CREATE TABLE business (
 	businessId
         SERIAL
         PRIMARY KEY,
@@ -87,7 +87,7 @@ CREATE TABLE Business (
         REFERENCES Company
 	);
 
-CREATE TABLE Gender (
+CREATE TABLE gender (
     genderId
         SERIAL
         PRIMARY KEY,
@@ -96,11 +96,11 @@ CREATE TABLE Gender (
         NOT NULL
     );
 
-INSERT INTO Gender ( genderName ) VALUES ( 'male' );
-INSERT INTO Gender ( genderName ) VALUES ( 'female' );
-INSERT INTO Gender ( genderName ) VALUES ( 'other' );
+INSERT INTO gender ( genderName ) VALUES ( 'male' );
+INSERT INTO gender ( genderName ) VALUES ( 'female' );
+INSERT INTO gender ( genderName ) VALUES ( 'other' );
 
-CREATE TABLE Login (
+CREATE TABLE login (
 	loginId
         INTEGER
         PRIMARY KEY,
@@ -134,7 +134,7 @@ CREATE TABLE Login (
 
 -- A Manager is a type of account in Ahvoda. Accounts are tied to physical
 -- persons, and so have birth dates, genders, and first-last names.
-CREATE TABLE Manager (
+CREATE TABLE manager (
     managerId
         SERIAL
         PRIMARY KEY,
@@ -161,7 +161,7 @@ CREATE TABLE Manager (
 -- For now these simply default to 'manager' and 1.
 -- In the future this allows for assistant managers and other management
 -- personnel to have access to the Ahvoda management interface.
-CREATE TABLE ManagerSet (
+CREATE TABLE manager_set (
     managerId
         INTEGER
         NOT NULL
@@ -181,70 +181,78 @@ CREATE TABLE ManagerSet (
 
 -- An Employee is a type of account in Ahvoda. Accounts are tied to physical
 -- persons, and so have birth dates, genders, and first-last names.
-CREATE TABLE Employee (
-    employeeId
+CREATE TABLE employee (
+    id
         SERIAL
         PRIMARY KEY,
     -- The first name of this Employee.
-    employeeFirstName
+    first_name
         VARCHAR --100
         NOT NULL,
     -- The last name of this Employee.
-    employeeLastName
+    last_name
         VARCHAR --100
         NOT NULL,
     -- The date of birth of this Employee.
-    employeeBirthDate
+    birth_date
         DATE
         NOT NULL,
     -- The home address of this Employee.
     -- e.g. 404 rue de l'Introuvable
-    employeeHomeAddress
-        VARCHAR --200
+    home_address
+        VARCHAR
         NOT NULL,
+    home_latitude
+        FLOAT
+        NOT NULL
+        CHECK ( home_latitude < 90.0 AND home_latitude > -90.0 ),
+    home_longitude
+        FLOAT
+        NOT NULL
+        CHECK ( home_longitude < 180.0 AND home_longitude > -180.0 ),
     -- The city where that address is valid.
     -- e.g. Montreal
-    employeeHomeCity
+    home_city
         VARCHAR --100
         NOT NULL,
-    educationLevel
+    education_level
         VARCHAR --100
         NOT NULL,
     -- A NULL gender indicates that the gender is simply unspecified.
-    genderId
+    gender_id
         INTEGER
         REFERENCES Gender
         ON DELETE SET NULL,
     -- The information used to authenticate as this Employee.
-    loginId
+    login_id
         INTEGER
         UNIQUE -- no two Employees can use the same login
         NOT NULL
         REFERENCES Login
     );
 
-CREATE TABLE Position (
-    positionId
+CREATE TABLE position (
+    id
         SERIAL
         PRIMARY KEY,
     -- The name of this Position.
-    positionName
+    name
         VARCHAR --50
         NOT NULL,
     -- When this Position was created.
-    positionCreateDate
+    create_date
         TIMESTAMP WITHOUT TIME ZONE
         NOT NULL
         DEFAULT ( now() AT TIME ZONE 'utc' ),
     -- The Business at which this Position exists.
-    businessId
+    business_id
         INTEGER
         NOT NULL
         REFERENCES Business
         ON DELETE CASCADE,
     -- The Manager that created this Position.
     -- This reference is set to NULL if the Manager is deleted.
-    managerId
+    manager_id
         INTEGER
         REFERENCES Manager
         ON DELETE SET NULL,
@@ -254,28 +262,28 @@ CREATE TABLE Position (
 -- Describes a shift, which is tied to a particular Position in a particular
 -- Business, and has some finite length. This table does not include the notion
 -- of shifts repeating.
-CREATE TABLE Shift (
-    shiftId
+CREATE TABLE shift (
+    id
         SERIAL
         PRIMARY KEY,
-    shiftStartTime
+    start_time
         TIMESTAMP WITHOUT TIME ZONE
         NOT NULL
         DEFAULT ( now() AT TIME ZONE 'utc' )
         CHECK ( shiftStartTime < shiftEndTime ),
-    shiftEndTime
+    end_time
         TIMESTAMP WITHOUT TIME ZONE
         NOT NULL
         DEFAULT ( now() AT TIME ZONE 'utc' )
         CHECK ( shiftEndTime > shiftStartTime ),
     -- The position (type of work) of this shift.
-    positionId
+    position_id
         INTEGER
         NOT NULL
         REFERENCES Position
         ON DELETE CASCADE,
     -- The business for which the work is being performed.
-    businessId
+    business_id
         INTEGER
         NOT NULL
         REFERENCES Business
@@ -283,12 +291,12 @@ CREATE TABLE Shift (
     );
 
 -- Describes the connection between workers and shifts.
-CREATE TABLE ShiftSet (
-    employeeId
+CREATE TABLE shift_set (
+    employee_id
         INTEGER
         NOT NULL
         REFERENCES Employee,
-    shiftId
+    shift_id
         INTEGER
         NOT NULL
         REFERENCES Shift,
@@ -297,51 +305,51 @@ CREATE TABLE ShiftSet (
     PRIMARY KEY ( employeeId, shiftId )
     );
 
-CREATE TABLE Job (
-    jobId
+CREATE TABLE job (
+    id
         SERIAL
         PRIMARY KEY,
     -- The start date is either decided a priori by the employer or is set
     -- automatically by Ahvoda when the employee is added to the workforce.
-	jobStartDate
+	start_date
         DATE,
     -- The end date either decided a priori by the employer or is set
     -- automatically by Ahvoda when the employee is removed from the workforce.
-    jobEndDate
+    end_date
         DATE,
     -- A job is available iff applications can be submitted to it.
-    jobIsAvailable
+    is_available
         BOOLEAN
         NOT NULL,
     -- A salary is an hourly rate. A NULL hourly rate means that the employer
     -- is not specifying the salary for this job.
-    jobSalary
+    salary
         FLOAT,
     -- An arbitrary text written by the employer explaining the job.
-    jobPositionDetails
+    position_details
         VARCHAR
         NOT NULL,
     -- When was this record created. A date used primarily internally.
-    jobCreateDate
+    create_date
         DATE
         NOT NULL,
     -- A job is for a particular position.
-    positionId
+    position_id
         INTEGER
         NOT NULL
         REFERENCES Position
         ON DELETE CASCADE,
     -- Until when can applications be submitted for this Job. At this deadline,
     -- the jobIsAvailable field will be set to FALSE automatically by Ahvoda.
-    jobApplicationDeadline
+    application_deadline
         DATE,
     -- Identifies the employee that has this Job. Starts off NULL before
     -- someone has been hired.
-    employeeId
+    employee_id
         INTEGER
         REFERENCES Employee,
     -- Identifies the Manager that created this Job.
-    managerId
+    manager_id
         INTEGER
         REFERENCES Manager
         ON DELETE SET NULL
