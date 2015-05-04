@@ -1,27 +1,57 @@
 from app import db
 
-class Position(db.Model):
-    __tablename__ = 'position'
+class Availability(db.Model):
+    __tablename__ = 'availability'
 
-    positionId = db.Column(db.Integer, primary_key=True)
-    positionName = db.Column(db.String, nullable=False)
-    create_date = db.Column(db.Date, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
 
-    businessId = db.Column(db.Integer, db.ForeignKey('business.id'),
-            nullable=False)
-    business = db.relationship('business',
-            backref=db.backref('positions', order_by=positionId))
+class Industry(db.Model):
+    __tablename__ = 'industry'
 
-    managerId = db.Column(db.Integer,
-            db.ForeignKey('manager.id'))
-    manager = db.relationship('manager',
-            backref=db.backref('manager', order_by=managerId))
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+
+class Language(db.Model):
+    __tablename__ = 'language'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+
+    testlogin_users = relationship('testlogin',
+            secondary='languagetestloginassociation')
+
+class LanguageTestLoginAssociation(db.Model):
+    __tablename__ = 'languagetestloginassociation'
+
+    language_id = db.Column(
+            db.Integer, db.ForeignKey('language'), nullable=False)
+    login_id = db.Column(
+            db.Integer, db.ForeignKey('testlogin'), nullable=False)
+
+class SchoolFaculty(db.Model):
+    __tablename__ = 'schoolfaculty'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+
+class TestLogin(db.Model):
+    __tablename__ = 'testlogin'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+
+    email_address = db.Column(db.String, nullable=False)
+
 
 class Company(db.Model):
     __tablename__ = 'company'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+
+    businesses = db.relationship('business', backref='company')
 
 class Business(db.Model):
     __tablename__ = 'business'
@@ -33,10 +63,10 @@ class Business(db.Model):
     description = db.Column(db.String, nullable=False)
     is_verified = db.Column(db.Boolean, nullable=False)
 
-    companyId = db.Column('companyid', db.Integer, db.ForeignKey('company.id'),
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'),
             nullable=True)
-    company = db.relationship('company',
-            backref='companyId')
+
+    managers = db.relationship('Mmnager', secondary='manager_set')
 
 class Gender(db.Model):
     __tablename__ = 'gender'
@@ -67,5 +97,111 @@ class Manager(db.Model):
 
     login_id = db.Column(db.Integer, db.ForeignKey('login.id'),
             nullable=False)
-    login = db.relationship('login',
-            backref=db.backref('account', uselist=False))
+    login = db.relationship('login', backref='managers')
+
+    businesses = db.relationship('Business', secondary='manager_set')
+
+class ManagerSet(db.Model):
+    __tablename__ = 'manager_set'
+
+    manager_id = db.Column(
+            db.Integer, db.ForeignKey('manager.id'), primary_key=True)
+    business_id = db.Column(
+            db.Integer, db.ForeignKey('business.id'), primary_key=True)
+
+    manager_set_name = db.Column(
+            db.String, nullable=False)
+    manager_set_level = db.Column(
+            db.Integer, nullable=False)
+
+class Employee(db.Model):
+    __tablename__ = 'employee'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    first_name = db.Column(
+            db.String, nullable=False)
+    last_name = db.Column(
+            db.String, nullable=False)
+
+    birth_date = db.Column(
+            db.DateTime)
+
+    home_address = db.Column(
+            db.String, nullable=False)
+    home_latitude = db.Column(
+            db.Float, # TODO figure out how to make floats work with migrate
+            # TODO figure out how to make constraints work with migrate
+            #db.CheckConstraint(
+            #    'home_latitude > -90.0 AND home_latitude < 90.0'),
+            nullable=False)
+    home_longitude = db.Column(
+            db.Float,
+            #db.CheckConstraint(
+            #    'home_longitude > -180.0 AND home_longitude < 180.0'),
+            nullable=False)
+    home_city = db.Column(
+            db.String, nullable=False)
+
+    gender_id = db.Column(
+            db.Integer, db.ForeignKey('gender.id'), nullable=False)
+    gender = db.relationship('gender')
+
+    login_id = db.Column(
+            db.Integer, db.ForeignKey('login.id'), nullable=False)
+    login = db.relationship('login', backref='employees')
+
+class Job(db.Model):
+    __tablename__ = 'job'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    start_date = db.Column(
+            db.DateTime, nullable=True)
+    end_date = db.Column(
+            db.DateTime, nullable=True)
+    is_available = db.Column(
+            db.Boolean, nullable=False)
+
+    salary = db.Column(
+            db.Float, nullable=True)
+
+    details = db.Column(
+            db.String, nullable=False)
+
+    create_date = db.Column(
+            db.DateTime, nullable=False)
+
+    position_id = db.Column(
+            db.Integer, db.ForeignKey('position.id'), nullable=True)
+
+    application_deadline = db.Column(
+            db.DateTime, nullable=True)
+
+    employee_id = db.Column(
+            db.Integer, db.ForeignKey('employee.id'), nullable=True)
+
+    employee = db.relationship('employee', backref='jobs')
+
+    # TODO ON DELETE SET NULL
+    manager_id = db.Column(
+            db.Integer, db.ForeignKey('manager.id'), nullable=True)
+
+    manager = db.relationship('manager', backref='listings')
+
+class Position(db.Model):
+    __tablename__ = 'position'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    create_date = db.Column(db.Date, nullable=False)
+
+    business_id = db.Column(db.Integer, db.ForeignKey('business.id'),
+            nullable=False)
+    business = db.relationship('business', backref='positions')
+
+    manager_id = db.Column(db.Integer,
+            db.ForeignKey('manager.id'))
+    manager = db.relationship('manager', backref='created_positions')
