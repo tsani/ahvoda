@@ -82,6 +82,57 @@ section {
     width: 100%;
     min-height: 100%;
     margin: 5em 0;
+
+    .contents {
+        text-align: center;
+        padding: 1em;
+        background-color: @trans-bg;
+        margin: 1em auto;
+        max-width: 45%;
+
+        h1 {
+            width: 100%;
+        }
+
+        p.description {
+            text-align: center;
+        }
+
+        .email-address {
+            text-align: center;
+        }
+
+        .circle-img-container {
+            height: 15em;
+            width: 15em;
+            display: inline-block;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0px 0px 5px white;
+            overflow: hidden;
+            position: relative;
+
+            img {
+                min-width: 100%;
+                min-height: 90%;
+                position: absolute;
+                -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                     -o-transform: translateX(-50%);
+                        transform: translateX(-50%);
+            }
+        }
+
+        a {
+            color: inherit;
+            text-decoration: underline;
+            transition: 0.4s all ease;
+
+            :hover {
+                color: @sol-blue;
+            }
+        }
+    }
 }
 
 body{
@@ -201,7 +252,7 @@ a.button:hover {
     box-shadow: 0 0 5px rgba(200, 255, 200, 0.75);
 }
 
-input[type='text'] {
+input[type='text'], input[type='password'], textarea {
     border-radius: 4px;
     color: #555;
     background-color: white;
@@ -211,10 +262,10 @@ input[type='text'] {
     transition: box-shadow 0.15s ease-in-out;
     width: 100%;
     padding: 0.25em;
-}
 
-input[type='text']:focus {
-    box-shadow: 0px 0px 10px rgba(200, 200, 255, 0.75);
+    &:focus {
+        box-shadow: 0px 0px 10px rgba(200, 200, 255, 0.75);
+    }
 }
 
 select {
