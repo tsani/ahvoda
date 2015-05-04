@@ -1,18 +1,20 @@
-<!doctype html>
+{% extends "layout-internal.html" %}
 
-<html lang='en' ng-app='app'>
+{% block title %}
+Opportunities
+{% endblock %}
 
-<head>
-<title> Ahvoda | Jobs </title>
+{% block css %}
+{{ super() }}
+<link rel='stylesheet' href='/static/css/swipe.css'>
+{% endblock %}
 
-<link rel='stylesheet' href='/static/css/user.css'>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+{% block js %}
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.2.js"></script>
-<script src="/static/js/user.js"></script>
-</head>
+<script src="/static/js/swipe.js"></script>
+{% endblock %}
 
-<body>
+{% block contents %}
 
 <h1 class='main-header'>
     Your opportunities
@@ -23,7 +25,8 @@
         <i class='fa fa-remove'></i>
     </div>
 
-    <div id='card-list' ng-controller='SwipeController'>
+    {% raw %}
+    <div class='card-list' ng-controller='SwipeController'>
         <div class='card-container' ng-repeat='card in cards'>
             <div class='card-image-container'>
             </div>
@@ -44,43 +47,46 @@
                 </div>
             </div>
 
-            <div class='duties'>
-                <div>
+            <dl> 
+                <dt class='duties'>
                     Duties
-                </div>
-                <p ng-if='!card.duties'>
-                No extra info.
-                </p>
-                <ul ng-repeat='duty in card.duties'>
-                    <li> {{ duty }} </li>
-                </ul>
-            </div>
+                </dt>
+                <dd>
+                    <p ng-if='!card.duties'>
+                    No extra info.
+                    </p>
+                    <ul>
+                        <li ng-repeat='duty in card.duties'> {{ duty }} </li>
+                    </ul>
+                </dd>
 
-            <div class='qualities'>
-                <div>
+                <dt class='qualities'>
                     Qualities
-                </div>
-                <p ng-if='!card.qualities'>
-                No extra info.
-                </p>
-                <ul ng-repeat='quality in card.qualities'>
-                    <li> {{ quality }} </li>
-                </ul>
-            </div>
+                </dt>
+                <dd>
+                    <p ng-if='!card.qualities'>
+                    No extra info.
+                    </p>
+                    <ul>
+                        <li ng-repeat='quality in card.qualities'> {{ quality }} </li>
+                    </ul>
+                </dd>
 
-            <div class='extra-info'>
-                <div>
+                <dt class='extra-info'>
                     Extra info
-                </div>
-                <p ng-if='!card.extraInfo'>
-                No extra info.
-                </p>
-                <ul ng-repeat='extra in card.extraInfo'>
-                    <li> {{ extra }} </li>
-                </ul>
-            </div>
+                </dt>
+                <dd>
+                    <p ng-if='!card.extraInfo'>
+                    No extra info.
+                    </p>
+                    <ul>
+                        <li ng-repeat='extra in card.extraInfo'> {{ extra }} </li>
+                    </ul>
+                </dd>
+            </ul>
         </div>
-        <div id='last-card' class='card-container'>
+
+        <div class='card-container last-card'>
             <div class='inner-last-card'>
                 <h2>
                 There are no more opportunities for now.
@@ -90,12 +96,11 @@
             </div>
         </div>
     </div>
+    {% endraw %}
 
     <div class='button-option button-option-yes' onclick='user.shift("right");'>
         <i class='fa fa-check'></i>
     </div>
 </div>
 
-</body>
-
-</html>
+{% endblock %}

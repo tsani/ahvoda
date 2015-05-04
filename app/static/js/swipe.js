@@ -60,11 +60,11 @@ app.controller('SwipeController', function($scope) {
 
 user = (function() {
     function shift(direction) {
-        cards = $('#card-list');
+        cards = $('.card-list');
         topCard = cards.find('> :first-child');
         nextCard = cards.children().eq(1);
 
-        if(topCard.attr('id') === 'last-card') {
+        if(topCard.hasClass('last-card')) {
             return false;
         }
 

@@ -7,7 +7,7 @@ all: static
 
 static: css
 
-css: app/static/css/main.css app/static/css/external.css
+css: app/static/css/external.css app/static/css/internal.css app/static/css/swipe.css
 
 # Rule for compiling .less files
 app/static/css/%.css: less/%.less

@@ -1,3 +1,4 @@
+/* Main Ahvoda palette colors */
 @base-green: #b8f0b2;
 @base-blue:  #6683b6;
 @base-beige: #fffe83;
@@ -18,3 +19,37 @@
 @darker-blue:  darken(@base-blue, 20%);
 @darker-beige: darken(@base-beige, 20%);
 
+/* Solarized colors */
+@sol-base03:    #002b36;
+@sol-base02:    #073642;
+@sol-base01:    #586e75;
+@sol-base00:    #657b83;
+@sol-base0:     #839496;
+@sol-base1:     #93a1a1;
+@sol-base2:     #eee8d5;
+@sol-base3:     #fdf6e3;
+@sol-yellow:    #b58900;
+@sol-orange:    #cb4b16;
+@sol-red:       #dc322f;
+@sol-magenta:   #d33682;
+@sol-violet:    #6c71c4;
+@sol-blue:      #268bd2;
+@sol-cyan:      #2aa198;
+@sol-green:     #859900;
+
+@trans-bg: fade(@sol-base03, 65%);
+
+a {
+    color: @sol-blue;
+    text-decoration: underline;
+}
+
+em {
+    text-style: italic;
+    color: @sol-violet;
+}
+
+strong {
+    font-weight: bold;
+    color: @sol-green;
+}

@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400|Merriweather:300,400,700);
 
+@import "colors.less";
+
+@mobile-size: 600px;
+
 * {
     box-sizing: border-box;
 }
@@ -9,13 +13,18 @@ html {
     width: 100%;
 }
 
+#vfill-container {
+    width: 100%;
+    min-height: 95vh;
+}
+
 body {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: white;
-    color: white;
+    background-color: @sol-base3;
+    color: @sol-base2;
     font-family: "Open Sans", sans;
     z-index: 0;
     line-height: 1.45em;
@@ -34,29 +43,40 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 225%;
+    font-size: 200%;
+    color: @sol-green;
 }
 
 h2 {
-    font-size: 200%;
+    font-size: 175%;
+    color: @sol-blue;
 }
 
 h3 {
-    font-size: 175%;
+    font-size: 150%;
+    color: @sol-violet;
 }
 
 h4 {
-    font-size: 150%;
+    font-size: 135%;
+    color: @sol-cyan;
 }
 
 h5 {
-    font-size: 125%;
+    font-size: 115%;
+    color: @sol-yellow;
 }
 
 h6 {
     font-size: 100%;
+    color: @sol-orange;
 }
 
+ul {
+    li {
+        list-style-type: none;
+    }
+}
 
 section {
     width: 100%;
@@ -84,7 +104,7 @@ body{
     align-items: center;
 }
 
-@media (max-width: 600px) {
+@media (max-width: @mobile-size) {
     body {
         font-size: 12px;
     }
@@ -128,7 +148,7 @@ body{
     width: 100%;
     min-height: 5vh;
     text-align: center;
-    background-color: rgba(32, 32, 32, 0.65);
+    background-color: @trans-bg;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -233,6 +253,6 @@ ul {
 
 /* Class given to errors in submitting forms. */
 .errors {
-    color: #faa;
+    color: @sol-red;
     margin-bottom: 1.5em;
 }

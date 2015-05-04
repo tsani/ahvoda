@@ -1,0 +1,169 @@
+@import "main.less";
+
+/* Main CSS */
+
+#vfill-container {
+    margin: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.swipe-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+
+    margin: 1em 0;
+
+    .button-option {
+        border-radius: 50%;
+        font-size: 2em;
+        width: 1.5em;
+        height: 1.5em;
+        display: flex;
+        color: white;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        transition: opacity linear 0.15s;
+        box-shadow: 0 0 5px 5px transparent;
+    }
+
+    .button-option-yes {
+        background-color: @sol-green;
+        border: 1px solid @sol-green;
+    }
+
+    .button-option-yes:hover {
+        box-shadow: 0 0 5px 5px @sol-green;
+    }
+
+    .button-option-no {
+        background-color: @sol-red;
+        border: 1px solid @sol-red;
+    }
+
+    .button-option-no:hover {
+        box-shadow: 0 0 5px 5px @sol-red;
+    }
+
+    .card-list {
+        width: 75%;
+        margin: 1em 0;
+        position: relative;
+        max-width: 600px;
+        min-height: 400px;
+
+        .card-container:not(:first-child) {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.0;
+        }
+
+        .card-container {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            border-radius: 5px;
+            box-shadow: -5px -5px 5px 5px rgba(0, 0, 0, 0.25);
+            padding: 2em;
+            background-color: @trans-bg;
+
+            .inner-last-card {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .card-image-container {
+            }
+
+            .business-main {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+                margin-bottom: 1em;
+
+                h1, h2, p {
+                    margin: 0;
+                }
+
+                .name {
+                    .address {
+                        .approximate {
+                            font-style: italic;
+                        }
+                    }
+                }
+
+                .position {
+                    text-align: right;
+                    .position-name {
+                        font-style: italic;
+                    }
+                }
+            }
+
+            ul {
+                padding: 0;
+            }
+
+            dt {
+                margin-bottom: 0;
+                font-style: italic;
+                color: @sol-blue;
+            }
+
+            dd {
+                margin-left: 1em;
+                margin-bottom: 1em;
+
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: @mobile-size) {
+    .swipe-container {
+        flex-flow: row wrap;
+
+        .card-list {
+            .card-container {
+                .business-main > div {
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        .card-list {
+            width: 95%;
+        }
+
+        .button-option-yes {
+            order: 3;
+        }
+
+        .button-option-no {
+            order: 2;
+        }
+
+        .card-list {
+            order: 1;
+        }
+    }
+}
+
