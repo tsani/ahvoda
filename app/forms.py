@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from wtforms import (StringField, SelectField, BooleanField, IntegerField,
-        DateField, RadioField, FileField)
+        DateField, RadioField, FileField, TextAreaField, FloatField)
 from wtforms.validators import (Email, Regexp, Length, Optional, NumberRange,
         InputRequired)
 
@@ -105,3 +105,18 @@ class RegistrationForm(Form):
 
     canadian_citizen = BooleanField('Are you a Canadian citizen?')
     canadian_work = BooleanField('Are you legally able to work in Canada?')
+
+class NewListingForm(Form):
+    # The position is populated from the database in the request handler.
+    position = SelectField('Position', choices=[],
+            validators=[InputRequired()])
+    details = TextAreaField('Details', validators=[InputRequired()])
+    pay = FloatField('Pay', validators=[InputRequired()])
+    deadline = DateField('Deadline (yyyy-mm-dd)', validators=[InputRequired()])
+
+    start_date = DateField('Start date (yyyy-mm-dd)',
+            validators=[InputRequired()])
+    end_date = DateField('End date (yyyy-mm-dd)',
+            validators=[InputRequired()])
+    available = BooleanField('Is the listing available?',
+            validators=[InputRequired()])
