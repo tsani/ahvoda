@@ -1,0 +1,43 @@
+{% extends "layout-internal.html" %}
+
+{% from "_form_helpers.html" import
+    render_field_label, render_errors_ul, render_field_dl %}
+
+{% block title %}
+Create a listing
+{% endblock %}
+
+{% block contents %}
+
+<section>
+    <div class='contents'>
+        <form action='/new-listing' method='POST'>
+            {{ form.hidden_tag() }}
+            <div>
+                <h1 class='main-heading'> Create a new listing </h1>
+            </div>
+            <div>
+                <h2> Essentials </h2>
+                <dl>
+                    {{ render_field_dl(form.position) }}
+                    {{ render_field_dl(form.details) }}
+                    {{ render_field_dl(form.pay) }}
+                    {{ render_field_dl(form.deadline) }}
+                </dl>
+            </div>
+            <div>
+                <h2> Details </h2>
+                <dl>
+                    {{ render_field_dl(form.start_date) }}
+                    {{ render_field_dl(form.end_date) }}
+                    {{ render_field_dl(form.available, checked=True) }}
+                </dl>
+            </div>
+            <button type='submit' class='button-success'>
+                Create
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
