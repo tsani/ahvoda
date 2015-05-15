@@ -212,6 +212,15 @@ button {
     color: #ccc;
 }
 
+a.button {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.button:hover {
+    color: inherit;
+}
+
 .button-success {
     background-image: linear-gradient(to bottom, #5cb85c 0px, #419641 100%);
     background-repeat: repeat-x;
