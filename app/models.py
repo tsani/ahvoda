@@ -18,16 +18,20 @@ class Language(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
-    testlogin_users = relationship('testlogin',
+    testlogin_users = db.relationship('testlogin',
             secondary='languagetestloginassociation')
 
 class LanguageTestLoginAssociation(db.Model):
     __tablename__ = 'languagetestloginassociation'
 
+    __table_args__ = (
+            db.PrimaryKeyConstraint('language_id', 'login_id'),
+    )
+
     language_id = db.Column(
-            db.Integer, db.ForeignKey('language'), nullable=False)
+            db.Integer, db.ForeignKey('language.id'), nullable=False)
     login_id = db.Column(
-            db.Integer, db.ForeignKey('testlogin'), nullable=False)
+            db.Integer, db.ForeignKey('testlogin.id'), nullable=False)
 
 class SchoolFaculty(db.Model):
     __tablename__ = 'schoolfaculty'
@@ -45,12 +49,12 @@ class TestLogin(db.Model):
 
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
-    gender_id = db.Column(db.Integer, ForeignKey('gender'))
-    gender = relationship('gender')
+    gender_id = db.Column(db.Integer, db.ForeignKey('gender.id'))
+    gender = db.relationship('gender')
     date_of_birth = db.Column(db.DateTime, nullable=False)
 
     address_line_1 = db.Column(db.String, nullable=False)
-    address_line_2 = db.Column(db.Stirng, nullable=False)
+    address_line_2 = db.Column(db.String, nullable=False)
     postal_code = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String, nullable=False)
 
@@ -59,26 +63,26 @@ class TestLogin(db.Model):
 
     is_student = db.Column(db.Boolean, nullable=False)
     faculty_id = db.Column(db.Integer, nullable=True)
-    faculty = relationship('SchoolFaculty')
+    faculty = db.relationship('SchoolFaculty')
     year = db.Column(db.Integer, nullable=True)
 
-    canadian_citizen(db.Boolean, nullable=False)
-    canadian_work(db.Boolean, nullable=False)
+    canadian_citizen = db.Column(db.Boolean, nullable=False)
+    canadian_work = db.Column(db.Boolean, nullable=False)
 
     availability_id = db.Column(
-            db.Integer, ForeignKey('availability'), nullable=False)
-    availability = relationship('availability')
+            db.Integer, db.ForeignKey('availability.id'), nullable=False)
+    availability = db.relationship('availability.id')
 
     industry_1_id = db.Column(
-            db.Integer, ForeignKey('industry'), nullable=False)
+            db.Integer, db.ForeignKey('industry.id'), nullable=False)
     # TODO figure out how to separate these
-    industry_1 = relationship('industry')
+    industry_1 = db.relationship('industry')
     industry_2_id = db.Column(
-            db.Integer, ForeignKey('industry'), nullable=False)
-    industry_2 = relationship('industry')
+            db.Integer, db.ForeignKey('industry.id'), nullable=False)
+    industry_2 = db.relationship('industry')
     industry_3_id = db.Column(
-            db.Integer, ForeignKey('industry'), nullable=False)
-    industry_3 = relationship('industry')
+            db.Integer, db.ForeignKey('industry.id'), nullable=False)
+    industry_3 = db.relationship('industry')
 
 
 class Company(db.Model):

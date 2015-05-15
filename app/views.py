@@ -1,4 +1,4 @@
-from app import app, forms, database, utils
+from app import app, forms, utils
 
 from flask import render_template, request
 
