@@ -70,10 +70,12 @@ class LanguageSet(db.Model):
     )
 
     language_id = db.Column(
-            db.Integer, db.ForeignKey('language.id'), nullable=False)
+            db.Integer, db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False)
 
     employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id'), nullable=False)
+            db.Integer, db.ForeignKey('employee.id', ondelete='CASCADE'),
+            nullable=False)
 
 class SchoolFaculty(db.Model):
     __tablename__ = 'schoolfaculty'
@@ -187,7 +189,7 @@ class Manager(db.Model):
             'Gender')
 
     login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id'), nullable=False)
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
 
     login = db.relationship(
             'Login', backref='managers')
@@ -199,10 +201,10 @@ class ManagerSet(db.Model):
     __tablename__ = 'manager_set'
 
     manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id'), primary_key=True)
+            db.Integer, db.ForeignKey('manager.id', ondelete='CASCADE'), primary_key=True)
 
     business_id = db.Column(
-            db.Integer, db.ForeignKey('business.id'), primary_key=True)
+            db.Integer, db.ForeignKey('business.id', ondelete='CASCADE'), primary_key=True)
 
     manager_set_name = db.Column(
             db.String, nullable=False)
@@ -272,7 +274,7 @@ class Employee(db.Model):
             db.Boolean, nullable=False)
 
     login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id'), nullable=False)
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
 
     login = db.relationship(
             'Login', backref='employees')
@@ -309,14 +311,14 @@ class Job(db.Model):
             db.DateTime, nullable=True)
 
     employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id'), nullable=True)
+            db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'), nullable=True)
 
     employee = db.relationship(
             'Employee', backref='jobs')
 
-    # TODO ON DELETE SET NULL
     manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id'), nullable=True)
+            db.Integer, db.ForeignKey('manager.id', ondelete='SET NULL'),
+            nullable=True)
 
     manager = db.relationship(
             'Manager', backref='listings')
