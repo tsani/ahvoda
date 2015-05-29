@@ -1,45 +1,25 @@
 from app import db
 
-class Experience(db.Model):
-    __tablename__ = 'experience'
+class Rating(db.Model):
+    __tablename__ = 'rating'
 
-    __table_args__ = (
-            db.PrimaryKeyConstraint('employee_id', 'industry_id'),
-    )
+    job_id = db.Column(
+            db.Integer, db.ForeignKey('job.id'), primary_key=True)
 
-    employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id'), nullable=False)
+    job = db.relationship(
+            'Job')
 
-    industry_id = db.Column(
-            db.Integer, db.ForeignKey('industry.id'), nullable=False)
-
-    value = db.Column(
+    employee_rating = db.Column(
             db.Float, nullable=False)
 
-class Rank(db.Model):
-    __tablename__ = 'rank'
+    employee_comment = db.Column(
+            db.String, nullable=True)
 
-    __table_args__ = (
-            db.PrimaryKeyConstraint('employee_id', 'industry_id'),
-    )
+    job_rating = db.Column(
+            db.Float, nullable=False)
 
-    employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id'), nullable=False)
-
-    industry_id = db.Column(
-            db.Integer, db.ForeignKey('industry.id'), nullable=False)
-
-    value = db.Column(
-            db.Integer, nullable=False)
-
-class Availability(db.Model):
-    __tablename__ = 'availability'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    name = db.Column(
-            db.String, nullable=False)
+    job_comment = db.Column(
+            db.String, nullable=True)
 
 class Industry(db.Model):
     __tablename__ = 'industry'
@@ -49,6 +29,9 @@ class Industry(db.Model):
 
     name = db.Column(
             db.String, nullable=False)
+
+    businesses = db.relationship(
+            'Business')
 
 class Language(db.Model):
     __tablename__ = 'language'
@@ -62,8 +45,8 @@ class Language(db.Model):
     employees = db.relationship(
             'Employee', secondary='languageset')
 
-class LanguageSet(db.Model):
-    __tablename__ = 'languageset'
+class EmployeeLanguageSet(db.Model):
+    __tablename__ = 'employeelanguageset'
 
     __table_args__ = (
             db.PrimaryKeyConstraint('language_id', 'employee_id'),
@@ -77,14 +60,20 @@ class LanguageSet(db.Model):
             db.Integer, db.ForeignKey('employee.id', ondelete='CASCADE'),
             nullable=False)
 
-class SchoolFaculty(db.Model):
-    __tablename__ = 'schoolfaculty'
+class JobLanguageSet(db.Model):
+    __tablename__ = 'joblanguageset'
 
-    id = db.Column(
-            db.Integer, primary_key=True)
+    __table_args__ = (
+            db.PrimaryKeyConstraint('language_id', 'job_id'),
+    )
 
-    name = db.Column(
-            db.String, nullable=False)
+    language_id = db.Column(
+            db.Integer, db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False)
+
+    job_id = db.Column(
+            db.Integer, db.ForeignKey('job.id', ondelete='CASCADE'),
+            nullable=False)
 
 class Company(db.Model):
     __tablename__ = 'company'
@@ -98,6 +87,66 @@ class Company(db.Model):
     businesses = db.relationship(
             'Business', backref='company')
 
+class City(db.Model):
+    __tablename__ = 'city'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    name = db.Column(
+            db.String, nullable=False)
+
+class Country(db.Model):
+    __tablename__ = 'country'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    name = db.Column(
+            db.String, nullable=False)
+
+class Location(db.Model):
+    __tablename__ = 'location'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    address = db.Column(
+            db.String, nullable=False)
+
+    city_id = db.Column(
+            db.Integer, db.ForeignKey('city.id'), nullable=False)
+
+    city = db.relationship(
+            'City')
+
+    country_id = db.Column(
+            db.Integer, db.ForeignKey('country.id'), nullable=False)
+
+    country = db.relationship(
+            'Country')
+
+    latitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'latitude > -90.0 AND latitude < 90.0'),
+            nullable=False)
+
+    longitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'longitude > -180.0 AND longitude < 180.0'),
+            nullable=False)
+
+class BusinessLocationSet(db.Model):
+    __tablename__ = 'businesslocationset'
+
+    business_id = db.Column(
+            db.Integer, nullable=False, primary_key=True)
+
+    location_id = db.Column(
+            db.Integer, nullable=False, primary_key=True)
+
 class Business(db.Model):
     __tablename__ = 'business'
 
@@ -109,6 +158,7 @@ class Business(db.Model):
 
     description = db.Column(
             db.String, nullable=False)
+
 
     location_longitude = db.Column(
             db.Float, nullable=False)
@@ -129,7 +179,7 @@ class Business(db.Model):
             db.Integer, db.ForeignKey('company.id'), nullable=True)
 
     managers = db.relationship(
-            'Manager', secondary='manager_set')
+            'Manager', secondary='managerset')
 
 class Gender(db.Model):
     __tablename__ = 'gender'
@@ -195,10 +245,10 @@ class Manager(db.Model):
             'Login', backref='managers')
 
     businesses = db.relationship(
-            'Business', secondary='manager_set')
+            'Business', secondary='managerset')
 
 class ManagerSet(db.Model):
-    __tablename__ = 'manager_set'
+    __tablename__ = 'managerset'
 
     manager_id = db.Column(
             db.Integer, db.ForeignKey('manager.id', ondelete='CASCADE'), primary_key=True)
@@ -211,6 +261,15 @@ class ManagerSet(db.Model):
 
     manager_set_level = db.Column(
             db.Integer, nullable=False)
+
+class EmployeeLocationSet(db.Model):
+    __tablename__ = 'employeelocationset'
+
+    employee_id = db.Column(
+            db.Integer, primary_key=True)
+
+    location_id = db.Column(
+            db.Integer, primary_key=True)
 
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -227,51 +286,10 @@ class Employee(db.Model):
     birth_date = db.Column(
             db.Date, nullable=False)
 
-    home_address = db.Column(
-            db.String, nullable=True)
-
-    home_latitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'home_latitude > -90.0 AND home_latitude < 90.0'),
-            nullable=False)
-
-    home_longitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'home_longitude > -180.0 AND home_longitude < 180.0'),
-            nullable=False)
-
-    home_city = db.Column(
-            db.String, nullable=False)
-
     gender_id = db.Column(
             db.Integer, db.ForeignKey('gender.id'), nullable=True)
 
     gender = db.relationship('Gender')
-
-    cv_name = db.Column(
-            db.String, nullable=False)
-
-    cv_original_name = db.Column(
-            db.String, nullable=False)
-
-    is_student = db.Column(
-            db.Boolean, nullable=False)
-
-    faculty_id = db.Column(
-            db.Integer, db.ForeignKey('schoolfaculty.id'), nullable=True)
-
-    faculty = db.relationship('SchoolFaculty')
-
-    graduation_year = db.Column(
-            db.String, nullable=True)
-
-    canadian_citizen = db.Column(
-            db.Boolean, nullable=False)
-
-    canadian_work = db.Column(
-            db.Boolean, nullable=False)
 
     login_id = db.Column(
             db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
@@ -280,7 +298,10 @@ class Employee(db.Model):
             'Login', backref='employees')
 
     languages = db.relationship(
-            'Language', secondary='languageset')
+            'Language', secondary='employeelanguageset')
+
+    is_verified = db.Column(
+            db.Boolean, nullable=False)
 
 class Job(db.Model):
     __tablename__ = 'job'
@@ -288,18 +309,17 @@ class Job(db.Model):
     id = db.Column(
             db.Integer, primary_key=True)
 
-    start_date = db.Column(
-            db.DateTime, nullable=True)
-    end_date = db.Column(
-            db.DateTime, nullable=True)
+    date = db.Column(
+            db.DateTime, nullable=False)
+
     is_available = db.Column(
             db.Boolean, nullable=False)
 
-    salary = db.Column(
-            db.Float, nullable=True)
+    pay = db.Column(
+            db.Float, nullable=False)
 
     details = db.Column(
-            db.String, nullable=False)
+            db.String, nullable=True)
 
     create_date = db.Column(
             db.DateTime, nullable=False, server_default=db.func.now())
@@ -307,21 +327,24 @@ class Job(db.Model):
     position_id = db.Column(
             db.Integer, db.ForeignKey('position.id'), nullable=True)
 
-    application_deadline = db.Column(
-            db.DateTime, nullable=True)
+    position = db.relationship(
+            'Position')
 
     employee_id = db.Column(
             db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'), nullable=True)
 
     employee = db.relationship(
-            'Employee', backref='jobs')
+            'Employee', backref='job', uselist=False)
 
     manager_id = db.Column(
             db.Integer, db.ForeignKey('manager.id', ondelete='SET NULL'),
             nullable=True)
 
     manager = db.relationship(
-            'Manager', backref='listings')
+            'Manager', backref='listings', uselist=False)
+
+    languages = db.relationship(
+            'Language', secondary='joblanguageset')
 
 class Position(db.Model):
     __tablename__ = 'position'
