@@ -13,18 +13,16 @@ html {
     width: 100%;
 }
 
-#vfill-container {
-    width: 100%;
-    min-height: 95vh;
-}
-
 body {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: @sol-base3;
-    color: @sol-base2;
+    background-repeat: repeat-x;
+    background-position: top;
+    background-image: linear-gradient(@lighter-blue, white);
+    background-color: white;
+    color: @fg-main;
     font-family: "Open Sans", sans;
     z-index: 0;
     line-height: 1.45em;
@@ -44,32 +42,32 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 200%;
-    color: @sol-green;
+    color: @fg-main;
 }
 
 h2 {
     font-size: 175%;
-    color: @sol-blue;
+    color: @fg-main;
 }
 
 h3 {
     font-size: 150%;
-    color: @sol-violet;
+    color: @fg-main;
 }
 
 h4 {
     font-size: 135%;
-    color: @sol-cyan;
+    color: @fg-main;
 }
 
 h5 {
     font-size: 115%;
-    color: @sol-yellow;
+    color: @fg-main;
 }
 
 h6 {
     font-size: 100%;
-    color: @sol-orange;
+    color: @fg-main;
 }
 
 ul {
@@ -86,7 +84,7 @@ section {
     .contents {
         text-align: center;
         padding: 1em;
-        background-color: @trans-bg;
+        background-color: @semitrans-bg;
         margin: 1em auto;
         max-width: 45%;
 
@@ -129,7 +127,13 @@ section {
             transition: 0.4s all ease;
 
             :hover {
-                color: @sol-blue;
+                text-decoration: underline;
+            }
+        }
+
+        button a {
+            :hover {
+                text-decoration: none;
             }
         }
     }
@@ -195,20 +199,6 @@ body{
     }
 }
 
-#footer {
-    width: 100%;
-    min-height: 5vh;
-    text-align: center;
-    background-color: @trans-bg;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-
-    p {
-        margin: 0;
-    }
-}
-
 #survey-request {
     display: none;
 }
@@ -226,7 +216,10 @@ form#give-us-your-email {
 }
 
 button {
-    color: #ccc;
+    border: solid 1px #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+    padding: 0.5em 1em;
 }
 
 a.button {
@@ -245,14 +238,14 @@ a.button:hover {
     border-radius: 4px;
     box-shadow: 0 0 0 transparent ;
     transition: box-shadow 0.15s ease-in-out;
-    padding: 0.25em;
 }
 
 .button-success:hover {
     box-shadow: 0 0 5px rgba(200, 255, 200, 0.75);
 }
 
-input[type='text'], input[type='password'], textarea {
+input[type='text'], input[type='password'], input[type='number'],
+input[type='email'], input[type='tel'], textarea {
     border-radius: 4px;
     color: #555;
     background-color: white;
@@ -261,7 +254,8 @@ input[type='text'], input[type='password'], textarea {
     box-shadow: 0px 0px 0px white;
     transition: box-shadow 0.15s ease-in-out;
     width: 100%;
-    padding: 0.25em;
+    margin: 0.25em 0;
+    padding: 0.25em 0.5em;
 
     &:focus {
         box-shadow: 0px 0px 10px rgba(200, 200, 255, 0.75);
@@ -306,4 +300,16 @@ ul {
 .errors {
     color: @sol-red;
     margin-bottom: 1.5em;
+}
+
+/* block elements whose purpose is to hold a single element in the center. */
+.center-holder {
+    display: block;
+    text-align: center;
+}
+
+/* "flatten" a <ul>, removing the indentation of its children. */
+ul.flat {
+    margin: 0;
+    padding-left: 0;
 }

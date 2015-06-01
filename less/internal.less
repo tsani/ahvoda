@@ -1,6 +1,8 @@
 @import "main.less";
 
 #vfill-container {
+    width: 100%;
+    min-height: 85vh;
     padding: 1em;
     display: flex;
     flex-flow: column nowrap;
@@ -8,8 +10,113 @@
     align-items: center;
 }
 
+#top-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 10vh;
+
+    /* Tags in the top bar should have centered text/content. 
+     * This is overridden by :first-child and :last-child selectors below. */
+    text-align: center;
+
+    /* The top bar contains three elements, so make each occupy the same
+     * space, and remove margins in case of those pesky <hN> tags. */
+    * {
+        margin: 0;
+    }
+
+    > * {
+        width: 33%;
+        padding: 0.5em;
+    }
+
+    /* Flush leftmost tag's text against the window's left edge. */
+    > :first-child {
+        text-align: left;
+    }
+
+    /* Flush rightmost tag's text against the window's right edge. */
+    > :last-child {
+        text-align: right;
+    }
+
+    /* The nav is the rightmost element of the top-bar, and consists of icons
+     * that let the user navigate to the home page with the "ah!" icon and to
+     * the settings page with the cog icon. */
+    #nav {
+        > * {
+            display: inline;
+        }
+    }
+}
+
+#footer {
+    width: 100%;
+    min-height: 5vh;
+    text-align: center;
+    background-color: @trans-bg;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    p {
+        margin: 0;
+    }
+}
+
 section {
     width: auto;
     padding: 2em;
     background-color: @trans-bg;
+}
+
+form {
+    h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 0;
+    }
+
+    > div {
+        margin: 1em 0;
+    }
+
+    input[type='radio'].radio-button {
+        display: none;
+    }
+
+    input[type='radio'].radio-button + label {
+        margin: 0.25em 0;
+        padding: 0.25em 0.5em;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid @fg-main;
+        display: block;
+        width: 100%;
+    }
+
+    input[type='radio'].radio-button:hover + label {
+        background-color: @light-blue;
+    }
+
+    input[type='radio'].radio-button:checked + label {
+        background-color: @base-blue;
+    }
+
+    input[type='radio'].radio-button + input[type='text']#position-new-text {
+        background-color: @trans-bg;
+        text-align: center;
+    }
+
+    input[type='radio'].radio-button:checked + input[type='text']#position-new-text {
+        background-color: @base-blue;
+        border: 1px solid @fg-main;
+    }
+}
+
+.main-contents {
+    h1 {
+        text-align: center;
+    }
 }

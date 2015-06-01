@@ -11,6 +11,10 @@ from datetime import datetime
 def index():
     return render_template('landing-page.html')
 
+@app.route('/business/create-listing')
+def business_create_listing():
+    return render_template('create-listing.html')
+
 @app.route('/opportunities')
 def opportunities():
     return render_template('opportunities.html')

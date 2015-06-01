@@ -3,21 +3,23 @@
 @base-blue:  #6683b6;
 @base-beige: #fffe83;
 
-@light-green: lighten(@base-green, 10%);
-@light-blue:  lighten(@base-blue, 10%);
-@light-beige: lighten(@base-beige, 10%);
+@light-green: lighten(@base-green, 15%);
+@light-blue:  lighten(@base-blue, 15%);
+@light-beige: lighten(@base-beige, 15%);
 
-@lighter-green: lighten(@base-green, 20%);
-@lighter-blue:  lighten(@base-blue, 20%);
-@lighter-beige: lighten(@base-beige, 20%);
+@lighter-green: lighten(@base-green, 30%);
+@lighter-blue:  lighten(@base-blue, 30%);
+@lighter-beige: lighten(@base-beige, 30%);
 
 @dark-green: darken(@base-green, 10%);
 @dark-blue:  darken(@base-blue, 10%);
 @dark-beige: darken(@base-beige, 10%);
 
-@darker-green: darken(@base-green, 20%);
-@darker-blue:  darken(@base-blue, 20%);
-@darker-beige: darken(@base-beige, 20%);
+@darker-green: darken(@base-green, 30%);
+@darker-blue:  darken(@base-blue, 30%);
+@darker-beige: darken(@base-beige, 30%);
+
+@fg-main: #4a4a49;
 
 /* Solarized colors */
 @sol-base03:    #002b36;
@@ -37,7 +39,9 @@
 @sol-cyan:      #2aa198;
 @sol-green:     #859900;
 
-@trans-bg: fade(@sol-base03, 65%);
+@semitrans-bg: fade(@sol-base03, 65%);
+
+@trans-bg:      rgba(0, 0, 0, 0);
 
 a {
     color: @sol-blue;

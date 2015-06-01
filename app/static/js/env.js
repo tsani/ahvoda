@@ -77,3 +77,9 @@ function registerEmail() {
         }
     });
 }
+
+$(document).ready(function() {
+    $('input#position-new-text').focus(function() {
+        $('input#position-new').prop('checked', true);
+    });
+});
