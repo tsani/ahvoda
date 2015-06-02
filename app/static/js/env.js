@@ -42,42 +42,6 @@ $(function() {
     scrollFadeCheck();
 });
 
-var emailSent = false;
-
-function registerEmail() {
-    if(emailSent) {
-        return false;
-    }
-
-    var email = $('#email-field').val();
-    $.post('/api/addemail', JSON.stringify({email: email}), function(data) {
-        emailSent = true;
-        $('#register-result-message').text("Gotcha! We'll keep you posted.");
-        $('#survey-request').show();
-    }, 'json').fail(function(data) {
-        data = JSON.parse(data.responseText);
-        console.log(JSON.stringify(data));
-        if(data.message === 'email too long') {
-            $('#register-result-message').text(
-                "Looks like the email address you gave is a bit too long!");
-        }
-        else if(data.message === 'user already exists') {
-            $('#register-result-message').text(
-                "Looks like you've already given us your email. Thanks!");
-        }
-        else if(data.message === 'invalid email address') {
-            $('#register-result-message').text(
-                "Uh oh, that email address doesn't look valid!");
-        }
-        else {
-            $('#register-result-message').html([
-                "Something went wrong adding your email address;",
-                "try again later, or if this keeps happening, contact",
-                "<a href='mailto:jake@mail.ahvoda.com'>Jake</a>"].join(' '));
-        }
-    });
-}
-
 $(document).ready(function() {
     $('input#position-new-text').focus(function() {
         $('input#position-new').prop('checked', true);
