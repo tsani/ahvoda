@@ -15,6 +15,10 @@ def index():
 def business_create_listing():
     return render_template('create-listing.html')
 
+@app.route('/business/login')
+def business_login():
+    return render_template('business-login.html')
+
 @app.route('/opportunities')
 def opportunities():
     return render_template('opportunities.html')

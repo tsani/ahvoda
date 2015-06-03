@@ -1,0 +1,26 @@
+{% extends "layout-external.html" %}
+
+{% block contents %}
+
+<section class='total-centering'>
+    <div class='contents'>
+        <h1> Log in </h1>
+        <form>
+            <label>
+                Email address
+                <input type='text' name='email'>
+            </label>
+            <label>
+                Password
+                <input type='password' name='password'>
+            </label>
+            <div class='center-holder'>
+                <button class='button-success'>
+                    Log in
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
