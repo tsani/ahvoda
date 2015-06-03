@@ -1,28 +1,51 @@
 General object formats
 ======================
 
+When making requests or receiving responses, these are the the formats of the
+JSON that should be supplying or will be received. Items marked with an
+asterisk are provided in responses only, and are not required in requests.
+
+Language
+--------
+
+    {
+        "id": <unique identifier for the language>,
+        "name": <friendly name for the language>,
+        "code": <ISO 631 language code>
+    }
+
+The id, the name, and the code are each unique.
+
 
 Position
 --------
 
     {
-        "id": <unique identifier of the position>
+        "id": <unique identifier of the position> *
         "name": <position name>,
         "pay": <amount as a float>,
         "startTime": <time the shift starts at>
         "duration":  <employment duration>,
         "languages": [ 
-            <language name>,
+            <language object>,
             ...
         ]
     }
+
+Language objects will always be returned in responses. However, in requests,
+since each entry of a language object is unique, the language can be identified
+by either its id or its ISO code, depending on the data
+type.
+
+* string: ISO code
+* integer: id
 
 
 Business
 --------
 
     {
-        "id": <unique identifer of the business>,
+        "id": <unique identifer of the business>, *
         "name": <business name>,
         "description": <business description>,
         "location": [
@@ -44,6 +67,7 @@ Company
 -------
 
     {
+        "id": <company id> *
         "name": <company name>
     }
 
