@@ -39,8 +39,13 @@ class Language(db.Model):
     id = db.Column(
             db.Integer, primary_key=True)
 
+    # Friendly name to show the user
     name = db.Column(
             db.String, nullable=False)
+
+    # ISO 639 code for the language
+    iso_name = db.Column(
+            db.String, nullable=True, unique=True)
 
     employees = db.relationship(
             'Employee', secondary='languageset')
