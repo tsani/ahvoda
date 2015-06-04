@@ -6,12 +6,16 @@
 
 {% block body %}
 
+<!--
 <div id='vfill-container'>
+-->
 {% block contents %}
 {% endblock %}
+<!--
 </div>
+-->
 
-<div class='carousel'>
+<div class='cycle cycle-parallel carousel' data-cycle-period='10000'>
     <img src='/static/img/carousel/fill_bike.jpg'>
     <img src='/static/img/carousel/fill_cups.jpg'>
     <img src='/static/img/carousel/fill_bridge.jpg'>

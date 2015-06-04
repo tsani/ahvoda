@@ -4,13 +4,10 @@ body {
     color: white;
 }
 
-#vfill-container {
-    min-height: 100%;
-}
-
 section {
+    width: 100%;
     min-height: 100%;
-    min-height: 100vh;
+    background-color: @semitrans-bg;
 
     h1, h2, h3, h4, h5, h6 {
         color: white;
@@ -19,17 +16,92 @@ section {
     .flex-row {
         display: flex;
         flex-flow: row wrap;
+        align-items: center;
+
+        > * {
+            margin: 1em auto;
+        }
+    }
+
+    .contents {
+        text-align: center;
+        padding: 1em;
+        margin: 1em auto;
+        max-width: 600px;
+
+        h1 {
+            width: 100%;
+        }
+
+        p.description {
+            text-align: center;
+        }
+
+        .email-address {
+            text-align: center;
+        }
+
+        .circle-img-container {
+            height: 15em;
+            width: 15em;
+            display: inline-block;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0px 0px 5px white;
+            overflow: hidden;
+            position: relative;
+
+            img {
+                min-width: 100%;
+                min-height: 90%;
+                position: absolute;
+                -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                     -o-transform: translateX(-50%);
+                        transform: translateX(-50%);
+            }
+        }
+
+        a {
+            color: inherit;
+            transition: 0.4s all ease;
+
+            :hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 
-section#about {
-    .contents {
-        margin: 4em auto;
+.cycle {
+    :not(:first-child) {
+        display: none;
     }
 }
 
-section#team {
-    .contents {
-        width: 100%;
+.carousel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+
+    img {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+             -o-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    img:first-child {
+        display: inline;
     }
 }
