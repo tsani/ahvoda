@@ -74,8 +74,12 @@ section {
 }
 
 .cycle {
-    :not(:first-child) {
+    > * {
         display: none;
+    }
+
+    :first-child {
+        display: inline;
     }
 }
 
