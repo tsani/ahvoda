@@ -85,14 +85,15 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
                 # If a session cannot be identified by a cookie, then fallback
                 # basic auth.
                 auth = request.authorization
-                if not auth or not check_auth(auth.username, auth.password):
+                login = check_auth(auth.username, auth.password)
+                if not auth or not login:
                     # If no 'Authorization' header is present, or if the username
                     # and password combination is invalid, issue a 401 response
                     # saying that authentication is required.
                     return failure_handler()
                 else:
                     if pass_login:
-                        return f(*args, login=session['login'], **kwargs)
+                        return f(*args, login=login, **kwargs)
                     else:
                         return f(*args, **kwargs)
         return decorated
