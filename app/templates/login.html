@@ -5,10 +5,19 @@
 <section class='total-centering'>
     <div class='contents'>
         <h1> Log in </h1>
-        <form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class='errors'>
+                {% for message in messages %}
+                    <li> {{ message }} </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+        <form method='POST' action='{{ url_for('login') }}'>
             <label>
-                Email address
-                <input type='text' name='email'>
+                Username
+                <input type='text' name='username'>
             </label>
             <label>
                 Password
