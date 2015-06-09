@@ -7,7 +7,7 @@ class Rating(db.Model):
             db.Integer, db.ForeignKey('job.id'), primary_key=True)
 
     job = db.relationship(
-            'Job')
+            'Job', lazy='joined', uselist=False)
 
     employee_rating = db.Column(
             db.Float, nullable=False)
@@ -48,7 +48,10 @@ class Language(db.Model):
             db.String, nullable=True, unique=True)
 
     employees = db.relationship(
-            'Employee', secondary='languageset')
+            'Employee', secondary='employeelanguageset')
+
+    jobs = db.relationship(
+            'Job', secondary='joblanguageset')
 
 class EmployeeLanguageSet(db.Model):
     __tablename__ = 'employeelanguageset'
@@ -222,6 +225,25 @@ class Login(db.Model):
     create_date = db.Column(
             db.DateTime, nullable=False, server_default=db.func.now())
 
+    employee_account = db.relationship(
+            'Employee', uselist=False, backref='login', lazy='joined')
+    manager_account = db.relationship(
+            'Manager', uselist=False, backref='login', lazy='joined')
+
+    def is_employee(self):
+        return bool(self.employee_account)
+
+    def is_manager(self):
+        return bool(manager_account)
+
+    def get_account(self):
+        """ Get the account associated with this Login.
+
+        Returns:
+            Either a Manager or Employee instance.
+        """
+        return self.employee_account or self.manager_account
+
 class Manager(db.Model):
     __tablename__ = 'manager'
 
@@ -241,13 +263,10 @@ class Manager(db.Model):
             db.Integer, db.ForeignKey('gender.id'), nullable=True)
 
     gender = db.relationship(
-            'Gender')
+            'Gender', lazy='joined')
 
     login_id = db.Column(
             db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
-
-    login = db.relationship(
-            'Login', backref='managers')
 
     businesses = db.relationship(
             'Business', secondary='managerset')
@@ -294,13 +313,11 @@ class Employee(db.Model):
     gender_id = db.Column(
             db.Integer, db.ForeignKey('gender.id'), nullable=True)
 
-    gender = db.relationship('Gender')
+    gender = db.relationship(
+            'Gender', lazy='joined')
 
     login_id = db.Column(
             db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
-
-    login = db.relationship(
-            'Login', backref='employees')
 
     languages = db.relationship(
             'Language', secondary='employeelanguageset')
@@ -333,7 +350,7 @@ class Job(db.Model):
             db.Integer, db.ForeignKey('position.id'), nullable=True)
 
     position = db.relationship(
-            'Position')
+            'Position', lazy='joined')
 
     employee_id = db.Column(
             db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'), nullable=True)
@@ -346,7 +363,7 @@ class Job(db.Model):
             nullable=True)
 
     manager = db.relationship(
-            'Manager', backref='listings', uselist=False)
+            'Manager', backref='listings', uselist=False, lazy='joined')
 
     languages = db.relationship(
             'Language', secondary='joblanguageset')
@@ -367,7 +384,7 @@ class Position(db.Model):
         db.Integer, db.ForeignKey('business.id'), nullable=False)
 
     business = db.relationship(
-            'Business', backref='positions')
+            'Business', backref='positions', lazy='joined')
 
     manager_id = db.Column(
             db.Integer, db.ForeignKey('manager.id'))
