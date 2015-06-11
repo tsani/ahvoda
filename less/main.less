@@ -18,9 +18,6 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
-    background-repeat: repeat-x;
-    background-position: top;
-    background-image: linear-gradient(@lighter-blue, white);
     background-color: white;
     color: @fg-main;
     font-family: "Open Sans", sans;
@@ -28,6 +25,7 @@ body {
     line-height: 1.45em;
     font-size: 14px;
     overflow-x: hidden;
+    position: relative;
 
     * {
         z-index: 1;
@@ -90,10 +88,11 @@ body{
  * center.
  */
 .total-centering {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+    .display-flex;
+    .flex-nowrap();
+    .flex-direction(column);
+    .flex-justify-content(center);
+    .flex-align-items(center);
 }
 
 @media (max-width: @mobile-size) {
@@ -106,31 +105,19 @@ body{
     }
 }
 
+section .contents {
+    max-width: 900px;
+}
+
 .btn {
     padding: 0.25em;
-}
-
-#survey-request {
-    display: none;
-}
-
-form#give-us-your-email {
-    text-align: center;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-
-    * {
-        margin: 0.25em;
-    }
 }
 
 button {
     color: inherit;
     border-radius: 5px;
     border: solid 1px #333;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: transparent;
     padding: 0.5em 1em;
 }
 
@@ -140,16 +127,18 @@ a.button {
     padding: 0.5em 1em;
     border-radius: 5px;
     border: 1px solid #333;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: transparent;
+    box-shadow: 0 0 0 transparent ;
+    transition: box-shadow 0.15s ease-in-out;
 }
 
 a.button:hover {
     color: inherit;
+    background-color: #333;
+    box-shadow: 0 0 5px rgba(32, 32, 32, 0.8);
 }
 
 .button-success {
-    background-image: linear-gradient(to bottom, #5cb85c 0px, #419641 100%);
-    background-repeat: repeat-x;
     border: 1px solid #3e8f3e;
     box-shadow: 0 0 0 transparent ;
     transition: box-shadow 0.15s ease-in-out;
@@ -231,12 +220,14 @@ ul.flat {
 
 #footer {
     width: 100%;
+    height: 4vh;
     min-height: 5vh;
     text-align: center;
     background-color: @semitrans-bg;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
+    .display-flex;
+    .flex-nowrap();
+    .flex-direction(column);
+    .flex-justify-content(center);
 
     p {
         margin: 0;
@@ -245,4 +236,88 @@ ul.flat {
 
 .sc {
     font-variant: small-caps;
+}
+
+#top-bar {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    padding: 1em 5em;
+    z-index: 5;
+    > img {
+        height: 4em;
+    }
+}
+
+.display-flex() {
+    display: flex;
+    display: -ms-flexbox;
+}
+
+.flex-nowrap() {
+    -ms-flex-wrap: none;
+    flex-wrap: nowrap;
+}
+
+.flex-wrap(@a) {
+    -ms-flex-wrap: @a;
+    flex-wrap: @a;
+}
+
+.flex-direction(@a) {
+    -ms-flex-direction: @a;
+    flex-direction: @a;
+}
+
+.flex-justify-content(@a) {
+    -ms-flex-pack: @a;
+    justify-content: @a;
+}
+
+.flex-align-items(@a) {
+    -ms-flex-align: @a;
+    align-items: center;
+}
+
+.fitsize {
+    max-height: 60vh;
+}
+
+.first-blah() {
+    > * {
+        margin: 1em;
+    }
+
+    h5 {
+        margin: 0;
+    }
+
+    > *:not(:first-child) {
+        height: 100%;
+        .display-flex;
+        text-align: left;
+        .flex-direction(column);
+        .flex-nowrap();
+        .flex-justify-content(center);
+    }
+}
+
+.first-left {
+    .first-blah;
+
+    > :first-child {
+        float: left;
+    }
+
+}
+
+.first-right {
+    .first-blah;
+
+    > :first-child {
+        float: right;
+    }
 }
