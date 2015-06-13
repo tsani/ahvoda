@@ -234,7 +234,7 @@ class Login(db.Model):
         return bool(self.employee_account)
 
     def is_manager(self):
-        return bool(manager_account)
+        return bool(self.manager_account)
 
     def get_account(self):
         """ Get the account associated with this Login.
