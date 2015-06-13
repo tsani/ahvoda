@@ -1,0 +1,6 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "/api/listings/create response",
+    "description": "A successful response to the creation of a listing.",
+    "type": "object"
+}
