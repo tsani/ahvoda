@@ -1,8 +1,8 @@
-from functools import wraps
 from flask import request, session, Response, flash, url_for
 from app import app, models, db
-from app.auth_utils import failure
+from . import failure
 
+from functools import wraps
 from hashlib import pbkdf2_hmac
 from binascii import hexlify
 
@@ -59,12 +59,12 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
             instance is recorded to the session associated with the request
             under the key "login".
         failure_handler (type: function, default:
-                "auth_utils.failure.login_redirect"):
+                "util.auth.failure.login_redirect"):
             The function to run in case authentication fails.
             The default assumes a browser-based interaction, so it will create
             a "Response" that will flash a message noting that the
             authentication failed, and will redirect to the login page.
-            For the REST API, the handler "auth_utils.failure.reponse_401" is
+            For the REST API, the handler "util.auth.failure.reponse_401" is
             more appropriate.
 
     Returns:
@@ -85,17 +85,29 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
                 # If a session cannot be identified by a cookie, then fallback
                 # basic auth.
                 auth = request.authorization
-                login = check_auth(auth.username, auth.password)
-                if not auth or not login:
-                    # If no 'Authorization' header is present, or if the username
-                    # and password combination is invalid, issue a 401 response
-                    # saying that authentication is required.
+
+                if not auth:
+                    # If no 'Authorization' header is present, run the supplied
+                    # failure handler.
+                    app.logger.info("no authentication headers sent in request"
+                            " for %s", request.path)
                     return failure_handler()
+
+                login = check_auth(auth.username, auth.password)
+
+                if not login:
+                    # If verifying the user's credentials failed, run the
+                    # supplied failure handler.
+                    app.logger.info("authentication failed for user %s for %s",
+                            (auth.username, request.path))
+                    return failure_handler()
+
+                app.logger.debug("successfully authenticated as user %s",
+                        login.username)
+                if pass_login:
+                    return f(*args, login=login, **kwargs)
                 else:
-                    if pass_login:
-                        return f(*args, login=login, **kwargs)
-                    else:
-                        return f(*args, **kwargs)
+                    return f(*args, **kwargs)
         return decorated
     return decorator
 
@@ -113,8 +125,10 @@ def requires_manager(f):
                     'instance')
 
         if kwargs['login'].is_manager():
+            app.logger.debug("identified manager account")
             return f(*args, **kwargs)
         else:
+            app.logger.info("failed to identify account as manager")
             return failure.response_403("This page requires a manager "
                     "account.")
     return decorated
@@ -133,8 +147,10 @@ def requires_employee(f):
                     'instance')
 
         if kwargs['login'].is_employee():
+            app.logger.debug("identified employee account")
             return f(*args, **kwargs)
         else:
+            app.logger.info("failed to identify account as employee")
             return failure.response_403("This page requires a manager "
                     "account.")
     return decorated

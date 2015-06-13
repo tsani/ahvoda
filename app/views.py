@@ -1,4 +1,4 @@
-from app import app, forms, utils, auth_utils
+from app import app, forms, util
 
 from flask import render_template, request, url_for, flash, session
 
@@ -29,7 +29,7 @@ def login():
             error = True
 
         if not error:
-            login = auth_utils.check_auth(form['username'], form['password'])
+            login = util.auth.check_auth(form['username'], form['password'])
             if not login:
                 flash('Incorrect username or password.')
                 return render_template('login.html')
@@ -49,9 +49,9 @@ def new_listing():
     return render_template('new-listing.html', form=form)
 
 @app.route('/test/employee-auth')
-@auth_utils.requires_auth(
-        failure_handler=auth_utils.failure.redirect('login'))
-@auth_utils.requires_employee
+@util.auth.requires_auth(
+        failure_handler=util.auth.failure.redirect('login'))
+@util.auth.requires_employee
 def test_employee_auth(login):
     print('added to session')
     employee = login.get_account()
