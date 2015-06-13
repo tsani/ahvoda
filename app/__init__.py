@@ -11,4 +11,4 @@ app.session_interface = RedisSessionInterface()
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import views, api, forms, models, auth_utils
+from app import views, api, forms, models, auth_utils, util
