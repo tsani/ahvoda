@@ -28,4 +28,4 @@ else:
 
 app.logger.addHandler(_syslog_handler)
 
-from app import views, api, forms, models
+from app import views, api, forms, models, util
