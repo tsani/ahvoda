@@ -1,33 +1,13 @@
-from app import app, db
-from app import models
-from app import util
+from app import app, util
 
-import datetime
-
-from flask import request
-
-@app.route('/api/listings/create', methods=['POST'])
-@util.json_validation.ResponseValidator()
+@app.route('/api/listings/create', methods=['GET'])
+@util.decorate_with(
+        util.json_validation.ResponseValidator() \
+                .with_schema('api/listings/GET/response.json'))
 @util.auth.requires_auth(failure_handler=util.auth.failure.response_401)
-@util.auth.requires_manager
-@util.json_validation.RequestValidator()
-def create(login):
-    """ API endpoint for creating a new listing -- /api/listings/create
-
-    Request body is JSON of the following form:
-
-        {
-            "name": <position name>,
-            "businessId": <unique identifier for the business>
-            "pay": <amount as a float>,
-            "startTime": <time the shift starts at>
-            "duration":  <employment duration>,
-            "languages": [
-                <language name>,
-                ...
-            ]
-        }
-    """
-    manager = login.get_account()
-
-    return jsonify({"hi": "lol"})
+@util.decorate_with(
+        util.json_validation.QueryStringValidator() \
+                .with_schema('api/listings/GET/query_string.json'))
+def get_listings(login):
+    """ API endpoint for listing listings. """
+    raise NotImplementedError()
