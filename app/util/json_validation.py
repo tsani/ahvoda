@@ -61,13 +61,14 @@ def _load_schema_from_request(request, schema_type):
             The schema to load. Two values are allowed:
             * 'request'
             * 'response'
+            * 'query_string'
 
     Exceptions:
         If the schema fails to load, then a ServerValidationError is raised.
     """
     # TODO cache schemas / load them all on application startup
     check = lambda s: s == schema_type
-    if not check('request') and not check('response'):
+    if not (check('request') or check('response') or check('query_string')):
         raise ValueError("invalid schema type `%s'." % schema_type)
 
     # To compute the path, we need to drop the first character of the request
@@ -94,6 +95,14 @@ def _load_request_schema(request):
     See _load_schema_from_request.
     """
     return _load_schema_from_request(request, 'request')
+
+@wraps(_load_schema_from_request)
+def _load_query_string_schema(request):
+    """ Load the query string JSON schema associated with a request.
+
+    See _load_schema_from_request.
+    """
+    return _load_schema_from_request(request, 'query_string')
 
 def _validate_response(response, schema):
     code = lambda x: x == response.status_code
@@ -169,6 +178,27 @@ def _validate_request(request, schema):
     else:
         raise ClientValidationError("provided request does not conform to "
                 "schema")
+
+def _validate_query_string(query_string_args, schema):
+    """ Validate the parsed query string arguments with a JSON schema.
+
+    Arguments:
+        query_string_args (type: dictionary):
+            The query string in a parsed form, as a dictionary. Each value
+            in the dictionary MUST be a string.
+        schema (type: dictionary):
+            The schema with which to validate the query string dictionary.
+    """
+    try:
+        validation_successful = jsonschema.validate(query_string_args, schema)
+    except jsonschema.exceptions.ValidationError as e:
+        raise ClientValidationError(str(e))
+
+    if validation_successful:
+        return query_string_args
+    else:
+        raise ClientValidationError("provided query string does not conform "
+                "to schema")
 
 class Validator:
     """ Base class for all JSON validators.
@@ -254,7 +284,11 @@ class RequestValidator(Validator):
     def decorate(self, f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            schema = _load_request_schema(request)
+            if self.schema is None:
+                schema = _load_request_schema(request)
+            else:
+                schema = self.schema
+
             try:
                 if not schema:
                     raise ValidationError("no schema for request")
@@ -267,5 +301,33 @@ class RequestValidator(Validator):
                 })
                 response.status_code = 400
                 return response
+
             return f(*args, **kwargs)
+
+        return decorated
+
+class QueryStringValidator(Validator):
+    """ The class of decorators for query string arguments. """
+    def decorate(self, f):
+        @wraps(f)
+        def deocrated(*args, **kwargs):
+            if self.schema is None:
+                schema = _load_query_string_schema(request)
+            else:
+                schema = self.schema
+
+            try:
+                if not schema:
+                    raise validationError("no schema for request")
+                _validate_query_string(request.args, schema)
+            except ClientValidationError as e:
+                app.logger_warning("request failed validation: %s", str(e))
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+                return response
+
+            return f(*args, **kwargs)
+
         return decorated
