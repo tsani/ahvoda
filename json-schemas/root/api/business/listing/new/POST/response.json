@@ -1,0 +1,116 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "/api/listings/create response",
+    "description": "A successful response to the creation of a listing.",
+    "type": "object",
+    "properties": {
+        "listingId": {
+            "$ref": "#/definitions/id"
+        },
+        "positionId": {
+            "$ref": "#/definitions/id"
+        },
+        "businessId": {
+            "$ref": "#/definitions/id"
+        },
+        "managerId": {
+            "$ref": "#/definitions/id"
+        },
+        "pay": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+        },
+        "startTime": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "duration": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+        },
+        "languages": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "status": {
+            "enum": [
+                "pending",
+                "submitted",
+                "inProgress",
+                "cancelled",
+                "completed",
+                "rated",
+                "stale",
+                "aborted"
+            ]
+        },
+        "employee": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMinimum": true
+                },
+                "rating": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                }
+            },
+            "required": [
+                "firstName",
+                "lastName",
+                "age",
+                "rating"
+            ],
+            "additionalProperties": false
+        },
+        "rating": {
+            "type": "object",
+            "properties": {
+                "ofEmployer": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "ofEmployee": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "listingId",
+        "positionId",
+        "businessId",
+        "managerId",
+        "pay",
+        "startTime",
+        "duration",
+        "languages",
+        "status"
+    ],
+    "additionalProperties": false,
+    "definitions": {
+        "id": {
+            "type": "number",
+            "minimum": 0
+        }
+    }
+}
