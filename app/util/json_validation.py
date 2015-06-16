@@ -5,6 +5,164 @@ from functools import wraps
 import json, os, sys
 import jsonschema
 
+class Validator:
+    """ Base class for all JSON validators.
+
+    Each derived class must implement the "decorate" method, which acts as
+    decorator for request handler functions.
+
+    This class uses the builder pattern to set attributes of the validator.
+    The methods used in this pattern should return self, so that they may be
+    chained together.
+
+    The base validator supports only two options "with_schema" and
+    "with_inferred_schema". Specifically, the "schema" attribute of instances
+    of this class is set to "None" if the schema should be inferred. Derived
+    classes must account for this.
+    """
+    def __init__(self):
+        self.schema = None
+        self.methods = None
+
+    def with_schema(self, path):
+        """ Specify a schema to use for validation.
+
+        Arguments:
+            path (type: string):
+                A path relative to the configuration option JSON_SCHEMA_ROOT.
+                The JSON file at that location is immediately loaded. The
+                upshot of this is that application loading should fail if the
+                file cannot be loaded.
+        """
+        self.schema = _load_schema_from_file(path)
+        return self
+
+    def with_inferred_schema(self):
+        """ Specify that the schema to use for validation should be inferred
+        from the request path.
+        """
+        self.schema = None
+        return self
+
+    def for_methods(self, *args):
+        """ Specify what methods this validator should act on. """
+        self.methods = set(args)
+        return self
+
+    def for_all_methods(self):
+        """ Specify that this validator should run on any request method. """
+        self.methods = None
+        return self
+
+    def should_run_on_method(self, method):
+        return self.methods is None or method in self.methods
+
+    def decorate(self, f):
+        """ The decorate method of the base validator is not implemented!
+        Derived classes must implement it.
+        """
+        raise NotImplementedError()
+
+    @wraps(decorate)
+    def __call__(self, f):
+        """ Wraps the "decorate" method. """
+        return self.decorate(f)
+
+class ResponseValidator(Validator):
+    """ The class of decorators for responses. """
+    def decorate(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            # TODO don't load the schema if the request method isn't approved?
+            if self.schema is None:
+                schema = _load_response_schema(request)
+            else:
+                schema = self.schema
+
+            response = f(*args, **kwargs)
+
+            if not self.should_run_on_method(request.method):
+                return response
+
+            try:
+                response = _validate_response(response, schema)
+            except ClientValidationError as e:
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+            except ServerValidationError as e:
+                app.logger.exception("failed to validate response")
+                response = jsonify({
+                    "message": "an unexpected server error occurred"
+                })
+                response.status_code = 500
+
+            return response
+
+        return decorated
+
+class RequestValidator(Validator):
+    """ The class of decorators for requests. """
+    def decorate(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if not self.should_run_on_method(request.method):
+                return f(*args, **kwargs)
+
+            if self.schema is None:
+                schema = _load_request_schema(request)
+            else:
+                schema = self.schema
+
+            try:
+                if not schema:
+                    raise ValidationError("no schema for request")
+                _validate_request(request, schema)
+            except ClientValidationError as e:
+                # TODO better page / don't abort in production
+                app.logger.warning("request failed validation: %s", str(e))
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+                return response
+
+            return f(*args, **kwargs)
+
+        return decorated
+
+class QueryStringValidator(Validator):
+    """ The class of decorators for query string arguments. """
+    def decorate(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if not self.should_run_on_method(request.method):
+                return f(*args, **kwargs)
+
+            if self.schema is None:
+                schema = _load_query_string_schema(request)
+            else:
+                schema = self.schema
+
+            try:
+                if not schema:
+                    raise validationError("no schema for request")
+                _validate_query_string(request.args, schema)
+            except ClientValidationError as e:
+                app.logger_warning("request failed validation: %s", str(e))
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+                return response
+
+            return f(*args, **kwargs)
+
+        return decorated
+
+### Exceptions
+
 class ValidationError(Exception):
     """ The class of errors that arise when validating requests and responses
     against JSON schemas.
@@ -26,6 +184,8 @@ class ServerValidationError(ValidationError):
     Errors of this type usually result in a 5xx status code.
     """
     pass
+
+### Dirty work functions
 
 def _load_schema_from_file(path):
     """ Try to load the schema identified by the given path.
@@ -199,135 +359,3 @@ def _validate_query_string(query_string_args, schema):
     else:
         raise ClientValidationError("provided query string does not conform "
                 "to schema")
-
-class Validator:
-    """ Base class for all JSON validators.
-
-    Each derived class must implement the "decorate" method, which acts as
-    decorator for request handler functions.
-
-    This class uses the builder pattern to set attributes of the validator.
-    The methods used in this pattern should return self, so that they may be
-    chained together.
-
-    The base validator supports only two options "with_schema" and
-    "with_inferred_schema". Specifically, the "schema" attribute of instances
-    of this class is set to "None" if the schema should be inferred. Derived
-    classes must account for this.
-    """
-    def __init__(self):
-        self.schema = None
-
-    def with_schema(self, path):
-        """ Specify a schema to use for validation.
-
-        Arguments:
-            path (type: string):
-                A path relative to the configuration option JSON_SCHEMA_ROOT.
-                The JSON file at that location is immediately loaded. The
-                upshot of this is that application loading should fail if the
-                file cannot be loaded.
-        """
-        self.schema = _load_schema_from_file(path)
-        return self
-
-    def with_inferred_schema(self):
-        """ Specify that the schema to use for validation should be inferred
-        from the request path.
-        """
-        self.schema = None
-        return self
-
-    def decorate(self, f):
-        """ The decorate method of the base validator is not implemented!
-        Derived classes must implement it.
-        """
-        raise NotImplementedError()
-
-    @wraps(decorate)
-    def __call__(self, f):
-        """ Wraps the "decorate" method. """
-        return self.decorate(f)
-
-class ResponseValidator(Validator):
-    """ The class of decorators for responses. """
-    def decorate(self, f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if self.schema is None:
-                schema = _load_response_schema(request)
-            else:
-                schema = self.schema
-
-            response = f(*args, **kwargs)
-
-            try:
-                response = _validate_response(response, schema)
-            except ClientValidationError as e:
-                response = jsonify({
-                    "message": str(e)
-                })
-                response.status_code = 400
-            except ServerValidationError as e:
-                app.logger.exception("failed to validate response")
-                response = jsonify({
-                    "message": "an unexpected server error occurred"
-                })
-                response.status_code = 500
-
-            return response
-
-        return decorated
-
-class RequestValidator(Validator):
-    """ The class of decorators for requests. """
-    def decorate(self, f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if self.schema is None:
-                schema = _load_request_schema(request)
-            else:
-                schema = self.schema
-
-            try:
-                if not schema:
-                    raise ValidationError("no schema for request")
-                _validate_request(request, schema)
-            except ClientValidationError as e:
-                # TODO better page / don't abort in production
-                app.logger.warning("request failed validation: %s", str(e))
-                response = jsonify({
-                    "message": str(e)
-                })
-                response.status_code = 400
-                return response
-
-            return f(*args, **kwargs)
-
-        return decorated
-
-class QueryStringValidator(Validator):
-    """ The class of decorators for query string arguments. """
-    def decorate(self, f):
-        @wraps(f)
-        def deocrated(*args, **kwargs):
-            if self.schema is None:
-                schema = _load_query_string_schema(request)
-            else:
-                schema = self.schema
-
-            try:
-                if not schema:
-                    raise validationError("no schema for request")
-                _validate_query_string(request.args, schema)
-            except ClientValidationError as e:
-                app.logger_warning("request failed validation: %s", str(e))
-                response = jsonify({
-                    "message": str(e)
-                })
-                response.status_code = 400
-                return response
-
-            return f(*args, **kwargs)
-
-        return decorated
