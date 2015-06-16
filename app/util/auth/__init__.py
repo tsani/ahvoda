@@ -3,8 +3,10 @@ from app import app, models, db
 from . import failure
 
 from functools import wraps
-from hashlib import pbkdf2_hmac
-from binascii import hexlify
+
+from app.util import crypto
+
+from binascii import unhexlify, hexlify
 
 def has_session():
     """ Check whether the request is being made with a cookie having the
@@ -15,7 +17,9 @@ def has_session():
 def check_auth(username, password):
     """ Try to authenticate with a given username and password.
 
-    The password supplied to this function must be in plaintext; this function
+    Both the username and password must be utf-8 encoded strings.
+
+    The password supplied to this function must be plaintext; this function
     takes care of hashing it.
 
     If the authentication succeeds, then a "models.Login" instance is returned.
@@ -27,17 +31,15 @@ def check_auth(username, password):
         print("no match for username", username)
         return None # no match for username in database
 
-    salt = login.password_salt
-    stored_password = bytes(login.password, 'utf-8')
+    salt_text = login.password_salt
+    salt = unhexlify(salt_text)
+    stored_password = login.password # utf-8 string
 
     # Compute the derived key.
-    given_password = hexlify(
-            pbkdf2_hmac(
-                'sha256', bytes(password, 'utf-8'), bytes(salt, 'utf-8'),
-                100000, 256))
-    # TODO move the details of the hashing (number of rounds, inner hashing
-    # algorithm, derived key length) into the database or into configuration
-    # files
+    given_password = str(
+            hexlify(
+                crypto.hash_password(password, salt)),
+            'utf-8')
 
     # Check whether the derived key matches the password on file.
     if given_password == stored_password:
@@ -99,7 +101,7 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
                     # If verifying the user's credentials failed, run the
                     # supplied failure handler.
                     app.logger.info("authentication failed for user %s for %s",
-                            (auth.username, request.path))
+                            auth.username, request.path)
                     return failure_handler()
 
                 app.logger.debug("successfully authenticated as user %s",
