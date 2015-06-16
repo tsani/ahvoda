@@ -7,10 +7,10 @@ import datetime
 from flask import request
 
 @app.route('/api/listings/create', methods=['POST'])
-@util.json_validation.validate_response
+@util.json_validation.ResponseValidator()
 @util.auth.requires_auth(failure_handler=util.auth.failure.response_401)
 @util.auth.requires_manager
-@util.json_validation.validate_request
+@util.json_validation.RequestValidator()
 def create(login):
     """ API endpoint for creating a new listing -- /api/listings/create
 

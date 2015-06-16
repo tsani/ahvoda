@@ -1,8 +1,9 @@
 from flask import request, abort, jsonify
+from app import app
+
 from functools import wraps
 import json, os, sys
 import jsonschema
-from app import app
 
 class ValidationError(Exception):
     """ The class of errors that arise when validating requests and responses
@@ -13,20 +14,43 @@ class ValidationError(Exception):
 class ClientValidationError(ValidationError):
     """ The class of errors that arise due to client error when validating
     requests and responses against JSON schemas.
+
+    Errors of this type usually result in a 4xx status code.
     """
     pass
 
 class ServerValidationError(ValidationError):
     """ The class of errors that arise due to server error when validating
     requests and requests against JSON schemas.
+
+    Errors of this type usually result in a 5xx status code.
     """
     pass
 
-def _load_schema(request, schema_type):
+def _load_schema_from_file(path):
+    """ Try to load the schema identified by the given path.
+
+    The path is given relative to configured value JSON_SCHEMA_ROOT.
+    """
+    path = os.path.join(
+            app.config['JSON_SCHEMA_ROOT'],
+            path)
+    app.logger.debug("loading JSON schema %s", path)
+    try:
+        with open(path, 'rt') as f:
+            json_data = json.load(f)
+    except (OSError, IOError, ValueError) as e:
+        raise ServerValidationError(str(e))
+
+    return json_data
+
+def _load_schema_from_request(request, schema_type):
     """ Try to load the schema associated with a given request.
 
     Use "_load_response_schema" and "_load_request_schema" instead of using
     this function directly, to avoid typos.
+
+    This function calls "_load_che
 
     Arguments:
         request:
@@ -47,37 +71,29 @@ def _load_schema(request, schema_type):
         raise ValueError("invalid schema type `%s'." % schema_type)
 
     # To compute the path, we need to drop the first character of the request
-    # path, since it's just a slash. This lets us properly combine the
-    # JSON_SCHEMA_ROOT with the request path to compute path relative to the
-    # webapp's current working directory where the schema is located.
+    # path, since it's just a slash. This produces a path relative to
+    # JSON_SCHEMA_ROOT, as required by "_load_schema_from_file".
     path = os.path.join(
-            app.config['JSON_SCHEMA_ROOT'],
             request.path[1:],
             schema_type + '.json')
-    app.logger.debug("loading JSON schema %s", path)
-    try:
-        with open(path, 'rt') as f:
-            json_data = json.load(f)
-    except (OSError, IOError, ValueError) as e:
-        raise ServerValidationError(str(e))
 
-    return json_data
+    return _load_schema_from_file(path)
 
-@wraps(_load_schema)
+@wraps(_load_schema_from_request)
 def _load_response_schema(request):
     """ Load the response JSON schema associated with a request.
 
-    See _load_schema.
+    See _load_schema_from_request.
     """
-    return _load_schema(request, 'response')
+    return _load_schema_from_request(request, 'response')
 
-@wraps(_load_schema)
+@wraps(_load_schema_from_request)
 def _load_request_schema(request):
     """ Load the request JSON schema associated with a request.
 
-    See _load_schema.
+    See _load_schema_from_request.
     """
-    return _load_schema(request, 'request')
+    return _load_schema_from_request(request, 'request')
 
 def _validate_response(response, schema):
     code = lambda x: x == response.status_code
@@ -154,62 +170,102 @@ def _validate_request(request, schema):
         raise ClientValidationError("provided request does not conform to "
                 "schema")
 
-def validate_response(f):
-    """ Decorator for route functions that validates the response data against
-    its corresponding JSON schema.
+class Validator:
+    """ Base class for all JSON validators.
+
+    Each derived class must implement the "decorate" method, which acts as
+    decorator for request handler functions.
+
+    This class uses the builder pattern to set attributes of the validator.
+    The methods used in this pattern should return self, so that they may be
+    chained together.
+
+    The base validator supports only two options "with_schema" and
+    "with_inferred_schema". Specifically, the "schema" attribute of instances
+    of this class is set to "None" if the schema should be inferred. Derived
+    classes must account for this.
     """
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        schema = _load_response_schema(request)
-        response = f(*args, **kwargs)
+    def __init__(self):
+        self.schema = None
 
-        try:
-            response = _validate_response(response, schema)
-        except ClientValidationError as e:
-            response = jsonify({
-                "message": str(e)
-            })
-            response.status_code = 400
-        except ServerValidationError as e:
-            app.logger.exception("failed to validate response")
-            response = jsonify({
-                "message": "an unexpected server error occurred"
-            })
-            response.status_code = 500
+    def with_schema(self, path):
+        """ Specify a schema to use for validation.
 
-        return response
+        Arguments:
+            path (type: string):
+                A path relative to the configuration option JSON_SCHEMA_ROOT.
+                The JSON file at that location is immediately loaded. The
+                upshot of this is that application loading should fail if the
+                file cannot be loaded.
+        """
+        self.schema = _load_schema_from_file(path)
+        return self
 
-    return decorated
+    def with_inferred_schema(self):
+        """ Specify that the schema to use for validation should be inferred
+        from the request path.
+        """
+        self.schema = None
+        return self
 
-def validate_request(f):
-    """ Decorator for route functions that validates the request data against
-    its corresponding JSON schema.
+    def decorate(self, f):
+        """ The decorate method of the base validator is not implemented!
+        Derived classes must implement it.
+        """
+        raise NotImplementedError()
 
-    This validator fails if the request does not include a body, so only
-    decorate functions that accept data with this validator.
-    """
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        schema = _load_request_schema(request)
-        try:
-            if not schema:
-                raise ValidationError("no schema for request")
-            _validate_request(request, schema)
-        except ClientValidationError as e:
-            # TODO better page / don't abort in production
-            app.logger.warning("request failed validation: %s", str(e))
-            response = jsonify({
-                "message": str(e)
-            })
-            response.status_code = 400
+    @wraps(decorate)
+    def __call__(self, f):
+        """ Wraps the "decorate" method. """
+        return self.decorate(f)
+
+class ResponseValidator(Validator):
+    """ The class of decorators for responses. """
+    def decorate(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if self.schema is None:
+                schema = _load_response_schema(request)
+            else:
+                schema = self.schema
+
+            response = f(*args, **kwargs)
+
+            try:
+                response = _validate_response(response, schema)
+            except ClientValidationError as e:
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+            except ServerValidationError as e:
+                app.logger.exception("failed to validate response")
+                response = jsonify({
+                    "message": "an unexpected server error occurred"
+                })
+                response.status_code = 500
+
             return response
-        return f(*args, **kwargs)
-    return decorated
 
-def validate_request_and_response(f):
-    """ Wraps a function with both "validate_request" and "validate_response".
+        return decorated
 
-    The name is long, but it fits on one line, and python uses at most one
-    decorator per line, so it's fine.
-    """
-    return validate_response(validate_request(f))
+class RequestValidator(Validator):
+    """ The class of decorators for requests. """
+    def decorate(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            schema = _load_request_schema(request)
+            try:
+                if not schema:
+                    raise ValidationError("no schema for request")
+                _validate_request(request, schema)
+            except ClientValidationError as e:
+                # TODO better page / don't abort in production
+                app.logger.warning("request failed validation: %s", str(e))
+                response = jsonify({
+                    "message": str(e)
+                })
+                response.status_code = 400
+                return response
+            return f(*args, **kwargs)
+        return decorated
