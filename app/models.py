@@ -3,11 +3,8 @@ from app import db
 class Rating(db.Model):
     __tablename__ = 'rating'
 
-    job_id = db.Column(
-            db.Integer, db.ForeignKey('job.id'), primary_key=True)
-
-    job = db.relationship(
-            'Job', lazy='joined', uselist=False)
+    id = db.Column(
+            db.Integer, primary_key=True)
 
     employee_rating = db.Column(
             db.Float, nullable=False)
@@ -334,9 +331,6 @@ class Job(db.Model):
     date = db.Column(
             db.DateTime, nullable=False)
 
-    is_available = db.Column(
-            db.Boolean, nullable=False)
-
     pay = db.Column(
             db.Float, nullable=False)
 
@@ -346,27 +340,40 @@ class Job(db.Model):
     create_date = db.Column(
             db.DateTime, nullable=False, server_default=db.func.now())
 
-    position_id = db.Column(
-            db.Integer, db.ForeignKey('position.id'), nullable=True)
+    start_date = db.Column(
+            db.DateTime, nullable=True)
 
-    position = db.relationship(
-            'Position', lazy='joined')
+    end_date = db.Column(
+            db.DateTime, nullable=True)
+
+    position_id = db.Column(
+            db.Integer, db.ForeignKey('position.id'), nullable=False)
 
     employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'), nullable=True)
-
-    employee = db.relationship(
-            'Employee', backref='job', uselist=False)
+            db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'),
+            nullable=True)
 
     manager_id = db.Column(
             db.Integer, db.ForeignKey('manager.id', ondelete='SET NULL'),
             nullable=True)
+
+    rating_id = db.Column(
+            db.Integer, db.ForeignKey('rating.id'), nullable=False)
+
+    position = db.relationship(
+            'Position', lazy='joined')
+
+    employee = db.relationship(
+            'Employee', backref='jobs', uselist=False)
 
     manager = db.relationship(
             'Manager', backref='listings', uselist=False, lazy='joined')
 
     languages = db.relationship(
             'Language', secondary='joblanguageset')
+
+    rating = db.relationship(
+            'Rating', backref='job', uselist=False, lazy='joined')
 
 class Position(db.Model):
     __tablename__ = 'position'
