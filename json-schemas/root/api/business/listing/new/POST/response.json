@@ -45,7 +45,6 @@
                 "inProgress",
                 "cancelled",
                 "completed",
-                "rated",
                 "stale",
                 "aborted"
             ]
