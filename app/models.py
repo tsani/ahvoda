@@ -155,15 +155,6 @@ class Location(db.Model):
                 'longitude > -180.0 AND longitude < 180.0'),
             nullable=False)
 
-class BusinessLocationSet(db.Model):
-    __tablename__ = 'businesslocationset'
-
-    business_id = db.Column(
-            db.Integer, nullable=False, primary_key=True)
-
-    location_id = db.Column(
-            db.Integer, nullable=False, primary_key=True)
-
 class Business(db.Model):
     __tablename__ = 'business'
 
@@ -176,12 +167,11 @@ class Business(db.Model):
     description = db.Column(
             db.String, nullable=False)
 
+    location_id = db.Column(
+            db.Integer, db.ForeignKey('location.id'), nullable=False)
 
-    location_longitude = db.Column(
-            db.Float, nullable=False)
-
-    location_latitude = db.Column(
-            db.Float, nullable=False)
+    location = db.relationship(
+            'Location')
 
     is_verified = db.Column(
             db.Boolean, nullable=False)
@@ -275,7 +265,8 @@ class Manager(db.Model):
             'Gender', lazy='joined')
 
     login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False)
 
     businesses = db.relationship(
             'Business', secondary='managerset')
@@ -283,26 +274,21 @@ class Manager(db.Model):
 class ManagerSet(db.Model):
     __tablename__ = 'managerset'
 
+    __table_args__ = (
+            db.PrimaryKeyConstraint('manager_id', 'business_id'),
+    )
+
     manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id', ondelete='CASCADE'), primary_key=True)
+            db.Integer, db.ForeignKey('manager.id', ondelete='CASCADE'))
 
     business_id = db.Column(
-            db.Integer, db.ForeignKey('business.id', ondelete='CASCADE'), primary_key=True)
+            db.Integer, db.ForeignKey('business.id', ondelete='CASCADE'))
 
-    manager_set_name = db.Column(
+    name = db.Column(
             db.String, nullable=False)
 
-    manager_set_level = db.Column(
+    level = db.Column(
             db.Integer, nullable=False)
-
-class EmployeeLocationSet(db.Model):
-    __tablename__ = 'employeelocationset'
-
-    employee_id = db.Column(
-            db.Integer, primary_key=True)
-
-    location_id = db.Column(
-            db.Integer, primary_key=True)
 
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -326,7 +312,8 @@ class Employee(db.Model):
             'Gender', lazy='joined')
 
     login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=False)
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False)
 
     languages = db.relationship(
             'Language', secondary='employeelanguageset')
@@ -334,14 +321,17 @@ class Employee(db.Model):
     is_verified = db.Column(
             db.Boolean, nullable=False)
 
+    home_location_id = db.Column(
+            db.Integer, db.ForeignKey('location.id'), nullable=False)
+
+    home_location = db.relationship(
+            'Location')
+
 class Job(db.Model):
     __tablename__ = 'job'
 
     id = db.Column(
             db.Integer, primary_key=True)
-
-    date = db.Column(
-            db.DateTime, nullable=False)
 
     pay = db.Column(
             db.Float, nullable=False)
