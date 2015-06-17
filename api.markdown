@@ -137,10 +137,15 @@ List all listings with the given status.
     * List all listings created before the given date and time.
 * max (type: integer)
     * List no more than the given number of listings.
-* businessId (type: integer)
-    * List only listings for this business.
-* employeeId (type: integer)
-    * List only listings that have been dispatched to this employee.
+* createdBy (type: integer)
+    * List only listings created by this business, identified by their
+      businessId.
+* dispatchedTo (type: integer)
+    * List only listings that have been dispatched to this employee, identified
+      by their employeeId.
+* workedBy (type: integer)
+    * List only listings associated with this employee, identified by their
+      employeeId.
 
 #### Responses
 
