@@ -1,4 +1,4 @@
-from app import app, forms, util
+from app import app, forms, util, auth
 
 from flask import render_template, request, url_for, flash, session
 
@@ -10,10 +10,6 @@ from datetime import datetime
 @app.route('/')
 def index():
     return render_template('landing-page.html')
-
-@app.route('/business/create-listing')
-def business_create_listing():
-    return render_template('create-listing.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -29,7 +25,7 @@ def login():
             error = True
 
         if not error:
-            login = util.auth.check_auth(form['username'], form['password'])
+            login = auth.check_auth(form['username'], form['password'])
             if not login:
                 flash('Incorrect username or password.')
                 return render_template('login.html')
@@ -39,19 +35,10 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/new-listing')
-def new_listing():
-    form = forms.NewListingForm()
-
-    if form.validate_on_submit():
-        return render_template('message.html', message='woot')
-
-    return render_template('new-listing.html', form=form)
-
 @app.route('/test/employee-auth')
-@util.auth.requires_auth(
-        failure_handler=util.auth.failure.redirect('login'))
-@util.auth.requires_employee
+@auth.requires_auth(
+        failure_handler=auth.failure.redirect('login'))
+@auth.requires_employee
 def test_employee_auth(login):
     print('added to session')
     employee = login.get_account()

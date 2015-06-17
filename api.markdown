@@ -35,6 +35,14 @@ responses, to ensure end-to-end correctness of the data.
 See `json-schemas/README.markdown` for more information.
 
 
+Dates
+=====
+
+All dates emitted by the API are UTC.
+
+All dates consumed by the API must be UTC.
+
+
 API
 ===
 
@@ -59,7 +67,7 @@ Get information about a business.
 * 404 (Not Found)
     * No such business.
 
-### `GET /api/business/:businessId/listing/:listingId/details`
+### `GET /api/business/:businessId/listing/:listingId`
 
 Get the details of a listing.
 
@@ -161,7 +169,7 @@ Manager
 
 All the following API endpoints must be used from a manager account.
 
-### `PUT /api/business/:businessId/details`
+### `PATCH /api/business/:businessId/details`
 
 Update information about a business.
 
@@ -187,7 +195,7 @@ Create a new listing.
 * 403 (Forbidden)
     * The account is not authorized to use that businessId.
 
-### `PUT /api/business/:businessId/listing/:listingId/details`
+### `PATCH /api/business/:businessId/listing/:listingId/details`
 
 Update the details of a listing.
 
@@ -217,7 +225,7 @@ Delete a listing.
 * 404 (Not Found)
     * No such listing.
 
-### `PUT /api/business/:businessId/listing/:listingId/employee`
+### `POST /api/business/:businessId/listing/:listingId/employee`
 
 Approve an employee to work a job.
 
@@ -230,7 +238,7 @@ effect.
 * 204 (No Content)
 * 400 (Bad Request)
     * The enclosed entity does not conform to the schema.
-    * A different employee has already been approved.
+    * An employee has already been approved.
 * 404 (Not Found)
     * No such listing.
 
@@ -258,7 +266,7 @@ Get a list of applicants for a listing.
     * No such business.
     * No such listing.
 
-### `PUT /api/business/:businessId/listing/:listingId/employee/departure`
+### `POST /api/business/:businessId/listing/:listingId/employee/departure`
 
 Indicate to the server at what time the employee has left. The indicated time
 must be in the past, and by no more than 15 minutes.
@@ -277,7 +285,7 @@ must be in the past, and by no more than 15 minutes.
 * 409 (Conflict)
     * The status of the listing is not `"inProgress"`.
 
-### `PUT /api/business/:businessId/listing/:listingId/employee/arrival`
+### `POST /api/business/:businessId/listing/:listingId/employee/arrival`
 
 Indicate to the server at what time the employee has arrived. The indicated
 time must be in the past, and by no more than 15 minutes.
@@ -291,7 +299,7 @@ time must be in the past, and by no more than 15 minutes.
     * No such listing.
     * No employee is associated with the listing.
 
-### `PUT /api/business/:businessId/listing/:listingId/employee/rating`
+### `POST /api/business/:businessId/listing/:listingId/employee/rating`
 
 Rate the employee associated with a given listing.
 
@@ -334,7 +342,7 @@ Get the current location of the employee.
 * 403 (Forbidden)
     * The account is not authorized ot use that userId.
 
-### `PUT /api/employee/:userId/details`
+### `PATCH /api/employee/:userId/details`
 
 Update information regarding an employee.
 
@@ -342,7 +350,7 @@ Update information regarding an employee.
 
 * 204 (No Content)
 * 400 (Bad Request)
-    * The enclosed entity does nto conform to the schema.
+    * The enclosed entity does not conform to the schema.
 * 403 (Forbidden)
     * The account is not authorized to use that userId.
 
@@ -356,7 +364,7 @@ Get information regarding an employee.
 * 403 (Forbidden)
     * The account is not authorized to use that userId.
 
-### `PUT /api/business/:businessId/listing/:listingId/applicant/:userId
+### `POST /api/business/:businessId/listing/:listingId/applicants
 
 Apply to a listing.
 
@@ -369,10 +377,9 @@ Apply to a listing.
 * 404 (Not Found)
     * No such listing.
 * 409 (Conflict)
-    * Another employee has already been accepted.
     * The listing can no longer be applied to.
 
-### `PUT /api/business/:businessId/listing/:listingId/rating`
+### `POST /api/business/:businessId/listing/:listingId/rating`
 
 Rate a job.
 

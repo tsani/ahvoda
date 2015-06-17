@@ -36,7 +36,6 @@ def make_salt():
         The returned value is of type "bytes", and should be passed through
         "binascii.hexlify" before transport or storage.
     """
-    print(app.config['CRYPTO']['HASHING']['SALT_LENGTH'])
     salt = urandom(
             app.config['CRYPTO']['HASHING']['SALT_LENGTH'])
     return salt

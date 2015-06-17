@@ -1,5 +1,12 @@
 from app import app, db
 
+from app.util import to_rfc3339
+
+# The to_dict methods implemented on the models correspond to the objects
+# specified in `json-schema/api.json`.
+
+### Business structure and listing-related tables
+
 class Rating(db.Model):
     __tablename__ = 'rating'
 
@@ -18,37 +25,17 @@ class Rating(db.Model):
     job_comment = db.Column(
             db.String, nullable=True)
 
-class Industry(db.Model):
-    __tablename__ = 'industry'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    name = db.Column(
-            db.String, nullable=False)
-
-    businesses = db.relationship(
-            'Business')
-
-class Language(db.Model):
-    __tablename__ = 'language'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    # Friendly name to show the user
-    name = db.Column(
-            db.String, nullable=False)
-
-    # ISO 639 code for the language
-    iso_name = db.Column(
-            db.String, nullable=False, unique=True)
-
-    employees = db.relationship(
-            'Employee', secondary='employeelanguageset')
-
-    jobs = db.relationship(
-            'Job', secondary='joblanguageset')
+    def to_dict(self):
+        return dict(
+                ofEmployee=dict(
+                    value=self.employee_rating,
+                    comment=self.employee_comment,
+                ),
+                ofEmployer=dict(
+                    value=self.job_rating,
+                    comment=self.job_comment,
+                )
+        )
 
 class JobStatus(db.Model):
     __tablename__ = 'jobstatus'
@@ -62,35 +49,12 @@ class JobStatus(db.Model):
     friendly_name = db.Column(
             db.String, nullable=False)
 
-class EmployeeLanguageSet(db.Model):
-    __tablename__ = 'employeelanguageset'
-
-    __table_args__ = (
-            db.PrimaryKeyConstraint('language_id', 'employee_id'),
-    )
-
-    language_id = db.Column(
-            db.Integer, db.ForeignKey('language.id', ondelete='CASCADE'),
-            nullable=False)
-
-    employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id', ondelete='CASCADE'),
-            nullable=False)
-
-class JobLanguageSet(db.Model):
-    __tablename__ = 'joblanguageset'
-
-    __table_args__ = (
-            db.PrimaryKeyConstraint('language_id', 'job_id'),
-    )
-
-    language_id = db.Column(
-            db.Integer, db.ForeignKey('language.id', ondelete='CASCADE'),
-            nullable=False)
-
-    job_id = db.Column(
-            db.Integer, db.ForeignKey('job.id', ondelete='CASCADE'),
-            nullable=False)
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+                friendly_name=self.friendly_name,
+        )
 
 class Company(db.Model):
     __tablename__ = 'company'
@@ -104,56 +68,11 @@ class Company(db.Model):
     businesses = db.relationship(
             'Business', backref='company')
 
-class City(db.Model):
-    __tablename__ = 'city'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    name = db.Column(
-            db.String, nullable=False)
-
-class Country(db.Model):
-    __tablename__ = 'country'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    name = db.Column(
-            db.String, nullable=False)
-
-class Location(db.Model):
-    __tablename__ = 'location'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    address = db.Column(
-            db.String, nullable=False)
-
-    city_id = db.Column(
-            db.Integer, db.ForeignKey('city.id'), nullable=False)
-
-    city = db.relationship(
-            'City')
-
-    country_id = db.Column(
-            db.Integer, db.ForeignKey('country.id'), nullable=False)
-
-    country = db.relationship(
-            'Country')
-
-    latitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'latitude > -90.0 AND latitude < 90.0'),
-            nullable=False)
-
-    longitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'longitude > -180.0 AND longitude < 180.0'),
-            nullable=False)
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+        )
 
 class Business(db.Model):
     __tablename__ = 'business'
@@ -167,71 +86,850 @@ class Business(db.Model):
     description = db.Column(
             db.String, nullable=False)
 
-    location_id = db.Column(
-            db.Integer, db.ForeignKey('location.id'), nullable=False)
-
-    location = db.relationship(
-            'Location')
-
     is_verified = db.Column(
             db.Boolean, nullable=False)
+
+    location_id = db.Column(
+            db.Integer, db.ForeignKey('location.id'), nullable=False)
 
     industry_id = db.Column(
             db.Integer, db.ForeignKey('industry.id'), nullable=False)
 
-    industry = db.relationship(
-            'Industry')
-
     company_id = db.Column(
             db.Integer, db.ForeignKey('company.id'), nullable=True)
 
+    contact_info_id = db.Column(
+            db.Integer, db.ForeignKey('contactinfo.id'), nullable=False)
+
     managers = db.relationship(
             'Manager', secondary='managerset')
+
+    industry = db.relationship(
+            'Industry', backref='businesses')
+
+    location = db.relationship(
+            'Location', backref='business', uselist=False)
+
+    contact_info = db.relationship(
+            'ContactInfo', backref='business', uselist=False, lazy='joined')
+
+    def to_dict(self):
+        result = dict(
+                id=self.id,
+                name=self.name,
+                description=self.description,
+                location=self.location.to_dict(),
+                is_verified=self.is_verified,
+                contact_info=self.contact_info.to_dict(),
+        )
+
+        if self.company is not None:
+            result['company'] = self.company.to_dict()
+
+        return result
+
+
+class Position(db.Model):
+    __tablename__ = 'position'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    create_date = db.Column(
+            db.Date,
+            nullable=False,
+            server_default=db.func.now()
+    )
+
+    is_available = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default="t"
+    )
+
+    business_id = db.Column(
+            db.Integer,
+            db.ForeignKey('business.id'),
+            nullable=False
+    )
+
+    business = db.relationship(
+            'Business',
+            backref='positions',
+            lazy='joined'
+    )
+
+    manager_id = db.Column(
+            db.Integer,
+            db.ForeignKey('manager.id', ondelete='SET NULL')
+    )
+
+    manager = db.relationship(
+            'Manager',
+            backref='created_positions'
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+                create_date=to_rfc3339(self.create_date),
+        )
+
+class Job(db.Model):
+    __tablename__ = 'job'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    pay = db.Column(
+            db.Float,
+            nullable=False
+    )
+
+    details = db.Column(
+            db.String,
+            nullable=True
+    )
+
+    create_date = db.Column(
+            db.DateTime,
+            nullable=False,
+            server_default=db.func.now()
+    )
+
+    arrival_date = db.Column(
+            db.DateTime,
+            nullable=True
+    )
+
+    departure_date = db.Column(
+            db.DateTime,
+            nullable=True
+    )
+
+    duration = db.Column(
+            db.Float,
+            nullable=False
+    )
+
+    position_id = db.Column(
+            db.Integer,
+            db.ForeignKey('position.id'),
+            nullable=False
+    )
+
+    employee_id = db.Column(
+            db.Integer,
+            db.ForeignKey('employee.id', ondelete='SET NULL'),
+            nullable=True
+    )
+
+    manager_id = db.Column(
+            db.Integer,
+            db.ForeignKey('manager.id', ondelete='SET NULL'),
+            nullable=True
+    )
+
+    rating_id = db.Column(
+            db.Integer,
+            db.ForeignKey('rating.id'),
+            nullable=True
+    )
+
+    business_id = db.Column(
+            db.Integer,
+            db.ForeignKey('business.id'),
+            nullable=False
+    )
+
+    status_id = db.Column(
+            db.Integer,
+            db.ForeignKey('jobstatus.id'),
+            nullable=False
+    )
+
+    position = db.relationship(
+            'Position',
+            backref='jobs',
+            lazy='joined'
+    )
+
+    employee = db.relationship(
+            'Employee',
+            backref='jobs',
+            uselist=False
+    )
+
+    manager = db.relationship(
+            'Manager',
+            backref='listings',
+            uselist=False,
+            lazy='joined'
+    )
+
+    business = db.relationship(
+            'Business',
+            backref='jobs',
+            uselist=False
+    )
+
+    languages = db.relationship(
+            'Language',
+            secondary='joblanguageset'
+    )
+
+    rating = db.relationship(
+            'Rating',
+            backref='job',
+            uselist=False,
+            lazy='joined'
+    )
+
+    status = db.relationship(
+            'JobStatus',
+            backref='jobs',
+            uselist=False,
+            lazy='joined'
+    )
+
+    applicants = db.relationship(
+            'Employee',
+            secondary='applicant',
+    )
+
+    def to_dict(self):
+        result = dict(
+                id=self.id,
+                pay=self.pay,
+                details=self.details,
+                create_date=to_rfc3339(self.create_date),
+                duration=self.duration,
+                position=self.position.to_dict(),
+                rating=dict(
+                    ofEmployer=None,
+                    ofEmployee=None,
+                ),
+                business=self.business.to_dict(),
+                status=self.status.to_dict(),
+                languages=[
+                    lang.to_dict()
+                    for lang
+                    in self.languages
+                ],
+        )
+
+        if self.manager is not None:
+            result['manager'] = self.manager.to_dict()
+
+        if self.rating is not None:
+            result['rating']['ofEmployer'] = dict(
+                    value=self.rating.job_rating,
+                    comment=self.rating.job_comment,
+            )
+            result['rating']['ofEmployee'] = dict(
+                    value=self.rating.employee_rating,
+                    comment=self.rating.employee_comment,
+            )
+
+        if self.arrival_date is not None:
+            result['arrival_date'] = to_rfc3339(self.arrival_date)
+
+        if self.departure_date is not None:
+            result['departure_date'] = to_rfc3339(self.departure_date)
+
+        if self.employee is not None:
+            result['employee'] = self.employee.to_dict()
+
+        print(result.keys())
+
+        return result
+
+### Location-relation tables
+
+class City(db.Model):
+    __tablename__ = 'city'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    state_id = db.Column(
+            db.Integer,
+            db.ForeignKey('state.id'),
+            nullable=False
+    )
+
+    state = db.relationship(
+            'State',
+            backref='cities'
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+                state=self.state.to_dict(),
+        )
+
+class State(db.Model):
+    __tablename__ = 'state'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    country_id = db.Column(
+            db.Integer,
+            db.ForeignKey('country.id'),
+            nullable=False
+    )
+
+    country = db.relationship(
+            'Country',
+            backref='states'
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+                country=self.country.to_dict(),
+        )
+
+class Country(db.Model):
+    __tablename__ = 'country'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+        )
+
+class Location(db.Model):
+    __tablename__ = 'location'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    address = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    postal_code = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    city_id = db.Column(
+            db.Integer,
+            db.ForeignKey('city.id'),
+            nullable=False
+    )
+
+    city = db.relationship(
+            'City'
+    )
+
+    latitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'latitude > -90.0 AND latitude < 90.0'
+            ),
+            nullable=False)
+
+    longitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'longitude > -180.0 AND longitude < 180.0'
+            ),
+            nullable=False)
+
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            address=self.address,
+            city=self.city.to_dict(),
+            postal_code=self.postal_code,
+            location=dict(
+                latitude=self.latitude,
+                longitude=self.longitude,
+            ),
+        )
+
+### Additional data tables
+
+class Industry(db.Model):
+    __tablename__ = 'industry'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+        )
+
+class Language(db.Model):
+    __tablename__ = 'language'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True
+    )
+
+    # Friendly name to show the user
+    name = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    # ISO 639 code for the language
+    iso_name = db.Column(
+            db.String,
+            nullable=False,
+            unique=True
+    )
+
+    employees = db.relationship(
+            'Employee',
+            secondary='employeelanguageset'
+    )
+
+    jobs = db.relationship(
+            'Job',
+            secondary='joblanguageset'
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+                iso_name=self.iso_name,
+        )
 
 class Gender(db.Model):
     __tablename__ = 'gender'
 
     id = db.Column(
-            db.Integer, primary_key=True)
+            db.Integer,
+            primary_key=True
+    )
 
     name = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                name=self.name,
+        )
+
+class ContactInfo(db.Model):
+    __tablename__ = 'contactinfo'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+            nullable=False,
+            unique=True
+    )
+
+    phone_number = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    email_address = db.Column(
+            db.String,
+            nullable=False
+    )
+
+    def to_dict(self):
+        return dict(
+                phone_number=self.phone_number,
+                email_address=self.email_address,
+        )
+
+class Human(db.Model):
+    __tablename__ = 'human'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+            nullable=False,
+            unique=True,
+    )
+
+    first_name = db.Column(
+            db.String,
+            nullable=False,
+    )
+
+    last_name = db.Column(
+            db.String,
+            nullable=False,
+    )
+
+    birth_date = db.Column(
+            db.Date,
+            nullable=False,
+    )
+
+    gender_id = db.Column(
+            db.Integer,
+            db.ForeignKey('gender.id'),
+            nullable=True,
+    )
+
+    gender = db.relationship(
+            'Gender',
+            lazy='joined',
+    )
+
+    contact_info_id = db.Column(
+            db.Integer,
+            db.ForeignKey('contactinfo.id'),
+            nullable=False,
+    )
+
+    contact_info = db.relationship(
+            'ContactInfo',
+            backref='human',
+            uselist=False,
+            lazy='joined',
+    )
+
+    def to_dict(self):
+        return dict(
+                first_name=self.first_name,
+                last_name=self.last_name,
+                birth_date=to_rfc3339(self.birth_date),
+                gender=self.gender.to_dict(),
+                contact_info=self.contact_info.to_dict(),
+        )
+
+    def is_employee(self):
+        """ Whether the account associated with this human is an employee. """
+        # The employee attribute comes from a backref given by the Employee
+        # class.
+        return self.employee is not None
+
+    def is_manager(self):
+        """ Whether the account associated with this human is a manager. """
+        # The manager attribute comes from a backref given by the Manager
+        # class.
+        return self.manager is not None
+
+    def get_account(self):
+        """ Retrieve the account associated with this human. """
+        account_possibilities = (
+                (self.is_employee, lambda: self.employee),
+                (self.is_manager, lambda: self.manager),
+        )
+
+        for predicate, thunk in account_possibilities:
+            if predicate():
+                return thunk()
+
+        app.logger.warning('Human %d (%s %s) has no associated account.',
+                (self.id, self.first_name, self.last_name))
+
+        return None
+
+### Account types
+
+class Administrator(db.Model):
+    __tablename__ = 'administrator'
+
+    id = db.Column(
+            db.Integer, primary_key=True
+    )
+
+    login_id = db.Column(
+            db.Integer,
+            db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False,
+            unique=True,
+    )
+
+    login = db.relationship(
+            'Login',
+            backref=db.backref('administrator_account', uselist=False),
+    )
+
+    def to_dict(self):
+        return dict()
+
+class Manager(db.Model):
+    __tablename__ = 'manager'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+    )
+
+    human_id = db.Column(
+            db.Integer,
+            db.ForeignKey('human.id'),
+            nullable=False,
+            unique=True,
+    )
+
+    login_id = db.Column(
+            db.Integer,
+            db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False,
+            unique=True,
+    )
+
+    businesses = db.relationship(
+            'Business',
+            secondary='managerset',
+    )
+
+    human = db.relationship(
+            'Human',
+            backref=db.backref('manager', uselist=False),
+    )
+
+    login = db.relationship(
+            'Login',
+            backref=db.backref('manager_account', uselist=False),
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                human=self.human.to_dict()
+        )
+
+class Employee(db.Model):
+    __tablename__ = 'employee'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+    )
+
+    login_id = db.Column(
+            db.Integer,
+            db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False,
+            unique=True,
+    )
+
+    is_verified = db.Column(
+            db.Boolean,
+            nullable=False,
+    )
+
+    human_id = db.Column(
+            db.Integer,
+            db.ForeignKey('human.id'),
+            nullable=False,
+            unique=True,
+    )
+
+    home_location_id = db.Column(
+            db.Integer,
+            db.ForeignKey('location.id'),
+            nullable=False,
+    )
+
+    home_location = db.relationship(
+            'Location',
+    )
+
+    languages = db.relationship(
+            'Language',
+            secondary='employeelanguageset',
+    )
+
+    human = db.relationship(
+            'Human',
+            backref='employee',
+            uselist=False,
+            lazy='joined',
+    )
+
+    login = db.relationship(
+            'Login',
+            backref=db.backref('employee_account', uselist=False),
+    )
+
+    applications = db.relationship(
+            'Job',
+            secondary='applicant',
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                is_verified=self.is_verified,
+                human=self.human.to_dict(),
+                home_location=self.home_location.to_dict(),
+                languages=[
+                    lang.to_dict()
+                    for lang
+                    in self.languages
+                ]
+        )
+
+### Association tables
+
+class Applicant(db.Model):
+    __tablename__ = 'applicant'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint(
+                'employee_id',
+                'job_id',
+            ),
+    )
+
+    employee_id = db.Column(
+            db.Integer,
+            db.ForeignKey('employee.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+    job_id = db.Column(
+            db.Integer,
+            db.ForeignKey('job.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+class EmployeeLanguageSet(db.Model):
+    __tablename__ = 'employeelanguageset'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint('language_id', 'employee_id'),
+    )
+
+    language_id = db.Column(
+            db.Integer,
+            db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+    employee_id = db.Column(
+            db.Integer,
+            db.ForeignKey('employee.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+class JobLanguageSet(db.Model):
+    __tablename__ = 'joblanguageset'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint('language_id', 'job_id'),
+    )
+
+    language_id = db.Column(
+            db.Integer,
+            db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+    job_id = db.Column(
+            db.Integer,
+            db.ForeignKey('job.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+class ManagerSet(db.Model):
+    __tablename__ = 'managerset'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint('manager_id', 'business_id'),
+    )
+
+    manager_id = db.Column(
+            db.Integer,
+            db.ForeignKey('manager.id', ondelete='CASCADE'),
+    )
+
+    business_id = db.Column(
+            db.Integer,
+            db.ForeignKey('business.id', ondelete='CASCADE'),
+    )
+
+### Authentication-related
 
 class Login(db.Model):
     __tablename__ = 'login'
 
     id = db.Column(
-            db.Integer, primary_key=True)
+            db.Integer,
+            primary_key=True
+    )
 
     username = db.Column(
-            db.String, nullable=False, unique=True)
-
-    email = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False,
+            unique=True,
+    )
 
     password = db.Column(
-            db.String, nullable=True)
+            db.String,
+            nullable=True,
+    )
 
     password_salt = db.Column(
-            db.String, nullable=True)
-
-    phone_number = db.Column(
-            db.String, nullable=False)
-
-    postal_code = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=True,
+    )
 
     create_date = db.Column(
-            db.DateTime, nullable=False, server_default=db.func.now())
-
-    employee_account = db.relationship(
-            'Employee', uselist=False, backref='login', lazy='joined')
-
-    manager_account = db.relationship(
-            'Manager', uselist=False, backref='login', lazy='joined')
-
-    administrator_account = db.relationship(
-            'Administrator', uselist=False, backref='login', lazy='joined')
+            db.DateTime,
+            nullable=False,
+            server_default=db.func.now(),
+    )
 
     def is_employee(self):
         return bool(self.employee_account)
@@ -264,208 +962,3 @@ class Login(db.Model):
 
         return None
         return self.employee_account or self.manager_account
-
-class Manager(db.Model):
-    __tablename__ = 'manager'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    human_id = db.Column(
-            db.Integer, db.ForeignKey('human.id'), nullable=False, unique=True)
-
-    login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
-            nullable=False, unique=True)
-
-    businesses = db.relationship(
-            'Business', secondary='managerset')
-
-    human = db.relationship(
-            'Human', backref='manager', uselist=False)
-
-class Human(db.Model):
-    __tablename__ = 'human'
-
-    id = db.Column(
-            db.Integer, primary_key=True, nullable=False, unique=True)
-
-    first_name = db.Column(
-            db.String, nullable=False)
-
-    last_name = db.Column(
-            db.String, nullable=False)
-
-    birth_date = db.Column(
-            db.Date, nullable=False)
-
-    gender_id = db.Column(
-            db.Integer, db.ForeignKey('gender.id'), nullable=True)
-
-    gender = db.relationship(
-            'Gender', lazy='joined')
-
-    def is_employee():
-        """ Whether the account associated with this human is an employee. """
-        # The employee attribute comes from a backref given by the Employee
-        # class.
-        return self.employee is not None
-
-    def is_manager():
-        """ Whether the account associated with this human is a manager. """
-        # The manager attribute comes from a backref given by the Manager
-        # class.
-        return self.manager is not None
-
-    def get_account():
-        """ Retrieve the account associated with this human. """
-        account_possibilities = (
-                (self.is_employee, lambda: self.employee),
-                (self.is_manager, lambda: self.manager),
-        )
-
-        for predicate, thunk in account_possibilities:
-            if predicate():
-                return thunk()
-
-        app.logger.warning('Human %d (%s %s) has no associated account.',
-                (self.id, self.first_name, self.last_name))
-
-        return None
-
-class ManagerSet(db.Model):
-    __tablename__ = 'managerset'
-
-    __table_args__ = (
-            db.PrimaryKeyConstraint('manager_id', 'business_id'),
-    )
-
-    manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id', ondelete='CASCADE'))
-
-    business_id = db.Column(
-            db.Integer, db.ForeignKey('business.id', ondelete='CASCADE'))
-
-    name = db.Column(
-            db.String, nullable=False)
-
-    level = db.Column(
-            db.Integer, nullable=False)
-
-class Administrator(db.Model):
-    __tablename__ = 'administrator'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
-            nullable=False, unique=True)
-
-class Employee(db.Model):
-    __tablename__ = 'employee'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
-            nullable=False, unique=True)
-
-    is_verified = db.Column(
-            db.Boolean, nullable=False)
-
-    human_id = db.Column(
-            db.Integer, db.ForeignKey('human.id'), nullable=False, unique=True)
-
-    human = db.relationship(
-            'Human', backref='employee', uselist=False, lazy='joined')
-
-    home_location_id = db.Column(
-            db.Integer, db.ForeignKey('location.id'), nullable=False)
-
-    home_location = db.relationship(
-            'Location')
-
-    languages = db.relationship(
-            'Language', secondary='employeelanguageset')
-
-class Job(db.Model):
-    __tablename__ = 'job'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    pay = db.Column(
-            db.Float, nullable=False)
-
-    details = db.Column(
-            db.String, nullable=True)
-
-    create_date = db.Column(
-            db.DateTime, nullable=False, server_default=db.func.now())
-
-    start_date = db.Column(
-            db.DateTime, nullable=True)
-
-    end_date = db.Column(
-            db.DateTime, nullable=True)
-
-    position_id = db.Column(
-            db.Integer, db.ForeignKey('position.id'), nullable=False)
-
-    employee_id = db.Column(
-            db.Integer, db.ForeignKey('employee.id', ondelete='SET NULL'),
-            nullable=True)
-
-    manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id', ondelete='SET NULL'),
-            nullable=True)
-
-    rating_id = db.Column(
-            db.Integer, db.ForeignKey('rating.id'), nullable=False)
-
-    status_id = db.Column(
-            db.Integer, db.ForeignKey('jobstatus.id'), nullable=False)
-
-    position = db.relationship(
-            'Position', lazy='joined')
-
-    employee = db.relationship(
-            'Employee', backref='jobs', uselist=False)
-
-    manager = db.relationship(
-            'Manager', backref='listings', uselist=False, lazy='joined')
-
-    languages = db.relationship(
-            'Language', secondary='joblanguageset')
-
-    rating = db.relationship(
-            'Rating', backref='job', uselist=False, lazy='joined')
-
-    status = db.relationship(
-            'JobStatus', backref='jobs', lazy='joined')
-
-class Position(db.Model):
-    __tablename__ = 'position'
-
-    id = db.Column(
-            db.Integer, primary_key=True)
-
-    name = db.Column(
-            db.String, nullable=False)
-
-    create_date = db.Column(
-            db.Date, nullable=False, server_default=db.func.now())
-
-    business_id = db.Column(
-        db.Integer, db.ForeignKey('business.id'), nullable=False)
-
-    business = db.relationship(
-            'Business', backref='positions', lazy='joined')
-
-    manager_id = db.Column(
-            db.Integer, db.ForeignKey('manager.id'))
-
-    manager = db.relationship(
-            'Manager', backref='created_positions')

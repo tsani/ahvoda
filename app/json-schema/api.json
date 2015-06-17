@@ -1,0 +1,850 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema$",
+    "title": "API specification of Ahvoda",
+    "description": "Fully describes the API for interacting with the Ahvoda backend over HTTP.",
+    "root": {
+        "type": "directory",
+        "contents": {
+            "employee": {
+                "type": "directory",
+                "contents": {
+                    "details": {
+                        "type": "endpoint",
+                        "description": "Detailed information about an employee.",
+                        "url": "/api/employee/<int:employee_id>",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/employee"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "PATCH": {
+                                "accountTypes": [ "employee" ],
+                                "request": {
+                                    "$ref": "#/definitions/employee"
+                                },
+                                "responses": {
+                                    "204": {},
+                                    "400": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "location": {
+                        "type": "endpoint",
+                        "description": "The current 'flag' location of an employee.",
+                        "url": "/api/employee/<int:employee_id>/location",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/minimalLocation"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "PUT": {
+                                "accountTypes": [ "employee" ],
+                                "request": {
+                                    "$ref": "#/definitions/employee"
+                                },
+                                "responses": {
+                                    "204": {},
+                                    "400": {
+                                        "$ref": "#/definitions/minimalLocation"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "business": {
+                "type": "directory",
+                "contents": {
+                    "details": {
+                        "type": "endpoint",
+                        "url": "/api/business/<int:business_id>/details",
+                        "description": "Detailed information about a business.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/business"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "PATCH": {
+                                "accountTypes": [ "manager" ],
+                                "request": {
+                                    "$ref": "#/definitions/business"
+                                },
+                                "responses": {
+                                    "204": {},
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "position": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/business/<int:business_id>/positions",
+                                "description": "Create a new position.",
+                                "verbs": {
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [ "name" ],
+                                            "additionalProperties": false
+                                        },
+                                        "responses": {
+                                            "200": { 
+                                                "$ref": "#/definitions/position" 
+                                            },
+                                            "400": { "$ref": "#/errors/message" },
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" }
+                                        }
+                                    },
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "positions": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/position"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/business/<int:business_id>/positions/<int:position_id>",
+                                "description": "Instance of a single position within a business.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": { 
+                                                "$ref": "#/definitions/position" 
+                                            },
+                                            "403": { 
+                                                "$ref": "#/errors/message" 
+                                            },
+                                            "404": { 
+                                                "$ref": "#/errors/message" 
+                                            }
+                                        }
+                                    },
+                                    "PATCH": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "responses": {
+                                            "204": {},
+                                            "400": { 
+                                                "$ref": "#/errors/message" 
+                                            },
+                                            "403": { 
+                                                "$ref": "#/errors/message" 
+                                            },
+                                            "404": { 
+                                                "$ref": "#/errors/message" 
+                                            }
+                                        }
+                                    },
+                                    "DELETE": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "204": {},
+                                            "403": { 
+                                                "$ref": "#/errors/message" 
+                                            },
+                                            "404": { 
+                                                "$ref": "#/errors/message" 
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "listing": {
+                        "type": "directory",
+                        "contents": {
+                            "details": {
+                                "type": "endpoint",
+                                "url":
+                                "/api/business/<int:business_id>/listings/<int:listing_id>",
+                                "description": "Detailed information about a listing.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": { "$ref": "#/definitions/listing" },
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" }
+                                        }
+                                    },
+                                    "PATCH": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "204": {},
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" },
+                                            "409": { "$ref": "#/errors/message" }
+                                        }
+                                    },
+                                    "DELETE": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "204": {},
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" },
+                                            "409": { "$ref": "#/errors/message" }
+                                        }
+                                    }
+                                }
+                            },
+                            "apply": {
+                                "type": "endpoint",
+                                "description": "Apply to a job.",
+                                "url": "/api/business/<int:business_id>/listings/<int:listing_id>/applicants",
+                                "verbs": {
+                                    "POST": {
+                                        "accountTypes": [ "employee" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "$ref": "#/definitions/id"
+                                                }
+                                            },
+                                            "required": [ "id" ],
+                                            "additionalProperties": "false"
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/listing"
+                                            },
+                                            "400": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "403": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "409": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    },
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "applicants": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/employee"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "applicants" ],
+                                                "additionalProperties": false
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "employee": {
+                                "type": "directory",
+                                "contents": {
+                                    "arrival": {
+                                        "type": "endpoint",
+                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee/arrival",
+                                        "description": "The arrival time of an employee.",
+                                        "verbs": {
+                                            "POST": {
+                                                "accountTypes": [ "manager" ],
+                                                "request": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "time": {
+                                                            "$ref": "#/definitions/date_time"
+                                                        }
+                                                    },
+                                                    "required": [ "time" ],
+                                                    "additinalProperties": false
+                                                },
+                                                "responses": {
+                                                    "200": {
+                                                        "$ref": "#/definitions/listing"
+                                                    },
+                                                    "400": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "403": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "404": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "409": { 
+                                                        "$ref": "#/errors/message" 
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "departure": {
+                                        "type": "endpoint",
+                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee/departure",
+                                        "description": "The departure time of an employee.",
+                                        "verbs": {
+                                            "POST": {
+                                                "accountTypes": [ "manager" ],
+                                                "request": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "time": {
+                                                            "$ref": "#/definitions/date_time"
+                                                        }
+                                                    },
+                                                    "required": [ "time" ],
+                                                    "additinalProperties": false
+                                                },
+                                                "responses": {
+                                                    "200": {
+                                                        "$ref": "#/definitions/listing"
+                                                    },
+                                                    "400": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "403": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "404": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "409": { 
+                                                        "$ref": "#/errors/message" 
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "approve": {
+                                        "type": "endpoint",
+                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee",
+                                        "description": "The employee selected for the job.",
+                                        "verbs": {
+                                            "POST": {
+                                                "accountTypes": [ "manager" ],
+                                                "request": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": { 
+                                                            "$ref": "#/definitions/id" 
+                                                        }
+                                                    },
+                                                    "required": [ "id" ],
+                                                    "additionalProperties": false
+                                                },
+                                                "responses": {
+                                                    "202": { 
+                                                        "$ref": "#/definitions/listing" 
+                                                    },
+                                                    "400": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "403": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "404": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "409": { 
+                                                        "$ref": "#/errors/message" 
+                                                    }
+                                                }
+                                            },
+                                            "GET": {
+                                                "accountTypes": [ "manager" ],
+                                                "responses": {
+                                                    "200": { 
+                                                        "$ref": "#/definitions/employee" 
+                                                    },
+                                                    "403": { 
+                                                        "$ref": "#/errors/message" 
+                                                    },
+                                                    "404": { 
+                                                        "$ref": "#/errors/message" 
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/business/<int:business_id>/listings",
+                                "description": "Collection of listings.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/listing" 
+                                                }
+                                            },
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" }
+                                        }
+                                    },
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "pay": {
+                                                    "type": "number",
+                                                    "minimum": 0
+                                                },
+                                                "duration": {
+                                                    "type": "number", 
+                                                    "minimum": 0
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                },
+                                                "position": { 
+                                                    "$ref": "#/definitions/id" 
+                                                },
+                                                "languages": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/definitions/language"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "pay",
+                                                "duration",
+                                                "details",
+                                                "position",
+                                                "languages"
+                                            ],
+                                            "additionalProperties": false
+                                        },
+                                        "responses": {
+                                            "202": {
+                                                "$ref": "#/definitions/listing"
+                                            },
+                                            "403": { "$ref": "#/errors/message" },
+                                            "404": { "$ref": "#/errors/message" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "id": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "named_id": {
+            "type": "object",
+            "description": "A convenience type for objects consisting of just an id and a name.",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [ "id", "name" ]
+        },
+        "gender": {
+            "$ref": "#/definitions/named_id"
+        },
+        "company": {
+            "$ref": "#/definitions/named_id"
+        },
+        "language": {
+            "type": "object",
+            "description": "Represents a spoken human language.",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "iso_name": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "contact_info": {
+            "type": "object",
+            "description": "All information to use to contact someone.",
+            "properties": {
+                "phone_number": {
+                    "type": "string"
+                },
+                "email_address": {
+                    "type": "string",
+                    "format": "email"
+                }
+            },
+            "additionalProperties": false
+        },
+        "human": {
+            "type": "object",
+            "description": "Represents a physical person.",
+            "properties": {
+                "first_name": { "type": "string" },
+                "last_name": { "type": "string" },
+                "birth_date": { "$ref": "#/definitions/date_time" },
+                "gender": { "$ref": "#/definitions/gender" },
+                "contact_info": { "$ref": "#/definitions/contact_info" }
+            },
+            "additionalProperties": false
+        },
+        "employee": {
+            "type": "object",
+            "description": "A representation of an employee.",
+            "properties": {
+                "id": { "$ref": "#/definitions/id" },
+                "human": { "$ref": "#/definitions/human" },
+                "is_verified": {
+                    "type": "boolean"
+                },
+                "create_date": {
+                    "type": "string",
+                    "format": "date_time"
+                },
+                "home_location": { "$ref": "#/definitions/fixed_location" },
+                "languages": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "$ref": "#/definitions/language" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+        },
+        "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+        },
+        "location": {
+            "type": "object",
+            "properties": {
+                "longitude": {
+                    "$ref": "#/definitions/longitude"
+                },
+                "latitude": {
+                    "$ref": "#/definitions/latitude"
+                }
+            },
+            "required": [ "longitude", "latitude" ]
+        },
+        "country": {
+            "$ref": "#/definitions/named_id"
+        },
+        "state": {
+            "type": "object",
+            "description": "A state, which is contained within a country.",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "country": {
+                    "$ref": "#/definitions/country"
+                }
+            },
+            "required": [ "name", "country" ]
+        },
+        "city": {
+            "type": "object",
+            "description": "A city, which is contained within a state.",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "state": {
+                    "$ref": "#definitions/state"
+                }
+            },
+            "required": [ "name", "state" ]
+        },
+        "fixed_location": {
+            "type": "object",
+            "description": "Represents a legally fixed location, with an address as well as geographical coordinates.",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "$ref": "#/definitions/city"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/location"
+                }
+            }
+        },
+        "date_time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "business": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/fixed_location"
+                },
+                "is_verified": { 
+                    "type": "boolean"
+                },
+                "company": {
+                    "$ref": "#/definitions/company"
+                },
+                "contact_info": {
+                    "$ref": "#definitions/contact_info"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "name",
+                "description",
+                "location",
+                "is_verified"
+            ]
+        },
+        "rating": {
+            "type": [ "object", "null" ],
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "comment": {
+                    "type": [ "string", "null" ]
+                }
+            },
+            "required": [ "value", "comment" ],
+            "additionalProperties": false
+        },
+        "listing": {
+            "type": "object",
+            "properties": {
+                "id": { "$ref": "#/definitions/id" },
+                "pay": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "details": {
+                    "type": "string"
+                },
+                "create_date": { "$ref": "#/definitions/date_time" },
+                "arrival_date": { "$ref": "#/definitions/date_time" },
+                "departure_date": { "$ref": "#/definitions/date_time" },
+                "duration": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "position": { "$ref": "#/definitions/position" },
+                "rating": {
+                    "type": "object",
+                    "properties": {
+                        "ofEmployer": { "$ref": "#/definitions/rating" },
+                        "ofEmployee": { "$ref": "#/definitions/rating" }
+                    },
+                    "additionalProperties": false
+                },
+                "business": { "$ref": "#/definitions/business" },
+                "manager": { "$ref": "#/definitions/manager" },
+                "employee": { "$ref": "#/definitions/employee" },
+                "status": { "$ref": "#/definitions/job_status" },
+                "languages": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/language" },
+                    "minItems": 1
+                }
+            },
+            "additionalProperties": false,
+            "required": [ 
+                "id", 
+                "pay", 
+                "details", 
+                "create_date", 
+                "duration",
+                "position", 
+                "business",
+                "rating",
+                "status",
+                "languages"
+            ]
+        },
+        "manager": {
+            "type": "object",
+            "properties": {
+                "id": { "$ref": "#/definitions/id" },
+                "human": { "$ref": "#/definitions/human" }
+            },
+            "additionalProperties": false
+        },
+        "position": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "create_date": {
+                    "$ref": "#/definitions/date_time"
+                }
+            },
+            "required": [ "id", "name", "create_date" ],
+            "additionalProperties": false
+        },
+        "job_status": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "friendly_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "enum": [
+                        "pending",
+                        "submitted",
+                        "inProgress",
+                        "cancelled",
+                        "completed",
+                        "stale",
+                        "aborted"
+                    ]
+                }
+            }
+        }
+    },
+    "errors": {
+        "message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "required": [ "message" ]
+        }
+    }
+}

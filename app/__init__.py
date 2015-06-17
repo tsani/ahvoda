@@ -4,6 +4,10 @@ from flask.ext.migrate import Migrate
 
 from app.redis_session import RedisSessionInterface
 
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 # Initialize application
 app = Flask(__name__)
 app.config.from_object('secret_config')
@@ -28,4 +32,13 @@ else:
 
 app.logger.addHandler(_syslog_handler)
 
-from app import views, api, forms, models, util
+from . import (
+        util,
+        models,
+        forms,
+        auth,
+        api_spec,
+        api,
+        views,
+        statistics,
+)
