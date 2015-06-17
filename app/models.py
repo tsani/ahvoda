@@ -4,7 +4,7 @@ class Rating(db.Model):
     __tablename__ = 'rating'
 
     id = db.Column(
-            db.Integer, primary_key=True)
+            db.Integer, unique=True, primary_key=True)
 
     employee_rating = db.Column(
             db.Float, nullable=False)
@@ -49,6 +49,18 @@ class Language(db.Model):
 
     jobs = db.relationship(
             'Job', secondary='joblanguageset')
+
+class JobStatus(db.Model):
+    __tablename__ = 'jobstatus'
+
+    id = db.Column(
+            db.Integer, nullable=False, unique=True, primary_key=True)
+
+    name = db.Column(
+            db.String, nullable=False, unique=True)
+
+    friendly_name = db.Column(
+            db.String, nullable=False)
 
 class EmployeeLanguageSet(db.Model):
     __tablename__ = 'employeelanguageset'
@@ -360,6 +372,9 @@ class Job(db.Model):
     rating_id = db.Column(
             db.Integer, db.ForeignKey('rating.id'), nullable=False)
 
+    status_id = db.Column(
+            db.Integer, db.ForeignKey('jobstatus.id'), nullable=False)
+
     position = db.relationship(
             'Position', lazy='joined')
 
@@ -374,6 +389,9 @@ class Job(db.Model):
 
     rating = db.relationship(
             'Rating', backref='job', uselist=False, lazy='joined')
+
+    status = db.relationship(
+            'JobStatus', backref='jobs', lazy='joined')
 
 class Position(db.Model):
     __tablename__ = 'position'
