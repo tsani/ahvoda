@@ -52,6 +52,98 @@ function cycle(container, strategy) {
     }, delay);
 }
 
+function unfold(element, height, complete) {
+    // Make the element visible
+    element.show();
+
+    if(typeof(complete) === 'undefined')
+        complete = function() {};
+
+    if(typeof(height) === 'undefined' || height === null) {
+        // Get its initial height
+        var initialHeight = element.height();
+        // Set its height to auto; the browser will now compute its height.
+        element.css('height', 'auto');
+        // Get the height computed by the browser
+        height = element.outerHeight();
+        // Reset the height to its initial height.
+        element.css('height', initialHeight);
+    }
+
+    element.animate({
+            "height": height
+    }, 500, function() {
+        element.css('height', 'auto');
+        complete();
+    });
+}
+
+function foldup(element, complete) {
+    if(typeof(complete) === 'undefined')
+        complete = function() {};
+
+    element.animate({
+        "height": 0
+    }, 500, function() {
+        element.hide();
+        complete();
+    });
+}
+
+function formToObject(formElement) {
+    formElement = $(formElement);
+
+    var formData = {};
+
+    $.each(formElement.serializeArray(), function(i, e) {
+        if(!e.name) {
+            // TODO exception
+        }
+        formData[e.name] = e.value;
+    });
+
+    return formData;
+}
+
+function subscribeUser() {
+    var data = formToObject($('#signup-form'));
+    console.log(JSON.stringify(data));
+    $.ajax({
+        url: "/api/subscribe",
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(data),
+        success: function(data) {
+            foldup($('#signup-form'), function() {
+                unfold($('#signup-result'));
+            });
+            $('html, body').animate({
+                scrollTop: 0
+            }, 500);
+        },
+        error: function(data) {
+            if(typeof(data.responseJSON) !== 'undefined') {
+                data = data.responseJSON;
+                if(typeof(data.offendingName) !== 'undefined') {
+                    $('#signup-container .errors').remove();
+                    var badField = $(
+                        '#signup-container *[name="' +
+                        data.offendingName +
+                        '"]');
+                    badField.after(
+                        "<p class='errors'>" + data.message + "</p>");
+                }
+                else {
+                    console.log("no offending name; ", data.message);
+                }
+            }
+            else {
+                console.log("no response json");
+            }
+        }
+    });
+}
 $(function() {
     function scrollFadeCheck() {
         // Check the location of each desired element
@@ -70,6 +162,7 @@ $(function() {
         });
     }
 
+    // Smooth scrolling for same-page anchors.
     $('a[href*=#]:not([href=#])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
             var target = $(this.hash);
@@ -83,6 +176,32 @@ $(function() {
         }
     });
 
+    // Register event handlers for any foldout forms.
+    // Get a jQuery object of the signup form and activate button
+    var signupForm = $('#signup-container');
+    var signupActivateButton = $('#signup-activate');
+
+    signupActivateButton.click(function() {
+        var signupFormInitialMinHeight = signupForm.parent().css('min-height');
+        // Ensure that when we're doing any fading in and out / hiding elements
+        // that the parent container doesn't shrink (bad UX !)
+        signupForm.parent().css(
+            'min-height', signupForm.parent().outerHeight());
+
+        // Animate the height "unfolding".
+        signupActivateButton.fadeOut(500, function() {
+            unfold(signupForm);
+
+            signupForm.css('opacity', 0);
+            signupForm.animate({
+                opacity: 1
+            },
+            500, function() {
+                signupForm.parent().css(
+                    'min-height', signupFormInitialMinHeight);
+            });
+        });
+    });
     /* Every time the window is scrolled ... */
     $(window).scroll(scrollFadeCheck);
 

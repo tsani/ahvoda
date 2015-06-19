@@ -1,74 +1,197 @@
 {% extends "layout-external.html" %}
 
 {% block title %}
-Part-Time Recruitment
+Employment on demand
+{% endblock %}
+
+{% block header %}
+<div id='top-bar' class='three-component-bar'>
+    <div>
+        <img src='/static/img/ahvoda-black-logo.png'>
+    </div>
+    <div>
+        <h1>Ahvoda</h1>
+    </div>
+    <div>
+        <a class='button' href='/business'>Not a worker?</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block contents %}
-<section id="email" class='total-centering'>
-    <div class="contents flex-row scrollfade">
-        <div>
-            <h1>Ahvoda</h1>
-            <h1>
-                <span class='cycle cycle-serial'
-                        data-cycle-period='5000' data-cycle-delay='2500'>
-                    <span>Work</span>
-                    <span>Spend</span>
-                </span>
-                <span class='cycle cycle-serial' data-cycle-period='5000'>
-                    <span>less</span>
-                    <span>minutes</span>
-                </span>
-                <span class='cycle cycle-serial'
-                        data-cycle-period='5000' data-cycle-delay='2500'>
-                    <span>play</span>
-                    <span>make</span>
-                </span>
-                <span class='cycle cycle-serial' data-cycle-period='5000'>
-                    <span>more</span>
-                    <span>hours</span>
-                </span>
-            </h1>
-            <p>
-            Employment on demand.<br>
-            Coming soon to Montreal.
-            </p>
-            <p>
-            Let jobs come to you.<br>
-            Work when you want.
-            </p>
-            <a href='#about' class='button button-success'>Find out more</a>
+<section id='banner'>
+    <div class='banner-contents scrollfade semiblack-bg'>
+        <h1>
+            <span class='cycle cycle-serial'
+                    data-cycle-period='5000' data-cycle-delay='2500'>
+                <span>Work</span>
+                <span>Spend</span>
+            </span>
+            <span class='cycle cycle-serial' data-cycle-period='5000'>
+                <span>less</span>
+                <span>minutes</span>
+            </span>
+            <span class='cycle cycle-serial'
+                    data-cycle-period='5000' data-cycle-delay='2500'>
+                <span>play</span>
+                <span>make</span>
+            </span>
+            <span class='cycle cycle-serial' data-cycle-period='5000'>
+                <span>more</span>
+                <span>hours</span>
+            </span>
+        </h1>
+
+        <button id='signup-activate' class='call-to-action'>
+            Sign up now<br>
+            and take control of your earnings
+        </button>
+
+        <div id='signup-container'>
+            <form id='signup-form' action="javascript:void(0);"
+                    onsubmit="subscribeUser();">
+                <input type='hidden' name='signup-type' value='employee'>
+                <div>
+                    <h2> Contact information </h2>
+                    <label>
+                        First name
+                        <input name='first-name' type='text'>
+                    </label>
+                    <label>
+                        Last name
+                        <input name='last-name' type='text'>
+                    </label>
+                    <label>
+                        Email address
+                        <input name='email-address' type='email'>
+                    </label>
+                    <label>
+                        Phone number
+                        <input name='phone-number' type='tel'
+                            placeholder='(514) 123-4567'>
+                    </label>
+                    <label>
+                        Address
+                        <input name='address' type='text'>
+                    </label>
+                    <label>
+                        City
+                        <input name='city' type='text'>
+                    </label>
+                    <label>
+                        Postal code
+                        <input name='postal-code' type='text'
+                            placeholder='H0H 0H0'>
+                    </label>
+                    <label>
+                        Country
+                        <select name='country'>
+                            {% for country in data.countries %}
+                            {% if country == "Canada" %}
+                            <option value="{{ country }}" selected="selected">
+                            {% else %}
+                            <option value="{{ country }}">
+                            {% endif %}
+                                {{ country }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+                <div>
+                    <h2> Details </h2>
+                    <label>
+                        Paypal email address
+                        <input name='paypal-email-address'
+                            type='email'>
+                    </label>
+                    <label>
+                        Preferred method for contact
+                        <select name='contact-method'>
+                            {% for method in data.contact_methods %}
+                            <option value="{{ method }}">
+                                {{ method }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        Briefly describe any experience you have in the
+                        restaurant industry.
+                        <textarea name='experience'></textarea>
+                    </label>
+                </div>
+                <div>
+                    <h2> Languages </h2>
+                    <label>
+                        English
+                        <input name='language-english' value='1'
+                            type='checkbox'>
+                    </label>
+                    <label>
+                        French
+                        <input name='language-french' value='1'
+                            type='checkbox'>
+                    </label>
+                </div>
+                <div class='center-holder'>
+                    <button type='submit' name='submit' class='call-to-action'>
+                        Sign up
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id='signup-result' class='center-holder'>
+            <h2> Signup successful! </h2>
+            <p> We'll contact you soon to confirm your signup. </p>
         </div>
     </div>
-</section>
 
-<section id="about" class='total-centering'>
-    <div class="contents scrollfade">
-        <h1>Employment on demand</h1>
-        <p class='description'>
-        Ahvoda lets you work when you're free.
-        </p>
-        <p class='description'>
-        After downloading our app, you'll start getting requests from
-        restaurants who need you to come in and help them out. Work when you
-        want to, take time off when you want to, and have more freedom.
-        </p>
-        <p class='description'>
-        Ahvoda is the modern way to work part-time.
-        </p>
+    <div class='cycle cycle-parallel carousel' data-cycle-period='10000'>
+        <img src='/static/img/carousel/fill_bike.jpg'>
+        <img src='/static/img/carousel/fill_cups.jpg'>
+        <img src='/static/img/carousel/fill_bridge.jpg'>
+        <img src='/static/img/carousel/fill_bus.jpg'>
+        <img src='/static/img/carousel/fill_highway.jpg'>
+        <img src='/static/img/carousel/fill_desk.jpg'>
     </div>
 </section>
 
-<section id='contact' class='total-centering'>
-    <div class='contents scrollfade'>
-        <h1>Questions?</h1>
-        <p>
-        Don't hesitate to
-        <i class='fa fa-paper-plane'></i>
-        <a href='mailto:hello@mail.ahvoda.com'>
-            contact us.
-        </a>
-        </p>
+<section id='about'>
+    <div class='contents first-left scrollfade'>
+        <img class='fitsize' src='/static/img/employee-app-views/view1.png'>
+        <div>
+            <h2>
+                Employment on demand
+            </h2>
+            <p>
+            Ahvoda lets you work when you're free.
+            </p>
+            <p>
+            After downloading our app, you'll start getting requests from
+            restaurants who need you to come in and help them out. Work when
+            you want to, take time off when you want to and have more freedom.
+            </p>
+            <p>
+            Ahvoda is the modern way to work part-time.
+            </p>
+        </div>
+    </div>
+    <div class='contents first-right scrollfade'>
+        <img class='fitsize' src='/static/img/employee-app-views/view2.png'>
+        <div>
+            <h2>
+                Get in, get out, and get paid
+            </h2>
+            <p>
+            All payments will be processed immediately after you finish work,
+            either through Paypal or directly by the employer.
+            </p>
+            <p>
+            Ahvoda lets you make money without any paperwork or red tape.
+            </p>
+        </div>
     </div>
 </section>
 

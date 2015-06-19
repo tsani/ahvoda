@@ -1,4 +1,4 @@
-from app import app, forms, utils
+from app import app, forms, util
 
 from flask import render_template, request
 
@@ -9,8 +9,8 @@ from datetime import datetime
 
 @app.route('/')
 def index():
-    return render_template('landing-page.html')
+    return util.render_template_with_data('landing-page.html')
 
 @app.route('/business')
 def business():
-    return render_template('business-landing-page.html')
+    return util.render_template_with_data('business-landing-page.html')

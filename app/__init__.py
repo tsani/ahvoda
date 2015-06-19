@@ -8,4 +8,4 @@ app.config.from_object('secret_config')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import views, api, forms, models
+from app import views, api, forms, models, util

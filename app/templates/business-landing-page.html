@@ -4,25 +4,125 @@
 Employment on demand
 {% endblock %}
 
+{% block js %}
+{{ super() }}
+
+<script>
+</script>
+
+{% endblock %}
+
 {% block header %}
-<div id='top-bar' class='flex-spaced'>
-    <img src='/static/img/ahvoda-white-logo.png'>
-    <a class='button' href='/'>Not an employer?</a>
+<div id='top-bar' class='three-component-bar'>
+    <div>
+        <img src='/static/img/ahvoda-black-logo.png'>
+    </div>
+    <div>
+        <h1>Ahvoda</h1>
+    </div>
+    <div>
+        <a class='button' href='/'>Not an employer?</a>
+    </div>
 </div>
 {% endblock %}
 
 {% block contents %}
-<section id='business-landing-top' class='total-centering'>
-    <div class='contents scrollfade'>
+<section id='banner'>
+    <div class='banner-contents scrollfade semiblack-bg'>
         <h1>
             Employment on Demand
             <br>
             Your workforce in the cloud
         </h1>
+
+        <button id='signup-activate' class='call-to-action'>
+            Sign up now<br>
+            and expand your workforce
+        </button>
+
+        <div id='signup-container'>
+            <form id='signup-form' action="javascript:void(0);"
+                    onsubmit="subscribeUser();">
+                <input type='hidden' name='signup-type' value='business'>
+                <div>
+                    <h2> Contact information </h2>
+                    <label>
+                        First name
+                        <input name='first-name' type='text'>
+                    </label>
+                    <label>
+                        Last name
+                        <input name='last-name' type='text'>
+                    </label>
+                    <label>
+                        Email address
+                        <input name='email-address' type='email'>
+                    </label>
+                    <label>
+                        Phone number
+                        <input name='phone-number' type='tel'
+                            placeholder='5141234567'>
+                    </label>
+                </div>
+                <div>
+                    <h2> Business information </h2>
+                    <label>
+                        Business name
+                        <input name='business-name' type='text'>
+                    </label>
+                    <label>
+                        Address
+                        <input name='address' type='text'
+                            placeholder="404 rue de l'Introuvable">
+                    </label>
+                    <label>
+                        City
+                        <input name='city' type='text'>
+                    </label>
+                    <label>
+                        Postal code
+                        <input name='postal-code' type='text'>
+                    </label>
+                    <label>
+                        Country
+                        <select name='country'>
+                            {% for country in data.countries %}
+                            {% if country == "Canada" %}
+                            <option value="{{ country }}" selected="selected">
+                            {% else %}
+                            <option value="{{ country }}">
+                            {% endif %}
+                                {{ country }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+                <div class='center-holder'>
+                    <button type='submit' name='submit' class='call-to-action'>
+                        Sign up
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id='signup-result' class='center-holder'>
+            <h2> Signup successful! </h2>
+            <p> We'll contact you soon to confirm your signup. </p>
+        </div>
+    </div>
+
+    <div class='cycle cycle-parallel carousel' data-cycle-period='10000'>
+        <img src='/static/img/carousel/fill_bike.jpg'>
+        <img src='/static/img/carousel/fill_cups.jpg'>
+        <img src='/static/img/carousel/fill_bridge.jpg'>
+        <img src='/static/img/carousel/fill_bus.jpg'>
+        <img src='/static/img/carousel/fill_highway.jpg'>
+        <img src='/static/img/carousel/fill_desk.jpg'>
     </div>
 </section>
 
-<section id='about' class='total-centering'>
+<section id='about' class='screenful'>
     <div class='contents first-left scrollfade'>
         <img class='fitsize' src='/static/img/business-app-views/view1.png'>
         <div>
@@ -59,25 +159,14 @@ Employment on demand
                     minutes.
                 </h5>
                 <p>
-                Using Ahvoda, you will never be understaffed. Keep fewer employees
-                on the floor, and more employees in the cloud. React to unexpected
-                circumstances with Ahvoda.
+                Using Ahvoda, you will never be understaffed. Keep fewer
+                employees on the floor, and more employees in the cloud. React
+                to unexpected circumstances with Ahvoda.
                 </p>
             </div>
         </div>
     </div>
 </section> 
-
-<section class='total-centering'>
-    <div class='contents'>
-        <h2>Closed alpha launch in July 2015</h2>
-        <p>Contact us to join.</p>
-        <a class='button' href='mailto:hello@mail.ahvoda.com'>
-            hello@mail.ahvoda.com
-        </a>
-    </div>
-</section>
-
 {% endblock %}
 
 {% block carousel %}
