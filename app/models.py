@@ -42,7 +42,7 @@ class Language(db.Model):
 
     # ISO 639 code for the language
     iso_name = db.Column(
-            db.String, nullable=True, unique=True)
+            db.String, nullable=False, unique=True)
 
     employees = db.relationship(
             'Employee', secondary='employeelanguageset')
