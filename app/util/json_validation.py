@@ -200,7 +200,7 @@ def _load_schema_from_file(path):
         with open(path, 'rt') as f:
             json_data = json.load(f)
     except (OSError, IOError, ValueError) as e:
-        raise ServerValidationError(str(e))
+        raise ServerValidationError(path + ": " + str(e))
 
     return json_data
 
