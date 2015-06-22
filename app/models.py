@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 
 class Rating(db.Model):
     __tablename__ = 'rating'
@@ -204,7 +204,7 @@ class Login(db.Model):
             db.Integer, primary_key=True)
 
     username = db.Column(
-            db.String, nullable=False)
+            db.String, nullable=False, unique=True)
 
     email = db.Column(
             db.String, nullable=False)
@@ -226,8 +226,12 @@ class Login(db.Model):
 
     employee_account = db.relationship(
             'Employee', uselist=False, backref='login', lazy='joined')
+
     manager_account = db.relationship(
             'Manager', uselist=False, backref='login', lazy='joined')
+
+    administrator_account = db.relationship(
+            'Administrator', uselist=False, backref='login', lazy='joined')
 
     def is_employee(self):
         return bool(self.employee_account)
@@ -235,12 +239,30 @@ class Login(db.Model):
     def is_manager(self):
         return bool(self.manager_account)
 
+    def is_administrator(self):
+        return bool(self.administrator_account)
+
     def get_account(self):
         """ Get the account associated with this Login.
 
         Returns:
             Either a Manager or Employee instance.
         """
+
+        account_possibilities = (
+                (self.is_employee, lambda: self.employee_account),
+                (self.is_manager, lambda: self.manager_account),
+                (self.is_administrator, lambda: self.administrator_account),
+        )
+
+        for predicate, thunk in account_possibilities:
+            if predicate():
+                return thunk()
+
+        app.logger.warning('Login %d (%s) has no associated account.',
+                (self.id, self.first_name, self.username))
+
+        return None
         return self.employee_account or self.manager_account
 
 class Manager(db.Model):
@@ -248,6 +270,25 @@ class Manager(db.Model):
 
     id = db.Column(
             db.Integer, primary_key=True)
+
+    human_id = db.Column(
+            db.Integer, db.ForeignKey('human.id'), nullable=False, unique=True)
+
+    login_id = db.Column(
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False, unique=True)
+
+    businesses = db.relationship(
+            'Business', secondary='managerset')
+
+    human = db.relationship(
+            'Human', backref='manager', uselist=False)
+
+class Human(db.Model):
+    __tablename__ = 'human'
+
+    id = db.Column(
+            db.Integer, primary_key=True, nullable=False, unique=True)
 
     first_name = db.Column(
             db.String, nullable=False)
@@ -264,12 +305,33 @@ class Manager(db.Model):
     gender = db.relationship(
             'Gender', lazy='joined')
 
-    login_id = db.Column(
-            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
-            nullable=False)
+    def is_employee():
+        """ Whether the account associated with this human is an employee. """
+        # The employee attribute comes from a backref given by the Employee
+        # class.
+        return self.employee is not None
 
-    businesses = db.relationship(
-            'Business', secondary='managerset')
+    def is_manager():
+        """ Whether the account associated with this human is a manager. """
+        # The manager attribute comes from a backref given by the Manager
+        # class.
+        return self.manager is not None
+
+    def get_account():
+        """ Retrieve the account associated with this human. """
+        account_possibilities = (
+                (self.is_employee, lambda: self.employee),
+                (self.is_manager, lambda: self.manager),
+        )
+
+        for predicate, thunk in account_possibilities:
+            if predicate():
+                return thunk()
+
+        app.logger.warning('Human %d (%s %s) has no associated account.',
+                (self.id, self.first_name, self.last_name))
+
+        return None
 
 class ManagerSet(db.Model):
     __tablename__ = 'managerset'
@@ -290,42 +352,43 @@ class ManagerSet(db.Model):
     level = db.Column(
             db.Integer, nullable=False)
 
+class Administrator(db.Model):
+    __tablename__ = 'administrator'
+
+    id = db.Column(
+            db.Integer, primary_key=True)
+
+    login_id = db.Column(
+            db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False, unique=True)
+
 class Employee(db.Model):
     __tablename__ = 'employee'
 
     id = db.Column(
             db.Integer, primary_key=True)
 
-    first_name = db.Column(
-            db.String, nullable=False)
-
-    last_name = db.Column(
-            db.String, nullable=False)
-
-    birth_date = db.Column(
-            db.Date, nullable=False)
-
-    gender_id = db.Column(
-            db.Integer, db.ForeignKey('gender.id'), nullable=True)
-
-    gender = db.relationship(
-            'Gender', lazy='joined')
-
     login_id = db.Column(
             db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'),
-            nullable=False)
-
-    languages = db.relationship(
-            'Language', secondary='employeelanguageset')
+            nullable=False, unique=True)
 
     is_verified = db.Column(
             db.Boolean, nullable=False)
+
+    human_id = db.Column(
+            db.Integer, db.ForeignKey('human.id'), nullable=False, unique=True)
+
+    human = db.relationship(
+            'Human', backref='employee', uselist=False, lazy='joined')
 
     home_location_id = db.Column(
             db.Integer, db.ForeignKey('location.id'), nullable=False)
 
     home_location = db.relationship(
             'Location')
+
+    languages = db.relationship(
+            'Language', secondary='employeelanguageset')
 
 class Job(db.Model):
     __tablename__ = 'job'
