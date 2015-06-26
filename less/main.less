@@ -106,6 +106,7 @@ section .contents {
 .button {
     cursor: pointer;
     text-decoration: none;
+    white-space: nowrap;
     color: inherit;
     padding: 0.5em 1em;
     border-radius: 5px;
@@ -264,6 +265,7 @@ ul.flat {
 .three-component-bar {
     > * {
         width: 33%;
+        min-width: 105px;
         text-align: center;
     }
 
@@ -277,13 +279,14 @@ ul.flat {
 
     .display-flex();
     .flex-direction(row);
-    .flex-nowrap();
+    .flex-wrap(wrap);
     .flex-align-items(center);
     .flex-justify-content(center);
 }
 
 .fitsize {
     max-height: 60vh;
+    max-width: 30vw;
 }
 
 .first-blah() {
