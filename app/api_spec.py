@@ -7,31 +7,42 @@ import jsonschema
 from app import app, basedir, auth
 from app.util import decorator_list, register_to, json_die, flat_dict
 
-# Build the absolute path to the json schema repository
-json_schema_basedir = os.path.join(
-        basedir,
-        app.config['JSON_SCHEMA_ROOT']
-)
+def load_api_data(path):
+    """ Loads the API JSON and creates a RefResolver for it.
 
-# Load the json schema describing the API
-try:
-    with open(os.path.join(json_schema_basedir, 'api.json'), 'rt') as f:
+    Arguments:
+        path (type: string):
+            The path to the json schema. This must be an absolute path.
+
+    Return:
+        A tuple (API JSON, RefResolver).
+    """
+    if path[0] != '/':
+        raise ValueError('path to json schema is not absoltue.')
+
+    with open(path, 'rt') as f:
         api_schema = json.load(f)
-except ValueError as e:
-    print("Failed to load JSON API specification:", e, file=sys.stderr)
-    sys.exit(1)
 
-# Build a resolver for JSON schema "$ref" keywords. This resolver will have the
-# main API file in scope.
-api_ref_resolver = jsonschema.RefResolver(
-        'file://' + json_schema_basedir + '/',
-        api_schema
-)
+    return (
+            api_schema,
+            jsonschema.RefResolver(
+                'file://' + os.path.dirname(path) + '/',
+                api_schema
+            ),
+    )
 
-def _make_api_validator(schema):
+def make_api_validator(resolver, schema):
     return jsonschema.Draft4Validator(
             schema,
-            resolver=api_ref_resolver
+            resolver=resolver,
+    )
+
+def load_api(path):
+    api_spec, api_ref_resolver = load_api_data(path)
+    return EndpointHandler.load(
+            api_ref_resolver,
+            api_spec,
+            path,
     )
 
 class EndpointHandler:
@@ -46,27 +57,29 @@ class EndpointHandler:
         responses, each of which is associated with an HTTP status code.
         """
         class RequestHandler:
-            def __init__(self, path):
+            def __init__(self, resolver, path):
                 self.path = path
                 self.schema = { '$ref': path }
-                self.validator = _make_api_validator(self.schema)
+                self.validator = make_api_validator(resolver, self.schema)
 
         class ResponseHandler:
             # All response codes for which no body should be included.
             empty_response_status_codes = [ "204" ]
 
-            def __init__(self, status_code, path):
+            def __init__(self, resolver, status_code, path):
                 self.status_code = status_code
                 self.path = path
                 self.schema = { '$ref': path }
-                self.validator = _make_api_validator(self.schema)
+                self.validator = make_api_validator(resolver, self.schema)
 
         @classmethod
-        def from_dict(cls, d, path):
+        def from_dict(cls, resolver, d, path):
             """ Construct a list of `ActionHandler` instances from a dictionary
             mapping method names to action descriptions.
 
             Arguments:
+                resolver (type: jsonschema.RefResolver):
+                    Resolver for references within the schema.
                 d (type: dictionary):
                     The mapping from method names to action descriptions.
                 path (type: string, format: JSON Pointer):
@@ -85,14 +98,16 @@ class EndpointHandler:
                             method,
                             [
                                 cls.ResponseHandler(
+                                    resolver,
                                     status_code,
-                                    action_path + '/responses/' + status_code
+                                    action_path + '/responses/' + status_code,
                                 )
                                 for status_code
                                 in data['responses']
                             ],
                             cls.RequestHandler(
-                                action_path + '/request'
+                                resolver,
+                                action_path + '/request',
                             )
                             if
                             'request' in data
@@ -307,18 +322,21 @@ class EndpointHandler:
             return decorated
 
     @classmethod
-    def load(cls):
-        """ Load all EndpointHandler objects described by
-        `json-schema/api.json`.
+    def load(cls, resolver, api_spec, api_spec_path):
+        """ Load all EndpointHandler objects described by an API specification.
 
         The result is a nested dictionary structure representing the path
         travelled in the `api.json` file in order to reach the definition of
         the given API endpoint.
         """
+        api_spec_path = os.path.basename(api_spec_path)
+
         def load(path, entry):
             if 'type' not in entry:
                 raise ValueError(
-                        "API entry does not declare a type."
+                        "API entry does not declare a type at %s." % (
+                            path,
+                        ),
                 )
 
             if entry['type'] == 'directory':
@@ -331,6 +349,7 @@ class EndpointHandler:
                 return cls(
                         entry['url'],
                         cls.ActionHandler.from_dict(
+                            resolver,
                             entry['verbs'],
                             path + '/verbs'
                         ),
@@ -338,10 +357,13 @@ class EndpointHandler:
                 )
             else:
                 raise ValueError(
-                        "Unsupported API entry type: %s." % entry['type']
+                        "Unsupported API entry type '%s' at %s." % (
+                            entry['type'],
+                            path,
+                        ),
                 )
 
-        return load("api.json#/root", api_schema['root'])
+        return load(api_spec_path + "#/root", api_spec['root'])
 
     def __init__(self, url, verbs, description=""):
         self.url = url
@@ -421,9 +443,7 @@ class EndpointHandler:
         else:
             print('Not registering empty route', self.url)
 
-endpoints = EndpointHandler.load()
-
-def register_all(app, strict=False):
+def register_all(endpoints, app, strict=False):
     for endpoint in flat_dict(endpoints):
         endpoint.register_route(app, strict=strict)
 

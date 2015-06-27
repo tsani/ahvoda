@@ -1,10 +1,20 @@
 from flask import jsonify, request, Response
 
-import datetime, json
+import datetime, json, os
 
-from app import app, db, util, models
-from app.api_spec import endpoints, register_all
+from app import app, db, util, models, basedir
+from app.api_spec import (
+        load_api,
+        register_all,
+)
 from app.util import ignored, decorate_with, from_rfc3339
+
+endpoints = load_api(
+        os.path.join(
+            basedir,
+            app.config['API_SPEC_JSON'],
+        ),
+)
 
 ### EMPLOYEE
 
@@ -771,4 +781,4 @@ def get_employee_location(employee_id, login):
             ),
     )
 
-register_all(app, strict=False)
+register_all(endpoints, app, strict=False)
