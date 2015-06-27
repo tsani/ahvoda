@@ -7,6 +7,9 @@ from redis import Redis
 from app.redis_session import RedisSessionInterface
 
 import os
+import logging
+
+from logging.handlers import SysLogHandler
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -27,8 +30,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Configure logging
-import logging
-from logging.handlers import SysLogHandler
 _syslog_handler = SysLogHandler("/dev/log")
 
 if app.debug:
