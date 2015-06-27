@@ -1,6 +1,6 @@
 import requests, json, sys
 
-from tests_config import manager_auth, make_url
+from tests_config import administrator_auth, manager_auth, make_url
 
 manager_id = 8
 
@@ -19,12 +19,19 @@ if __name__ == '__main__':
 
     r.raise_for_status()
 
-    business = r.json()['businesses'][0]
+    data = r.json()
 
-    r = requests.get(
+    if not data['businesses']:
+        print("Manager has no businesses.")
+        sys.exit(1)
+
+    business = data['businesses'][0]
+
+    r = requests.delete(
             make_url(
-                '/api/business/%d/positions' % (
+                '/api/business/%d/managers/%d' % (
                     business['id'],
+                    manager_id,
                 ),
             ),
             auth=manager_auth,
@@ -33,32 +40,27 @@ if __name__ == '__main__':
             },
     )
 
-    position_id = r.json()['positions'][0]['id']
+    r.raise_for_status()
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings' % (
+                '/api/business/%d/managers' % (
                     business['id'],
+                ),
+            ),
+            data=json.dumps(
+                dict(
+                    id=manager_id,
                 )
             ),
-            auth=manager_auth,
+            auth=administrator_auth,
             headers={
                 'Content-type': 'application/json',
             },
-            data=json.dumps(
-                dict(
-                    pay=15,
-                    duration=3,
-                    details='Flip test burgers.',
-                    position=position_id,
-                    languages=[
-                        dict(
-                            iso_name='fr',
-                        ),
-                    ],
-                ),
-            ),
     )
+
+    if r.status_code == 400:
+        print(json.dumps(r.json(), indent=2))
 
     r.raise_for_status()
 

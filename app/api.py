@@ -781,4 +781,125 @@ def get_employee_location(employee_id, login):
             ),
     )
 
+@decorate_with(
+        endpoints['manager']['business']['collection'].handles_action('GET')
+)
+def get_managed_businesses(manager_id, login):
+    account = login.get_account()
+    if login.is_manager() and account.id != manager_id:
+        return util.json_die(
+                "No such manager.",
+                404,
+        )
+
+    if login.is_manager():
+        manager = account
+    else:
+        manager = models.Manager.query.get(manager_id)
+        if manager is None:
+            return util.json_die(
+                    "No such manager.",
+                    404,
+            )
+
+    return jsonify(
+            dict(
+                businesses=[
+                    business.to_dict()
+                    for business
+                    in manager.businesses
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['business']['manager']['collection'].handles_action('GET')
+)
+def get_business_managers(business_id, login):
+    business = models.Business.query.get(business_id)
+    if business is None:
+        return util.json_die(
+                "No such business.",
+                404,
+        )
+
+    return jsonify(
+            dict(
+                managers=[
+                    manager.to_dict()
+                    for manager
+                    in business.managers
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['business']['manager']['collection'].handles_action('POST')
+)
+def add_manager_to_business(business_id, login):
+    account = login.get_account()
+    business = models.Business.query.get(business_id)
+
+    if login.is_manager() and business not in account.businesses:
+        return util.json_die(
+                "No such business.",
+                404,
+        )
+
+    data = request.get_json()
+
+    manager = models.Manager.query.get(
+            data['id'],
+    )
+
+    if manager is None:
+        return util.json_die(
+                "No such manager.",
+                404,
+        )
+
+    business.managers.append(manager)
+
+    db.session.add(business)
+    db.session.commit()
+
+    return jsonify(
+            business.to_dict()
+    )
+
+@decorate_with(
+        endpoints['business']['manager']['instance'].handles_action('DELETE')
+)
+def remove_manager_from_business(business_id, manager_id, login):
+    account = login.get_account()
+    business = models.Business.query.get(business_id)
+    manager = models.Manager.query.get(manager_id)
+
+    # The operation fails if:
+    # * the business or manager do not exist in the database.
+    # * the manager is not a manager of that business.
+    # * the account is not a manager of that business.
+    if business is None or \
+            manager is None or \
+            login.is_manager() and business not in account.businesses:
+        return util.json_die(
+                "No such business or manager.",
+                404,
+        )
+
+    for i, m in enumerate(business.managers):
+        if m == manager:
+            del business.managers[i]
+            break
+    else:
+        return util.json_die(
+                "No such business or manager.",
+                404,
+        )
+
+    db.session.add(business)
+    db.session.commit()
+
+    return Response(status=204)
+
 register_all(endpoints, app, strict=False)

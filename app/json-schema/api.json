@@ -5,6 +5,44 @@
     "root": {
         "type": "directory",
         "contents": {
+            "manager": {
+                "type": "directory",
+                "contents": {
+                    "business": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "description": "Manage the businesses managed by a manager.",
+                                "url": "/api/manager/<int:manager_id>/businesses",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "businesses": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/business"
+                                                        }
+                                                    },
+                                                    "required": "businesses",
+                                                    "additionalProperties": false
+                                                }
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "employee": {
                 "type": "directory",
                 "contents": {
@@ -110,6 +148,79 @@
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "manager": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/business/<int:business_id>/managers",
+                                "description": "Collection of managers at a business.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "managers": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/manager"
+                                                        }
+                                                    },
+                                                    "required": [ "managers" ],
+                                                    "additionalProperties": false
+                                                }
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    },
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "$ref": "#/definitions/id"
+                                                },
+                                                "required": [ "id" ],
+                                                "additionalProperties": false
+                                            }
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/business"
+                                            },
+                                            "400": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/business/<int:business_id>/managers/<int:manager_id>",
+                                "description": "Instance of a manager at a business.",
+                                "verbs": {
+                                    "DELETE": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "204": {},
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
                                     }
                                 }
                             }
