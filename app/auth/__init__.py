@@ -126,13 +126,17 @@ def requires_manager(f):
             raise TypeError('requires_manager did not receive a "Login" '
                     'instance')
 
-        if kwargs['login'].is_manager():
+        if kwargs['login'].is_administrator():
+            app.logger.debug("identified administrator account")
+        elif kwargs['login'].is_manager():
             app.logger.debug("identified manager account")
-            return f(*args, **kwargs)
         else:
             app.logger.info("failed to identify account as manager")
             return failure.response_403("This page requires a manager "
                     "account.")
+
+        return f(*args, **kwargs)
+
     return decorated
 
 def requires_employee(f):
@@ -148,13 +152,17 @@ def requires_employee(f):
             raise TypeError('requires_employee did not receive a "Login" '
                     'instance')
 
+        if kwargs['login'].is_administrator():
+            app.logger.debug("identified administrator account")
         if kwargs['login'].is_employee():
             app.logger.debug("identified employee account")
-            return f(*args, **kwargs)
         else:
             app.logger.info("failed to identify account as employee")
             return failure.response_403("This page requires a manager "
                     "account.")
+
+        return f(*args, **kwargs)
+
     return decorated
 
 def requires_account(account_type):
