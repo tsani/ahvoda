@@ -76,13 +76,15 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
         @wraps(f)
         def decorated(*args, **kwargs):
             if has_session():
-                if 'login' not in session:
-                    return failure_handler()
-                else:
+                if 'login' in session:
                     if pass_login:
-                        return f(*args, login=session['login'], **kwargs)
+                        login = models.Login.query.get(session['login']['id'])
+                        # TODO add check that login is still valid
+                        return f(*args, login=login, **kwargs)
                     else:
                         return f(*args, **kwargs)
+                else:
+                    return failure_handler()
             else:
                 # If a session cannot be identified by a cookie, then fallback
                 # basic auth.

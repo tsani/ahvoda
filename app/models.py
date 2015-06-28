@@ -940,6 +940,12 @@ class Login(db.Model):
     def is_administrator(self):
         return bool(self.administrator_account)
 
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                username=self.username,
+        )
+
     def get_account(self):
         """ Get the account associated with this Login.
 

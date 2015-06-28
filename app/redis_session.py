@@ -46,7 +46,8 @@ class RedisSessionInterface(SessionInterface):
             return self.session_class(sid=sid, new=True)
         val = self.redis.get(self.prefix + sid)
         if val is not None:
-            data = self.serializer.loads(val)
+            # TODO ensure that this decode is justified
+            data = self.serializer.loads(val.decode('utf-8'))
             return self.session_class(data, sid=sid)
         return self.session_class(sid=sid, new=True)
 

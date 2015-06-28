@@ -26,12 +26,12 @@ def login():
 
         if not error:
             login = auth.check_auth(form['username'], form['password'])
-            if not login:
+            if login:
+                session['login'] = login.to_dict()
+                return 'successfully logged in'
+            else:
                 flash('Incorrect username or password.')
                 return render_template('login.html')
-            else:
-                session['login'] = login
-                return 'successfully logged in'
 
     return render_template('login.html')
 
