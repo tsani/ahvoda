@@ -2,13 +2,13 @@ import requests, json, sys
 
 from tests_config import administrator_auth, manager_auth, make_url
 
-manager_id = 8
+manager_username = 'test-manager'
 
 if __name__ == '__main__':
     r = requests.get(
             make_url(
-                '/api/manager/%d/businesses' % (
-                    manager_id,
+                '/api/manager/%s/businesses' % (
+                    manager_username,
                 ),
             ),
             auth=manager_auth,
@@ -29,9 +29,9 @@ if __name__ == '__main__':
 
     r = requests.delete(
             make_url(
-                '/api/business/%d/managers/%d' % (
+                '/api/business/%d/managers/%s' % (
                     business['id'],
-                    manager_id,
+                    manager_username,
                 ),
             ),
             auth=manager_auth,
@@ -50,7 +50,7 @@ if __name__ == '__main__':
             ),
             data=json.dumps(
                 dict(
-                    id=manager_id,
+                    name=manager_username,
                 )
             ),
             auth=administrator_auth,

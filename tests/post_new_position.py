@@ -110,8 +110,6 @@ if __name__ == '__main__':
         print("Names don't match.")
         failed()
 
-    sys.exit(0)
-
     filter2xx(
             delete_position(business_id, p['id'])
     )

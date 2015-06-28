@@ -21,18 +21,25 @@ endpoints = load_api(
 @decorate_with(
         endpoints['employee']['details'].handles_action('GET')
 )
-def get_employee_details(login, employee_id):
+def get_employee_details(employee_name, login):
     """ The handler to execute for the GET request method. """
-    # TODO ensure that the authenticated account is authorized to see this
-    # employees info.
-    employee = models.Employee.query.get(employee_id)
+    die = lambda: util.json_die(
+            "No such employee.",
+            404,
+    )
+
+    employee_login = models.Login.query.filter_by(
+            username=employee_name
+    ).first()
+
+    if employee_login is None or not employee_login.is_employee():
+        return die()
+
+    employee = employee_login.get_account()
     account = login.get_account()
-    if employee is None or login.is_employee() and account.id != employee_id:
-        return util.json_die(
-                "The account is not authorized to read information for "
-                "employee %d" % (employee_id,),
-                403
-        )
+
+    if login.is_employee() and account.id != employee.id:
+        return die()
 
     return jsonify(
             employee.to_dict(),
@@ -41,19 +48,25 @@ def get_employee_details(login, employee_id):
 @decorate_with(
         endpoints['employee']['details'].handles_action('PATCH')
 )
-def patch_employee_details(login, employee_id):
+def patch_employee_details(login, employee_name):
     account = login.get_account()
+
+    employee_login = models.Login.query.filter_by(
+            username=employee_name
+    ).first()
+
+    if employee_login is None or not employee_login.is_employee():
+        return die()
+
+    employee = employee_login.get_account()
 
     # Ensure that the authenticated account is an employee and that their
     # account id is the id of the account they wish to update
 
-    if not login.is_employee() or account.id != employee_id:
+    if not login.is_employee() or account.id != employee.id:
         return util.json_die(
-                "The account is not authorized to read information for "
-                "employee %d" % (
-                    employee_id,
-                ),
-                403,
+                "No such employee.",
+                404,
         )
 
     data = request.get_json()
@@ -194,7 +207,13 @@ def get_business_listings(business_id, login):
         )
 
     return jsonify(
-            business.to_dict(),
+            dict(
+                listings=[
+                    job.to_dict()
+                    for job
+                    in business.jobs
+                ],
+            ),
     )
 
 @decorate_with(
@@ -227,7 +246,9 @@ def new_listing(business_id, login):
                 404
         )
 
-    pending = models.JobStatus.query.filter_by(name='pending').first()
+    pending = models.JobStatus.query.filter_by(
+            name='pending'
+    ).first()
 
     languages = [
             models.Language.query.filter_by(
@@ -504,7 +525,9 @@ def approve_employee(business_id, listing_id, login):
 
     data = request.get_json()
 
-    employee_to_approve = models.Employee.query.get(data['id'])
+    employee_to_approve = models.Employee.query.get(
+            data['name'],
+    )
 
     if employee_to_approve is None:
         return util.json_die(
@@ -686,13 +709,15 @@ def apply_to_job(business_id, listing_id, login):
 
     data = request.get_json()
 
-    if login.is_employee() and account.id != data['id']:
+    if login.is_employee() and loin.username != data['name']:
         return util.json_die(
                 "This account is not authorized to use that employee id.",
                 403,
         )
 
-    employee = models.Employee.query.get(data['id'])
+    employee = models.Employee.query.filter_by(
+            username=data['name'],
+    )
 
     if employee is None:
         return util.json_die(
@@ -743,14 +768,20 @@ def get_applicants(business_id, listing_id, login):
 @decorate_with(
         endpoints['employee']['location'].handles_action('PUT')
 )
-def put_employee_location(employee_id, login):
+def put_employee_location(employee_name, login):
     account = login.get_account()
-    employee = models.Employee.query.get(employee_id)
-    if employee is None or login.is_employee() and account.id != employee_id:
+    employee_login = models.Login.query.filter_by(
+            username=employee_name,
+    ).first()
+    if employee_login is None or \
+            not employee_login.is_employee() or \
+            login.id != employee_login.id:
         return util.json_die(
                 "No such employee.",
                 404,
         )
+
+    employee = employee_login.get_account()
 
     data = request.get_json()
 
@@ -765,14 +796,23 @@ def put_employee_location(employee_id, login):
 @decorate_with(
         endpoints['employee']['location'].handles_action('GET')
 )
-def get_employee_location(employee_id, login):
+def get_employee_location(employee_name, login):
+    die = lambda: util.json_die(
+            "No such employee.",
+            404,
+    )
+
     account = login.get_account()
-    employee = models.Employee.query.get(employee_id)
-    if employee is None or login.is_employee() and account.id != employee_id:
-        return util.json_die(
-                "No such employee.",
-                404,
-        )
+    employee_login = models.Login.query.filter_by(
+            username=employee_name,
+    )
+
+    if employee_login is None or not employee_login.is_employee():
+        return die()
+
+    employee = employee_login.get_account()
+
+    # TODO add security
 
     return jsonify(
             dict(
@@ -784,23 +824,19 @@ def get_employee_location(employee_id, login):
 @decorate_with(
         endpoints['manager']['business']['collection'].handles_action('GET')
 )
-def get_managed_businesses(manager_id, login):
-    account = login.get_account()
-    if login.is_manager() and account.id != manager_id:
-        return util.json_die(
-                "No such manager.",
-                404,
-        )
-
+def get_managed_businesses(manager_name, login):
     if login.is_manager():
-        manager = account
+        manager = login.get_account()
     else:
-        manager = models.Manager.query.get(manager_id)
-        if manager is None:
+        manager_login = models.Login.query.filter_by(
+                username=manager_name
+        ).first()
+        if manager_login is None or not manager_login.is_manager():
             return util.json_die(
                     "No such manager.",
                     404,
             )
+        manager = manager_login.get_account()
 
     return jsonify(
             dict(
@@ -848,15 +884,17 @@ def add_manager_to_business(business_id, login):
 
     data = request.get_json()
 
-    manager = models.Manager.query.get(
-            data['id'],
-    )
+    manager_login = models.Login.query.filter_by(
+            username=data['name'],
+    ).first()
 
-    if manager is None:
+    if manager_login is None or not manager_login.is_manager():
         return util.json_die(
                 "No such manager.",
                 404,
         )
+
+    manager = manager_login.get_account()
 
     business.managers.append(manager)
 
@@ -870,22 +908,31 @@ def add_manager_to_business(business_id, login):
 @decorate_with(
         endpoints['business']['manager']['instance'].handles_action('DELETE')
 )
-def remove_manager_from_business(business_id, manager_id, login):
+def remove_manager_from_business(business_id, manager_name, login):
+    die = lambda: util.json_die(
+            "No such manager.",
+            "404",
+    )
+
     account = login.get_account()
     business = models.Business.query.get(business_id)
-    manager = models.Manager.query.get(manager_id)
+
+    manager_login = models.Login.query.filter_by(
+            username=manager_name,
+    ).first()
+
+    if manager_login is None or not manager_login.is_manager():
+        return die()
+
+    manager = manager_login.get_account()
 
     # The operation fails if:
     # * the business or manager do not exist in the database.
     # * the manager is not a manager of that business.
     # * the account is not a manager of that business.
     if business is None or \
-            manager is None or \
             login.is_manager() and business not in account.businesses:
-        return util.json_die(
-                "No such business or manager.",
-                404,
-        )
+        return die()
 
     for i, m in enumerate(business.managers):
         if m == manager:

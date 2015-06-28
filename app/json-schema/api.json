@@ -14,7 +14,7 @@
                             "collection": {
                                 "type": "endpoint",
                                 "description": "Manage the businesses managed by a manager.",
-                                "url": "/api/manager/<int:manager_id>/businesses",
+                                "url": "/api/manager/<manager_name>/businesses",
                                 "verbs": {
                                     "GET": {
                                         "accountTypes": [ "manager" ],
@@ -49,7 +49,7 @@
                     "details": {
                         "type": "endpoint",
                         "description": "Detailed information about an employee.",
-                        "url": "/api/employee/<int:employee_id>",
+                        "url": "/api/employee/<employee_name>",
                         "verbs": {
                             "GET": {
                                 "accountTypes": [ "employee", "manager" ],
@@ -82,7 +82,7 @@
                     "location": {
                         "type": "endpoint",
                         "description": "The current 'flag' location of an employee.",
-                        "url": "/api/employee/<int:employee_id>/location",
+                        "url": "/api/employee/<employee_name>/location",
                         "verbs": {
                             "GET": {
                                 "accountTypes": [ "employee", "manager" ],
@@ -98,7 +98,7 @@
                             "PUT": {
                                 "accountTypes": [ "employee" ],
                                 "request": {
-                                    "$ref": "#/definitions/employee"
+                                    "$ref": "#/definitions/minimalLocation"
                                 },
                                 "responses": {
                                     "204": {},
@@ -187,10 +187,8 @@
                                         "request": {
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "$ref": "#/definitions/id"
-                                                },
-                                                "required": [ "id" ],
+                                                "name": { "type": "string" },
+                                                "required": [ "name" ],
                                                 "additionalProperties": false
                                             }
                                         },
@@ -210,7 +208,7 @@
                             },
                             "instance": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/managers/<int:manager_id>",
+                                "url": "/api/business/<int:business_id>/managers/<manager_name>",
                                 "description": "Instance of a manager at a business.",
                                 "verbs": {
                                     "DELETE": {
@@ -381,11 +379,9 @@
                                         "request": {
                                             "type": "object",
                                             "properties": {
-                                                "id": {
-                                                    "$ref": "#/definitions/id"
-                                                }
+                                                "name": { "type": "string" }
                                             },
-                                            "required": [ "id" ],
+                                            "required": [ "name" ],
                                             "additionalProperties": "false"
                                         },
                                         "responses": {
@@ -516,11 +512,11 @@
                                                 "request": {
                                                     "type": "object",
                                                     "properties": {
-                                                        "id": { 
-                                                            "$ref": "#/definitions/id" 
+                                                        "name": { 
+                                                            "type": "string"
                                                         }
                                                     },
-                                                    "required": [ "id" ],
+                                                    "required": [ "name" ],
                                                     "additionalProperties": false
                                                 },
                                                 "responses": {
@@ -568,10 +564,17 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "#/definitions/listing" 
-                                                }
+                                                "type": "object",
+                                                "properties": {
+                                                    "listings": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/listing" 
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "properties" ],
+                                                "additionalProperties": false
                                             },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" }
