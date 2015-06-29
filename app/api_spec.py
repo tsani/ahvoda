@@ -114,7 +114,8 @@ class EndpointHandler:
                             else
                             None,
                             cls.RequestHandler(
-                                action_path + '/query_string'
+                                resolver,
+                                action_path + '/query_string',
                             )
                             if
                             'query_string' in data
@@ -195,6 +196,23 @@ class EndpointHandler:
         def _validate_query_string(self, f):
             @wraps(f)
             def decorated(*args, **kwargs):
+                if self.query_string_handler is None:
+                    if request.args:
+                        return json_die(
+                                "this endpoint does not support query string "
+                                "arguments.",
+                                400,
+                        )
+                else:
+                    try:
+                        self.query_string_handler(
+                                request.args,
+                        )
+                    except jsonschema.exceptions.ValidationError as e:
+                        return json_die(
+                                str(e),
+                                400,
+                        )
                 return f(*args, **kwargs)
             return decorated
 
