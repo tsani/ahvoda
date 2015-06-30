@@ -5,6 +5,60 @@
     "root": {
         "type": "directory",
         "contents": {
+            "listings": {
+                "type": "endpoint",
+                "url": "/api/listings",
+                "description": "Global readonly collection of listings.",
+                "verbs": {
+                    "GET": {
+                        "accountTypes": [ "employee", "manager" ],
+                        "query_string": {
+                            "type": "object",
+                            "properties": {
+                                "status": { "$ref": "#/definitions/job_status_name" },
+                                "since": { "$ref": "#/definitions/date_time" },
+                                "before": { "$ref": "#/definitions/date_time" },
+                                "max": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "created_by": {
+                                    "description": "Username of the manager that created the listing.",
+                                    "type": "string"
+                                },
+                                "business": { "$ref": "#/definitions/id" },
+                                "dispatched_to": {
+                                    "description": "Username of the employee receiving the listing.",
+                                    "type": "string"
+                                },
+                                "worked_by": {
+                                    "description": "Username of the employee associated with the listing.",
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "responses": {
+                            "200": {
+                                "type": "object",
+                                "properties": {
+                                    "listings": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/definitions/listing"
+                                        }
+                                    }
+                                },
+                                "required": [ "listings" ],
+                                "additionalProperties": false
+                            },
+                            "400": { "$ref": "#/errors/message" },
+                            "403": { "$ref": "#/errors/message" },
+                            "404": { "$ref": "#/errors/message" }
+                        }
+                    }
+                }
+            },
             "manager": {
                 "type": "directory",
                 "contents": {
