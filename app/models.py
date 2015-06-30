@@ -1105,4 +1105,3 @@ class Login(db.Model):
                 (self.id, self.first_name, self.username))
 
         return None
-        return self.employee_account or self.manager_account
