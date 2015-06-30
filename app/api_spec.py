@@ -83,6 +83,29 @@ class EndpointHandler:
             """ Construct a list of `ActionHandler` instances from a dictionary
             mapping method names to action descriptions.
 
+            An action description is a dictionary represented by the following
+            JSON.
+
+                {
+                    "request": {
+                        # a JSON schema
+                    },
+                    "responses": {
+                        "200": {
+                            # a JSON schema
+                        },
+                        ... # more possible status codes, including most 4xx
+                    },
+                    "query_string": {
+                        # a JSON schema
+                    }
+                }
+
+            The `responses` dictionary is the only required one. If the request
+            schema is absent, then validation will fail if the request body is
+            nonemtpy. Likewise, if the `query_string` schema is absent, then
+            validation will fail if a query string is provided.
+
             Arguments:
                 resolver (type: jsonschema.RefResolver):
                     Resolver for references within the schema.
