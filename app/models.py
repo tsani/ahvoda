@@ -841,7 +841,10 @@ class Administrator(db.Model):
     )
 
     def to_dict(self):
-        return dict()
+        return dict(
+                id=self.id,
+                username=self.login.username,
+        )
 
 class Manager(db.Model):
     __tablename__ = 'manager'
