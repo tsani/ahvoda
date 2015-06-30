@@ -32,7 +32,7 @@ Validation
 JSON schemas are used to validate both incoming requests and outgoing
 responses, to ensure end-to-end correctness of the data.
 
-See `json-schemas/README.markdown` for more information.
+See `json-schemas/api.json` for details about the validation rules.
 
 
 Dates
@@ -47,7 +47,10 @@ API
 ===
 
 This sections gives an overview of each API endpoint. In should be consulted in
-tandem with the associated JSON schemas.
+tandem with the JSON schema.
+
+In fact, the JSON schema is now the authoritative specification of the API, not
+the following. This document remains as is for historical/reference purposes.
 
 Common
 ------
