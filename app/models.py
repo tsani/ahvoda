@@ -468,14 +468,16 @@ class Location(db.Model):
     latitude = db.Column(
             db.Float,
             db.CheckConstraint(
-                'latitude > -90.0 AND latitude < 90.0'
+                'latitude > -90.0 AND latitude < 90.0',
+                name='latitude',
             ),
             nullable=False)
 
     longitude = db.Column(
             db.Float,
             db.CheckConstraint(
-                'longitude > -180.0 AND longitude < 180.0'
+                'longitude > -180.0 AND longitude < 180.0',
+                name='longitude',
             ),
             nullable=False)
 

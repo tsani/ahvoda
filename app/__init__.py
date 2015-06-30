@@ -1,9 +1,9 @@
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 
 from redis import Redis
 
+from app.naming_convention_hack import SQLAlchemy
 from app.redis_session import RedisSessionInterface
 
 import os
