@@ -2,6 +2,8 @@ from flask import jsonify, request, Response
 
 import datetime, json, os
 
+from collections import defaultdict
+
 from app import app, db, util, models, basedir
 from app.api_spec import (
         load_api,
@@ -948,5 +950,135 @@ def remove_manager_from_business(business_id, manager_name, login):
     db.session.commit()
 
     return Response(status=204)
+
+@decorate_with(
+        endpoints['listings'].handles_action('GET')
+)
+def get_listings(login):
+    account = login.get_account()
+
+    # Okay, this is complicated...
+    # People using the API can submit a whole bunch of different query
+    # restrictions. These in turn translate into different conditions tacked
+    # into a WHERE clause on the resulting SQL query.
+    # To build this query, we need to collect groups of criteria.
+    criteria = defaultdict(list)
+    # We go over each property in the query string arguments, construct a
+    # SQLAlchemy condition, and append it to the list of criteria.
+    # Each criterion forms a condition group. Each condition group is an AND in
+    # the conditions, whereas each member of each group is an OR.
+    for status_name in request.args.getlist('status'):
+        status = models.JobStatus.query.filter_by(
+                name=status_name
+        ).first()
+        if status is None:
+            return util.json_die(
+                    "No status `%s'." % (
+                        status_name,
+                    ),
+                    404,
+            )
+        criteria['status'].append(
+                models.Job.status == status,
+        )
+
+    for business_id in request.args.getlist('business'):
+        business = models.Business.query.get(business_id)
+        if business is None:
+            return util.json_die(
+                    "No business with id %d." % (
+                        business_id,
+                    ),
+                    404,
+            )
+        criteria['business'].append(
+                models.Job.business_id == business_id,
+        )
+
+    for manager_name in request.args.getlist('created_by'):
+        manager_login = models.Login.query.filter_by(
+                username=manager_name,
+        ).first()
+        if manager_login is None or not manager_login.is_manager():
+            return util.json_die(
+                    "No manager with username %s." % (
+                        manager_name,
+                    ),
+                    404,
+            )
+
+        manager = manager_login.get_account()
+
+        criteria['manager'].append(
+                models.Job.manager_id == manager.id,
+        )
+
+    for employee_name in request.args.getlist('dispatched_to') + \
+            request.args.getlist('worked_by'):
+        employee_login = models.Login.query.filter_by(
+                username=employee_name,
+        )
+        if employee_login is None or not employee_login.is_employee():
+            return util.json_die(
+                    "No employee with username %s." % (
+                        employee_name,
+                    ),
+                    404,
+            )
+
+        employee = employee_login.get_account()
+
+        criteria['employee'].append(
+                models.Job.employee_id == employee.id,
+        )
+
+    try:
+        since_date = from_rfc3339(
+                request.args['since'],
+        )
+    except KeyError:
+        pass
+    else:
+        criteria['since'].append(
+                models.Job.create_date > since_date,
+        )
+
+    try:
+        before_date = from_rfc3339(
+                request.args['before'],
+        )
+    except KeyError:
+        pass
+    else:
+        criteria['before'].append(
+                models.Job.create_date < before_date,
+        )
+
+    try:
+        max_count = request.args['max']
+    except KeyError:
+        max_count = 100
+
+    results = models.Job.query.filter(
+            db.and_(
+                *[
+                    db.or_(
+                        *predicates
+                    )
+                    for predicates
+                    in criteria.values()
+                ]
+            ),
+    ).limit(max_count).all()
+
+    return jsonify(
+            dict(
+                listings=[
+                    listing.to_dict()
+                    for listing
+                    in results
+                ]
+            )
+    )
 
 register_all(endpoints, app, strict=False)
