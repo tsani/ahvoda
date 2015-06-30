@@ -7,6 +7,87 @@ from app.util import to_rfc3339
 
 ### Business structure and listing-related tables
 
+class JobMatch(db.Model):
+    """ Represents a match between an employee and a job.
+
+    Rows in this table are considerably more volatile than in most other tables
+    in the database.
+
+    When a listing is created, a message is written into the Redis-backed
+    message queue and picked up by the matcher. The matcher runs the listing
+    through each employee row and finds matches. It writes rows to this
+    table as a record of its work, which also allows it to pick up where it
+    left off in case of failures.
+
+    As it writes rows to this table, the matcher also enqueues messages to the
+    dispatcher. The dispatcher uses GCM to send batches of listings to the
+    phones.
+
+    Each phone decides whether the listing is a true match based on the
+    employee's current location. The phone's decisions are relayed back to the
+    webapp using the REST API and are also recorded in this table.
+
+    In sum, each row represents a match as well as the following information:
+    * whether the match has been dispatched
+    * whether the match was a true match
+
+    Of course, the match can't be a true match unless the match has been
+    dispatched, so until `dispatched` becomes `true`, `true match` can't have a
+    value other than NULL. CHECK constraints will enforce this.
+    """
+    __tablename__ = 'jobmatch'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint(
+                'employee_id',
+                'job_id',
+            ),
+    )
+
+    id = db.Column(
+            db.Integer,
+            unique=True,
+            nullable=False,
+    )
+
+    create_date = db.Column(
+            db.DateTime,
+            server_default=db.func.now(),
+            nullable=False,
+    )
+
+    is_dispatched = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default='f',
+            index=True,
+    )
+
+    is_true_match = db.Column(
+            db.Boolean,
+            nullable=True,
+    )
+
+    employee_id = db.Column(
+            db.Integer,
+            db.ForeignKey('employee.id'),
+    )
+
+    job_id = db.Column(
+            db.Integer,
+            db.ForeignKey('job.id'),
+    )
+
+    employee = db.relationship(
+            'Employee',
+            backref='employee_matches',
+    )
+
+    job = db.relationship(
+            'Job',
+            backref='job_matches',
+    )
+
 class Rating(db.Model):
     __tablename__ = 'rating'
 
