@@ -299,8 +299,8 @@
                                             "additionalProperties": false
                                         },
                                         "responses": {
-                                            "200": { 
-                                                "$ref": "#/definitions/position" 
+                                            "200": {
+                                                "$ref": "#/definitions/position"
                                             },
                                             "400": { "$ref": "#/errors/message" },
                                             "403": { "$ref": "#/errors/message" },
@@ -335,14 +335,14 @@
                                     "GET": {
                                         "accountTypes": [ "manager" ],
                                         "responses": {
-                                            "200": { 
-                                                "$ref": "#/definitions/position" 
+                                            "200": {
+                                                "$ref": "#/definitions/position"
                                             },
-                                            "403": { 
-                                                "$ref": "#/errors/message" 
+                                            "403": {
+                                                "$ref": "#/errors/message"
                                             },
-                                            "404": { 
-                                                "$ref": "#/errors/message" 
+                                            "404": {
+                                                "$ref": "#/errors/message"
                                             }
                                         }
                                     },
@@ -359,14 +359,14 @@
                                         },
                                         "responses": {
                                             "204": {},
-                                            "400": { 
-                                                "$ref": "#/errors/message" 
+                                            "400": {
+                                                "$ref": "#/errors/message"
                                             },
-                                            "403": { 
-                                                "$ref": "#/errors/message" 
+                                            "403": {
+                                                "$ref": "#/errors/message"
                                             },
-                                            "404": { 
-                                                "$ref": "#/errors/message" 
+                                            "404": {
+                                                "$ref": "#/errors/message"
                                             }
                                         }
                                     },
@@ -374,11 +374,11 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "204": {},
-                                            "403": { 
-                                                "$ref": "#/errors/message" 
+                                            "403": {
+                                                "$ref": "#/errors/message"
                                             },
-                                            "404": { 
-                                                "$ref": "#/errors/message" 
+                                            "404": {
+                                                "$ref": "#/errors/message"
                                             }
                                         }
                                     }
@@ -503,17 +503,17 @@
                                                     "200": {
                                                         "$ref": "#/definitions/listing"
                                                     },
-                                                    "400": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "400": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "403": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "403": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "404": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "404": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "409": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "409": {
+                                                        "$ref": "#/errors/message"
                                                     }
                                                 }
                                             }
@@ -540,17 +540,17 @@
                                                     "200": {
                                                         "$ref": "#/definitions/listing"
                                                     },
-                                                    "400": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "400": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "403": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "403": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "404": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "404": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "409": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "409": {
+                                                        "$ref": "#/errors/message"
                                                     }
                                                 }
                                             }
@@ -566,7 +566,7 @@
                                                 "request": {
                                                     "type": "object",
                                                     "properties": {
-                                                        "name": { 
+                                                        "name": {
                                                             "type": "string"
                                                         }
                                                     },
@@ -574,34 +574,34 @@
                                                     "additionalProperties": false
                                                 },
                                                 "responses": {
-                                                    "202": { 
-                                                        "$ref": "#/definitions/listing" 
+                                                    "202": {
+                                                        "$ref": "#/definitions/listing"
                                                     },
-                                                    "400": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "400": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "403": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "403": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "404": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "404": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "409": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "409": {
+                                                        "$ref": "#/errors/message"
                                                     }
                                                 }
                                             },
                                             "GET": {
                                                 "accountTypes": [ "manager" ],
                                                 "responses": {
-                                                    "200": { 
-                                                        "$ref": "#/definitions/employee" 
+                                                    "200": {
+                                                        "$ref": "#/definitions/employee"
                                                     },
-                                                    "403": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "403": {
+                                                        "$ref": "#/errors/message"
                                                     },
-                                                    "404": { 
-                                                        "$ref": "#/errors/message" 
+                                                    "404": {
+                                                        "$ref": "#/errors/message"
                                                     }
                                                 }
                                             }
@@ -623,7 +623,7 @@
                                                     "listings": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/listing" 
+                                                            "$ref": "#/definitions/listing"
                                                         }
                                                     }
                                                 },
@@ -644,14 +644,14 @@
                                                     "minimum": 0
                                                 },
                                                 "duration": {
-                                                    "type": "number", 
+                                                    "type": "number",
                                                     "minimum": 0
                                                 },
                                                 "details": {
                                                     "type": "string"
                                                 },
-                                                "position": { 
-                                                    "$ref": "#/definitions/id" 
+                                                "position": {
+                                                    "$ref": "#/definitions/id"
                                                 },
                                                 "languages": {
                                                     "type": "array",
@@ -872,7 +872,7 @@
                 "location": {
                     "$ref": "#/definitions/fixed_location"
                 },
-                "is_verified": { 
+                "is_verified": {
                     "type": "boolean"
                 },
                 "company": {
@@ -914,9 +914,7 @@
                     "type": "number",
                     "minimum": 0
                 },
-                "details": {
-                    "type": "string"
-                },
+                "details": { "type": "string" },
                 "create_date": { "$ref": "#/definitions/date_time" },
                 "arrival_date": { "$ref": "#/definitions/date_time" },
                 "departure_date": { "$ref": "#/definitions/date_time" },
@@ -944,13 +942,13 @@
                 }
             },
             "additionalProperties": false,
-            "required": [ 
-                "id", 
-                "pay", 
-                "details", 
-                "create_date", 
+            "required": [
+                "id",
+                "pay",
+                "details",
+                "create_date",
                 "duration",
-                "position", 
+                "position",
                 "business",
                 "rating",
                 "status",
@@ -969,15 +967,9 @@
         "position": {
             "type": "object",
             "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "create_date": {
-                    "$ref": "#/definitions/date_time"
-                }
+                "id": { "$ref": "#/definitions/id" },
+                "name": { "type": "string" },
+                "create_date": { "$ref": "#/definitions/date_time" }
             },
             "required": [ "id", "name", "create_date" ],
             "additionalProperties": false
