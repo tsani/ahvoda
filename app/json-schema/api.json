@@ -931,24 +931,21 @@
         "job_status": {
             "type": "object",
             "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "friendly_name": {
-                    "type": "string"
-                },
-                "name": {
-                    "enum": [
-                        "pending",
-                        "submitted",
-                        "inProgress",
-                        "cancelled",
-                        "completed",
-                        "stale",
-                        "aborted"
-                    ]
-                }
+                "id": { "$ref": "#/definitions/id" },
+                "friendly_name": { "type": "string" },
+                "name": { "$ref": "#/definitions/job_status_name" }
             }
+        },
+        "job_status_name": {
+            "enum": [
+                "pending",
+                "submitted",
+                "inProgress",
+                "cancelled",
+                "completed",
+                "stale",
+                "aborted"
+            ]
         }
     },
     "errors": {
