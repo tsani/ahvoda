@@ -702,6 +702,7 @@
             "description": "A representation of an employee.",
             "properties": {
                 "id": { "$ref": "#/definitions/id" },
+                "username": { "type": "string" },
                 "human": { "$ref": "#/definitions/human" },
                 "is_verified": {
                     "type": "boolean"
@@ -906,6 +907,7 @@
             "type": "object",
             "properties": {
                 "id": { "$ref": "#/definitions/id" },
+                "username": { "type": "string" },
                 "human": { "$ref": "#/definitions/human" }
             },
             "additionalProperties": false

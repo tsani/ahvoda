@@ -883,7 +883,8 @@ class Manager(db.Model):
     def to_dict(self):
         return dict(
                 id=self.id,
-                human=self.human.to_dict()
+                username=self.login.username,
+                human=self.human.to_dict(),
         )
 
 class Employee(db.Model):
@@ -948,6 +949,7 @@ class Employee(db.Model):
     def to_dict(self):
         return dict(
                 id=self.id,
+                username=self.login.username,
                 is_verified=self.is_verified,
                 human=self.human.to_dict(),
                 home_location=self.home_location.to_dict(),
