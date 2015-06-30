@@ -879,7 +879,7 @@
                     "$ref": "#/definitions/company"
                 },
                 "contact_info": {
-                    "$ref": "#definitions/contact_info"
+                    "$ref": "#/definitions/contact_info"
                 }
             },
             "additionalProperties": false,
