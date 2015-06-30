@@ -92,19 +92,30 @@ class Rating(db.Model):
     __tablename__ = 'rating'
 
     id = db.Column(
-            db.Integer, unique=True, primary_key=True)
+            db.Integer,
+            unique=True,
+            primary_key=True,
+    )
 
     employee_rating = db.Column(
-            db.Float, nullable=False)
+            db.Float,
+            nullable=False,
+    )
 
     employee_comment = db.Column(
-            db.String, nullable=True)
+            db.String,
+            nullable=True,
+    )
 
     job_rating = db.Column(
-            db.Float, nullable=False)
+            db.Float,
+            nullable=False,
+    )
 
     job_comment = db.Column(
-            db.String, nullable=True)
+            db.String,
+            nullable=True,
+    )
 
     def to_dict(self):
         return dict(
@@ -122,13 +133,21 @@ class JobStatus(db.Model):
     __tablename__ = 'jobstatus'
 
     id = db.Column(
-            db.Integer, nullable=False, unique=True, primary_key=True)
+            db.Integer,
+            nullable=False,
+            unique=True,
+            primary_key=True,
+    )
 
     name = db.Column(
-            db.String, nullable=False, unique=True)
+            db.String,
+            nullable=False, unique=True,
+    )
 
     friendly_name = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False,
+    )
 
     def to_dict(self):
         return dict(
@@ -141,10 +160,14 @@ class Company(db.Model):
     __tablename__ = 'company'
 
     id = db.Column(
-            db.Integer, primary_key=True)
+            db.Integer,
+            primary_key=True,
+    )
 
     name = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False,
+    )
 
     businesses = db.relationship(
             'Business', backref='company')
@@ -159,40 +182,71 @@ class Business(db.Model):
     __tablename__ = 'business'
 
     id = db.Column(
-            db.Integer, primary_key=True)
+            db.Integer,
+            primary_key=True,
+    )
 
     name = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False,
+    )
 
     description = db.Column(
-            db.String, nullable=False)
+            db.String,
+            nullable=False,
+    )
 
     is_verified = db.Column(
-            db.Boolean, nullable=False)
+            db.Boolean,
+            nullable=False,
+    )
 
     location_id = db.Column(
-            db.Integer, db.ForeignKey('location.id'), nullable=False)
+            db.Integer,
+            db.ForeignKey('location.id'),
+            nullable=False,
+    )
 
     industry_id = db.Column(
-            db.Integer, db.ForeignKey('industry.id'), nullable=False)
+            db.Integer,
+            db.ForeignKey('industry.id'),
+            nullable=False,
+    )
 
     company_id = db.Column(
-            db.Integer, db.ForeignKey('company.id'), nullable=True)
+            db.Integer,
+            db.ForeignKey('company.id'),
+            nullable=True,
+    )
 
     contact_info_id = db.Column(
-            db.Integer, db.ForeignKey('contactinfo.id'), nullable=False)
+            db.Integer,
+            db.ForeignKey('contactinfo.id'),
+            nullable=False,
+    )
 
     managers = db.relationship(
-            'Manager', secondary='managerset')
+            'Manager',
+            secondary='managerset',
+    )
 
     industry = db.relationship(
-            'Industry', backref='businesses')
+            'Industry',
+            backref='businesses',
+    )
 
     location = db.relationship(
-            'Location', backref='business', uselist=False)
+            'Location',
+            backref='business',
+            uselist=False,
+    )
 
     contact_info = db.relationship(
-            'ContactInfo', backref='business', uselist=False, lazy='joined')
+            'ContactInfo',
+            backref='business',
+            uselist=False,
+            lazy='joined',
+    )
 
     def to_dict(self):
         result = dict(
@@ -209,52 +263,51 @@ class Business(db.Model):
 
         return result
 
-
 class Position(db.Model):
     __tablename__ = 'position'
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     create_date = db.Column(
             db.Date,
             nullable=False,
-            server_default=db.func.now()
+            server_default=db.func.now(),
     )
 
     is_available = db.Column(
             db.Boolean,
             nullable=False,
-            server_default="t"
+            server_default="t",
     )
 
     business_id = db.Column(
             db.Integer,
             db.ForeignKey('business.id'),
-            nullable=False
+            nullable=False,
     )
 
     business = db.relationship(
             'Business',
             backref='positions',
-            lazy='joined'
+            lazy='joined',
     )
 
     manager_id = db.Column(
             db.Integer,
-            db.ForeignKey('manager.id', ondelete='SET NULL')
+            db.ForeignKey('manager.id', ondelete='SET NULL'),
     )
 
     manager = db.relationship(
             'Manager',
-            backref='created_positions'
+            backref='created_positions',
     )
 
     def to_dict(self):
@@ -269,99 +322,99 @@ class Job(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     pay = db.Column(
             db.Float,
-            nullable=False
+            nullable=False,
     )
 
     details = db.Column(
             db.String,
-            nullable=True
+            nullable=True,
     )
 
     create_date = db.Column(
             db.DateTime,
             nullable=False,
-            server_default=db.func.now()
+            server_default=db.func.now(),
     )
 
     arrival_date = db.Column(
             db.DateTime,
-            nullable=True
+            nullable=True,
     )
 
     departure_date = db.Column(
             db.DateTime,
-            nullable=True
+            nullable=True,
     )
 
     duration = db.Column(
             db.Float,
-            nullable=False
+            nullable=False,
     )
 
     position_id = db.Column(
             db.Integer,
             db.ForeignKey('position.id'),
-            nullable=False
+            nullable=False,
     )
 
     employee_id = db.Column(
             db.Integer,
             db.ForeignKey('employee.id', ondelete='SET NULL'),
-            nullable=True
+            nullable=True,
     )
 
     manager_id = db.Column(
             db.Integer,
             db.ForeignKey('manager.id', ondelete='SET NULL'),
-            nullable=True
+            nullable=True,
     )
 
     rating_id = db.Column(
             db.Integer,
             db.ForeignKey('rating.id'),
-            nullable=True
+            nullable=True,
     )
 
     business_id = db.Column(
             db.Integer,
             db.ForeignKey('business.id'),
-            nullable=False
+            nullable=False,
     )
 
     status_id = db.Column(
             db.Integer,
             db.ForeignKey('jobstatus.id'),
-            nullable=False
+            nullable=False,
     )
 
     position = db.relationship(
             'Position',
             backref='jobs',
-            lazy='joined'
+            lazy='joined',
     )
 
     employee = db.relationship(
             'Employee',
             backref='jobs',
-            uselist=False
+            uselist=False,
     )
 
     manager = db.relationship(
             'Manager',
             backref='listings',
             uselist=False,
-            lazy='joined'
+            lazy='joined',
     )
 
     business = db.relationship(
             'Business',
             backref='jobs',
-            uselist=False
+            uselist=False,
     )
 
     languages = db.relationship(
@@ -373,14 +426,14 @@ class Job(db.Model):
             'Rating',
             backref='job',
             uselist=False,
-            lazy='joined'
+            lazy='joined',
     )
 
     status = db.relationship(
             'JobStatus',
             backref='jobs',
             uselist=False,
-            lazy='joined'
+            lazy='joined',
     )
 
     applicants = db.relationship(
@@ -442,23 +495,23 @@ class City(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     state_id = db.Column(
             db.Integer,
             db.ForeignKey('state.id'),
-            nullable=False
+            nullable=False,
     )
 
     state = db.relationship(
             'State',
-            backref='cities'
+            backref='cities',
     )
 
     def to_dict(self):
@@ -473,23 +526,23 @@ class State(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     country_id = db.Column(
             db.Integer,
             db.ForeignKey('country.id'),
-            nullable=False
+            nullable=False,
     )
 
     country = db.relationship(
             'Country',
-            backref='states'
+            backref='states',
     )
 
     def to_dict(self):
@@ -504,12 +557,12 @@ class Country(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     def to_dict(self):
@@ -523,27 +576,27 @@ class Location(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     address = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     postal_code = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     city_id = db.Column(
             db.Integer,
             db.ForeignKey('city.id'),
-            nullable=False
+            nullable=False,
     )
 
     city = db.relationship(
-            'City'
+            'City',
     )
 
     latitude = db.Column(
@@ -552,7 +605,8 @@ class Location(db.Model):
                 'latitude > -90.0 AND latitude < 90.0',
                 name='latitude',
             ),
-            nullable=False)
+            nullable=False,
+    )
 
     longitude = db.Column(
             db.Float,
@@ -560,7 +614,8 @@ class Location(db.Model):
                 'longitude > -180.0 AND longitude < 180.0',
                 name='longitude',
             ),
-            nullable=False)
+            nullable=False,
+    )
 
     def to_dict(self):
         return dict(
@@ -581,12 +636,12 @@ class Industry(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     def to_dict(self):
@@ -600,30 +655,30 @@ class Language(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     # Friendly name to show the user
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     # ISO 639 code for the language
     iso_name = db.Column(
             db.String,
             nullable=False,
-            unique=True
+            unique=True,
     )
 
     employees = db.relationship(
             'Employee',
-            secondary='employeelanguageset'
+            secondary='employeelanguageset',
     )
 
     jobs = db.relationship(
             'Job',
-            secondary='joblanguageset'
+            secondary='joblanguageset',
     )
 
     def to_dict(self):
@@ -638,12 +693,12 @@ class Gender(db.Model):
 
     id = db.Column(
             db.Integer,
-            primary_key=True
+            primary_key=True,
     )
 
     name = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     def to_dict(self):
@@ -659,17 +714,17 @@ class ContactInfo(db.Model):
             db.Integer,
             primary_key=True,
             nullable=False,
-            unique=True
+            unique=True,
     )
 
     phone_number = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     email_address = db.Column(
             db.String,
-            nullable=False
+            nullable=False,
     )
 
     def to_dict(self):
@@ -900,7 +955,7 @@ class Employee(db.Model):
                     lang.to_dict()
                     for lang
                     in self.languages
-                ]
+                ],
         )
 
 ### Association tables
