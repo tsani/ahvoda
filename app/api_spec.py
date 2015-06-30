@@ -62,6 +62,9 @@ class EndpointHandler:
                 self.schema = { '$ref': path }
                 self.validator = make_api_validator(resolver, self.schema)
 
+            def __call__(self, instance):
+                self.validator.validate(instance)
+
         class ResponseHandler:
             # All response codes for which no body should be included.
             empty_response_status_codes = [ "204" ]
@@ -71,6 +74,9 @@ class EndpointHandler:
                 self.path = path
                 self.schema = { '$ref': path }
                 self.validator = make_api_validator(resolver, self.schema)
+
+            def __call__(self, instance):
+                self.validator.validate(instance)
 
         @classmethod
         def from_dict(cls, resolver, d, path):
@@ -268,7 +274,7 @@ class EndpointHandler:
                     )
 
                 try:
-                    handler.validator.validate(data)
+                    handler(data)
                 except jsonschema.exceptions.ValidationError as e:
                     raise ServerValidationError(str(e))
 
@@ -329,7 +335,7 @@ class EndpointHandler:
                     )
 
                 try:
-                    self.request_handler.validator.validate(data)
+                    self.request_handler(data)
                 except jsonschema.exceptions.ValidationError as e:
                     return json_die(
                             str(e),
