@@ -10,3 +10,4 @@ __pycache__
 /tests/tests_config.py
 /docs/visualization
 /app/static/css
+/app/bower_components

@@ -1,0 +1,19 @@
+{
+  "name": "ahvoda",
+  "version": "0.0.0",
+  "authors": [
+    "Jacob Errington <jake@mail.ahvoda.com>",
+    "Ajwad Anwar <ajwad@mail.ahvoda.com"
+  ],
+  "license": "Ahvoda EULA",
+  "homepage": "http://ahvoda.com/",
+  "ignore": [
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular-formly": "~6.16.1",
+    "angularjs": "~1.4.1",
+    "fontawesome": "~4.3.0",
+    "jquery": "~2.1.4"
+  }
+}

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask.ext.migrate import Migrate
+from flask.ext.bower import Bower
 
 from redis import Redis
 
@@ -28,6 +29,9 @@ app.session_interface = RedisSessionInterface(
 # Initialize database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# Initialize Flask-Bower
+Bower(app)
 
 # Configure logging
 _syslog_handler = SysLogHandler("/dev/log")

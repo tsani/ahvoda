@@ -10,21 +10,13 @@
 
 <link rel="icon" href="/static/ahvoda-favicon.png" type="image/png">
 
-<!-- jQuery -->
-<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
-
 <!-- Font Awesome -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" 
+href="{{ url_for('bower.static', filename='fontawesome/css/font-awesome.css') }}">
 
 
 <!-- Our styles -->
 {% block css %}
-{% endblock %}
-
-<!-- Out JavaScript -->
-<script src='/static/js/env.js'></script>
-
-{% block js %}
 {% endblock %}
 
 <!-- Google analytics -->
@@ -52,6 +44,15 @@
 <div id='footer'>
     <p>Ahvoda Recuitment / Recrutement Ahvoda Inc. 2015</p>
 </div>
+{% endblock %}
+
+{% block js %}
+<!-- Our general JavaScript -->
+<script src='/static/js/env.js'></script>
+
+<!-- jQuery -->
+<script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}">
+</script>
 {% endblock %}
 
 </body>
