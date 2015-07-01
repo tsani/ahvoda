@@ -35,11 +35,3 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/test/employee-auth')
-@auth.requires_auth(
-        failure_handler=auth.failure.redirect('login'))
-@auth.requires_employee
-def test_employee_auth(login):
-    print('added to session')
-    employee = login.get_account()
-    return ' '.join([employee.first_name, employee.last_name])
