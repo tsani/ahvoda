@@ -84,4 +84,23 @@ def json_die(message, status_code):
     response.status_code = status_code
     return response
 
+def throw(exc):
+    raise exc
+
+def supply(**supplies):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            return f(
+                    *args,
+                    **dict(
+                        chain(
+                            supplies.items(),
+                            kwargs.items()
+                        )
+                    )
+            )
+        return decorated
+    return decorator
+
 from . import crypto
