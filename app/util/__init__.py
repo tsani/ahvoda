@@ -6,6 +6,10 @@ from strict_rfc3339 import rfc3339_to_timestamp, timestamp_to_rfc3339_utcoffset
 
 from datetime import datetime, date
 
+from functools import wraps
+
+from itertools import chain
+
 def to_rfc3339(dt):
     """ Represent a datetime object in rfc3339 with UTC offset. """
     return timestamp_to_rfc3339_utcoffset(
@@ -20,10 +24,7 @@ def from_rfc3339(rfc3339):
     """ Parse an rfc3339 string into a datetime object. """
     return datetime.utcfromtimestamp(rfc3339_to_timestamp(rfc3339))
 
-def decorate_with(expr):
-    return expr
-
-def decorator_list(*fseq):
+def decorator_list(fseq):
     """ Combines several decorators in a list into a single decorator.
 
     Each argument must be a decorator. A new decorator is built to apply each
@@ -35,6 +36,12 @@ def decorator_list(*fseq):
             f1 = f(f1)
         return f1
     return decorator
+
+def decorate_with(*decorators):
+    """ A wrapper for `decorator_list` that's nicer to use when there's just
+    one decorator.
+    """
+    return decorator_list(decorators)
 
 def register_to(mapping, name):
     """ Build a decorator that inserts the function into a mapping under a

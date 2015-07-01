@@ -5,7 +5,7 @@ import json, os, sys
 import jsonschema
 
 from app import app, basedir, auth
-from app.util import decorator_list, register_to, json_die, flat_dict
+from app.util import decorate_with, register_to, json_die, flat_dict
 
 def load_api_data(path):
     """ Loads the API JSON and creates a RefResolver for it.
@@ -444,7 +444,7 @@ class EndpointHandler:
             )
 
         def decorator(f):
-            d = decorator_list(
+            d = decorate_with(
                 register_to(self.handlers, method),
                 *self.verbs[method].decorators
             )
