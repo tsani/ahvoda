@@ -486,9 +486,15 @@ class EndpointHandler:
                     methods=list(self.verbs.keys()),
                     view_func=self._route
             )
-            print('Registered ' + qualifier + 'route:', self.url)
+            app.logger.debug(
+                    'Registered %sroute: %s',
+                    (qualifier, self.url,),
+            )
         else:
-            print('Not registering empty route', self.url)
+            app.logger.debug(
+                    'Not registering empty route: %s',
+                    (self.url,),
+            )
 
 def register_all(endpoints, app, strict=False):
     for endpoint in flat_dict(endpoints):
