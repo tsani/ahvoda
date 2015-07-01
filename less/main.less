@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400|Merriweather:300,400,700);
 
 @import "colors.less";
+@import "prefixes.less";
 
 @mobile-size: 600px;
 
@@ -20,7 +21,6 @@ body {
     width: 100%;
     background-repeat: repeat-x;
     background-position: top;
-    background-image: linear-gradient(@lighter-blue, white);
     background-color: white;
     color: @fg-main;
     font-family: "Open Sans", sans;
@@ -90,10 +90,10 @@ body{
  * center.
  */
 .total-centering {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+    .display-flex();
+    .flex-flow(column nowrap);
+    .justify-content(center);
+    .align-items(center);
 }
 
 @media (max-width: @mobile-size) {
@@ -106,45 +106,64 @@ body{
     }
 }
 
-.btn {
-    padding: 0.25em;
+.uniform-shadow(@color, @type : "") {
+    box-shadow: @type 0 0 5px @color;
 }
 
-#survey-request {
-    display: none;
+.dark-gray-shadow(@type : "") {
+    .uniform-shadow(#333, @type);
 }
 
-form#give-us-your-email {
-    text-align: center;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
+.light-gray-shadow(@type : "") {
+    .uniform-shadow(#aaa, @type);
+}
 
-    * {
-        margin: 0.25em;
+.enshadow(@type : "") {
+    box-shadow: @type 0 0 0px transparent;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.button {
+    &.block {
+        display: inline-block;
     }
-}
-
-button {
-    color: inherit;
-    border-radius: 5px;
-    border: solid 1px #333;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 0.5em 1em;
-}
-
-a.button {
     text-decoration: none;
     color: inherit;
     padding: 0.5em 1em;
     border-radius: 5px;
     border: 1px solid #333;
     background-color: rgba(255, 255, 255, 0.8);
+    .enshadow();
+
+    &:hover {
+        .dark-gray-shadow();
+    }
 }
 
-a.button:hover {
-    color: inherit;
+.ng-invalid.ng-dirty:not(form) {
+    .uniform-shadow(#a00, inset);
+}
+
+form {
+    &.ng-invalid.ng-dirty {
+        button[type='submit'] {
+            background-color: #caa;
+        }
+    }
+
+    &.ng-valid.ng-dirty {
+        button[type='submit'] {
+            background-color: #aca;
+        }
+    }
+}
+
+button {
+    .button();
+    cursor: pointer;
+}
+
+button[disabled='disabled'] {
 }
 
 .button-success {
@@ -159,30 +178,41 @@ a.button:hover {
     box-shadow: 0 0 5px rgba(200, 255, 200, 0.75);
 }
 
-input[type='text'], input[type='password'], input[type='number'],
-input[type='email'], input[type='tel'], textarea {
-    border-radius: 4px;
-    color: #555;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: 0px 0px 0px white;
-    transition: box-shadow 0.15s ease-in-out;
-    width: 100%;
-    margin: 0.25em 0;
-    padding: 0.25em 0.5em;
+.formly-field {
+    margin: 0.5em initial;
+}
 
+.form-control() {
+    color: #333;
+    background-color: white;
+    border: 1px solid #333;
+    margin: 0.25em 0;
+    padding: 0.5em 1em;
+    outline: none;
+
+    .enshadow();
+    &:hover {
+        .light-gray-shadow(inset);
+    }
     &:focus {
-        box-shadow: 0px 0px 10px rgba(200, 200, 255, 0.75);
+        .dark-gray-shadow(inset);
+    }
+}
+
+input[type='text'], input[type='password'], input[type='number'],
+input[type='email'], input[type='tel'], textarea, select {
+    .form-control();
+
+    form.separate-form & {
+        display: block;
+    }
+
+    form.fullwidth & {
+        width: 100%;
     }
 }
 
 select {
-    padding: 0.25em;
-    width: 100%;
-    background-color: white;
-    border: none;
-
     option {
         padding: 0.25em;
         border: none;
@@ -230,13 +260,14 @@ ul.flat {
 }
 
 #footer {
+    border-top: 1px solid #333;
     width: 100%;
     min-height: 5vh;
+    bottom: 100%;
     text-align: center;
-    background-color: @semitrans-bg;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
+    .display-flex();
+    .flex-flow(column nowrap);
+    .justify-content(center);
 
     p {
         margin: 0;

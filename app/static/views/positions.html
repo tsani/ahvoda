@@ -1,0 +1,15 @@
+<h1> Positions </h1>
+<div>
+    <a class='button block' ui-sref='new-position'>New position</a>
+</div>
+<div ng-repeat='business in vm.businesses'>
+    <h2> {{ business.name }} </h2>
+    <p ng-if='vm.positionGroups[business.name].length == 0'>
+    This location has no positions.
+    </p>
+    <ul ng-if='vm.positionGroups[business.name].length > 0'>
+        <li ng-repeat='position in vm.positionGroups[business.name]'>
+            <h3> {{ position.name }} </h3>
+        </li>
+    </ul>
+</div>

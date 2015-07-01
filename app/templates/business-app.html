@@ -1,0 +1,50 @@
+{% extends "layout-internal.html" %}
+
+{% block headjs %}
+{{ super() }}
+<script
+src="{{ url_for('bower.static', filename='angular/angular.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='angular-ui-router/release/angular-ui-router.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
+</script>
+<script>
+window.username = "{{ username }}";
+</script>
+{% endblock %}
+
+{% block bodyjs %}
+{{ super() }}
+<script src="/static/js/app.js"></script>
+{% endblock %}
+
+{% block header %}
+{% raw %}
+<nav role='navigation' id='top-bar' ng-controller='NavCtrl as nav'>
+    <ul id="nav-left">
+        <li>
+        <h3>
+            {{ nav.manager.human.first_name }} {{ nav.manager.human.last_name }}
+        </h3>
+        </li>
+    </ul>
+    <h1> ah! </h1>
+    <ul id='nav'>
+        <li><a class='button block' ui-sref='listings'>Listings</a></li>
+        <li><a class='button block' ui-sref='positions'>Positions</a></li>
+        <li><a class='button block' ui-sref='help'>Help</a></li>
+    </ul>
+    </div>
+</nav>
+{% endraw %}
+{% endblock %}
+
+{% block contents %}
+<div ui-view></div>
+{% endblock %}

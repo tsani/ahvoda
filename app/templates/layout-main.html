@@ -1,6 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 
-<html lang='en' ng-app='app'>
+<html ng-app='app'>
 
 <head>
 <title>Ahvoda | {% block title %}Part-time Recruitment{% endblock %}</title>
@@ -14,6 +14,13 @@
 <link rel="stylesheet" 
 href="{{ url_for('bower.static', filename='fontawesome/css/font-awesome.css') }}">
 
+{% block headjs %}
+<!-- jQuery -->
+<script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}">
+</script>
+<!-- Our general JavaScript -->
+<script src='/static/js/env.js'></script>
+{% endblock %}
 
 <!-- Our styles -->
 {% block css %}
@@ -46,13 +53,7 @@ href="{{ url_for('bower.static', filename='fontawesome/css/font-awesome.css') }}
 </div>
 {% endblock %}
 
-{% block js %}
-<!-- Our general JavaScript -->
-<script src='/static/js/env.js'></script>
-
-<!-- jQuery -->
-<script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}">
-</script>
+{% block bodyjs %}
 {% endblock %}
 
 </body>

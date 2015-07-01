@@ -241,6 +241,12 @@ class Business(db.Model):
             uselist=False,
     )
 
+    languages = db.relationship(
+            'Language',
+            backref='businesses',
+            secondary='businesslanguageset',
+    )
+
     contact_info = db.relationship(
             'ContactInfo',
             backref='business',
@@ -256,6 +262,11 @@ class Business(db.Model):
                 location=self.location.to_dict(),
                 is_verified=self.is_verified,
                 contact_info=self.contact_info.to_dict(),
+                languages=[
+                    lang.to_dict()
+                    for lang
+                    in self.languages
+                ],
         )
 
         if self.company is not None:
@@ -984,6 +995,25 @@ class Applicant(db.Model):
     job_id = db.Column(
             db.Integer,
             db.ForeignKey('job.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+class BusinessLanguageSet(db.Model):
+    __tablename__ = 'businesslanguageset'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint('language_id', 'business_id'),
+    )
+
+    language_id = db.Column(
+            db.Integer,
+            db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+    business_id = db.Column(
+            db.Integer,
+            db.ForeignKey('business.id', ondelete='CASCADE'),
             nullable=False,
     )
 

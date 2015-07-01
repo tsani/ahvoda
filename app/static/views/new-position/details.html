@@ -1,0 +1,29 @@
+<h3> Choose position details </h3>
+<form class='separate-form fullwidth'
+        novalidate ng-submit='vm.submit()'>
+    <formly-form
+            model='vm.data'
+            fields='vm.fields'
+            form='vm.form'>
+        <div class='center-holder'>
+            <button type='submit' ng-disabled='vm.form.$invalid'
+                    ng-hide='vm.form.$submitted'>
+                Create
+            </button>
+            <div ng-show='vm.form.$submitted'>
+                <p>
+                    Created!
+                </p>
+                <div>
+                    <a ui-sref='positions' class='button block'>
+                        Go to positions
+                    </a>
+                    <br>
+                    <a ui-sref='new-listing' class='button block'>
+                        Create a listing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </formly-form>
+</form>

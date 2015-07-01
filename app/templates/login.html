@@ -14,7 +14,8 @@
             </ul>
             {% endif %}
         {% endwith %}
-        <form method='POST' action='{{ url_for('login') }}'>
+        <form class='separate-form fullwidth' method='POST' 
+                action='{{ url_for('login') }}'>
             <label>
                 Username
                 <input type='text' name='username'>

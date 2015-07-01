@@ -1,0 +1,14 @@
+<h3> Select a location </h3>
+<form class='separate-form fullwidth' 
+        novalidate ng-submit='locationSelect.next()'>
+    <formly-form
+            model='locationSelect.data'
+            fields='locationSelect.fields'
+            form='locationSelect.form'>
+        <div class='center-holder'>
+            <button type='submit' ng-disabled='locationSelect.form.$invalid'>
+                Next
+            </button>
+        </div>
+    </formly-form>
+</form>

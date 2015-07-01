@@ -191,7 +191,7 @@
                 "contents": {
                     "details": {
                         "type": "endpoint",
-                        "url": "/api/business/<int:business_id>/details",
+                        "url": "/api/business/<int:business_id>",
                         "description": "Detailed information about a business.",
                         "verbs": {
                             "GET": {
@@ -898,6 +898,10 @@
                 },
                 "contact_info": {
                     "$ref": "#/definitions/contact_info"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/language" }
                 }
             },
             "additionalProperties": false,

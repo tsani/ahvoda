@@ -260,6 +260,10 @@ if __name__ == '__main__':
                 is_verified=True,
                 industry=fooddrink,
                 contact_info=business_contact_info,
+                languages=[
+                    english,
+                    french,
+                ],
             )
     )
 
