@@ -62,6 +62,24 @@
             "manager": {
                 "type": "directory",
                 "contents": {
+                    "details": {
+                        "type": "endpoint",
+                        "description": "Detailed information about a manager.",
+                        "url": "/api/manager/<manager_name>",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "manager", "employee" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/manager"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "business": {
                         "type": "directory",
                         "contents": {

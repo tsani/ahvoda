@@ -948,6 +948,25 @@ def get_managed_businesses(manager_name, login):
             ),
     )
 
+@decorate_with(
+        endpoints['manager']['details'].handles_action('GET'),
+)
+def get_manager_details(manager_name, login):
+    manager_login = models.Login.query.filter_by(
+            username=manager_name,
+    ).first()
+
+    if manager_login is None or not manager_login.is_manager():
+        return util.json_die(
+                "No such manager.",
+                404,
+        )
+
+    account = manager_login.get_account()
+    return jsonify(
+            account.to_dict(),
+    )
+
 ### Listings
 
 @decorate_with(
