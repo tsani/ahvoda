@@ -286,12 +286,6 @@ def new_listing(business_id, login):
 
     db.session.commit()
 
-    print(business)
-    if business is None:
-        print('business is none')
-
-    print(json.dumps(job.to_dict(), indent=2))
-
     response = jsonify(job.to_dict())
     response.status_code = 202
     return response
@@ -733,7 +727,7 @@ def apply_to_job(business_id, listing_id, login):
     db.session.commit()
 
     return jsonify(
-            job.to_dict()
+            job.to_dict(),
     )
 
 @decorate_with(
@@ -1077,8 +1071,8 @@ def get_listings(login):
                     listing.to_dict()
                     for listing
                     in results
-                ]
-            )
+                ],
+            ),
     )
 
 register_all(endpoints, app, strict=False)
