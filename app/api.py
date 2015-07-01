@@ -198,6 +198,64 @@ def patch_employee_details(login, employee_name):
     return Response(status=204)
 
 @decorate_with(
+        endpoints['employee']['location'].handles_action('PUT')
+)
+def put_employee_location(employee_name, login):
+    account = login.get_account()
+    employee_login = models.Login.query.filter_by(
+            username=employee_name,
+    ).first()
+    if employee_login is None or \
+            not employee_login.is_employee() or \
+            login.id != employee_login.id:
+        return util.json_die(
+                "No such employee.",
+                404,
+        )
+
+    employee = employee_login.get_account()
+
+    data = request.get_json()
+
+    employee.home_location.latitude = data['latitude']
+    employee.home_location.longitude = data['longitude']
+
+    db.session.add(employee)
+    db.session.commit()
+
+    return Response(status=204)
+
+@decorate_with(
+        endpoints['employee']['location'].handles_action('GET')
+)
+def get_employee_location(employee_name, login):
+    die = lambda: util.json_die(
+            "No such employee.",
+            404,
+    )
+
+    account = login.get_account()
+    employee_login = models.Login.query.filter_by(
+            username=employee_name,
+    )
+
+    if employee_login is None or not employee_login.is_employee():
+        return die()
+
+    employee = employee_login.get_account()
+
+    # TODO add security
+
+    return jsonify(
+            dict(
+                latitude=employee.home_location.latitude,
+                longitude=employee.home_location.longitude,
+            ),
+    )
+
+### Business
+
+@decorate_with(
         endpoints['business']['listing']['collection'].handles_action('GET'),
 )
 def get_business_listings(business_id, login):
@@ -760,90 +818,6 @@ def get_applicants(business_id, listing_id, login):
             ),
     )
 
-
-@decorate_with(
-        endpoints['employee']['location'].handles_action('PUT')
-)
-def put_employee_location(employee_name, login):
-    account = login.get_account()
-    employee_login = models.Login.query.filter_by(
-            username=employee_name,
-    ).first()
-    if employee_login is None or \
-            not employee_login.is_employee() or \
-            login.id != employee_login.id:
-        return util.json_die(
-                "No such employee.",
-                404,
-        )
-
-    employee = employee_login.get_account()
-
-    data = request.get_json()
-
-    employee.home_location.latitude = data['latitude']
-    employee.home_location.longitude = data['longitude']
-
-    db.session.add(employee)
-    db.session.commit()
-
-    return Response(status=204)
-
-@decorate_with(
-        endpoints['employee']['location'].handles_action('GET')
-)
-def get_employee_location(employee_name, login):
-    die = lambda: util.json_die(
-            "No such employee.",
-            404,
-    )
-
-    account = login.get_account()
-    employee_login = models.Login.query.filter_by(
-            username=employee_name,
-    )
-
-    if employee_login is None or not employee_login.is_employee():
-        return die()
-
-    employee = employee_login.get_account()
-
-    # TODO add security
-
-    return jsonify(
-            dict(
-                latitude=employee.home_location.latitude,
-                longitude=employee.home_location.longitude,
-            ),
-    )
-
-@decorate_with(
-        endpoints['manager']['business']['collection'].handles_action('GET')
-)
-def get_managed_businesses(manager_name, login):
-    if login.is_manager():
-        manager = login.get_account()
-    else:
-        manager_login = models.Login.query.filter_by(
-                username=manager_name
-        ).first()
-        if manager_login is None or not manager_login.is_manager():
-            return util.json_die(
-                    "No such manager.",
-                    404,
-            )
-        manager = manager_login.get_account()
-
-    return jsonify(
-            dict(
-                businesses=[
-                    business.to_dict()
-                    for business
-                    in manager.businesses
-                ],
-            ),
-    )
-
 @decorate_with(
         endpoints['business']['manager']['collection'].handles_action('GET')
 )
@@ -944,6 +918,37 @@ def remove_manager_from_business(business_id, manager_name, login):
     db.session.commit()
 
     return Response(status=204)
+
+### Manager
+
+@decorate_with(
+        endpoints['manager']['business']['collection'].handles_action('GET')
+)
+def get_managed_businesses(manager_name, login):
+    if login.is_manager():
+        manager = login.get_account()
+    else:
+        manager_login = models.Login.query.filter_by(
+                username=manager_name
+        ).first()
+        if manager_login is None or not manager_login.is_manager():
+            return util.json_die(
+                    "No such manager.",
+                    404,
+            )
+        manager = manager_login.get_account()
+
+    return jsonify(
+            dict(
+                businesses=[
+                    business.to_dict()
+                    for business
+                    in manager.businesses
+                ],
+            ),
+    )
+
+### Listings
 
 @decorate_with(
         endpoints['listings'].handles_action('GET')
