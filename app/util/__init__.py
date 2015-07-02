@@ -1,6 +1,9 @@
 from contextlib import contextmanager
 
-from flask import jsonify
+from flask import (
+        jsonify,
+        render_template,
+)
 
 from strict_rfc3339 import rfc3339_to_timestamp, timestamp_to_rfc3339_utcoffset
 
@@ -103,4 +106,12 @@ def supply(**supplies):
         return decorated
     return decorator
 
-from . import crypto
+from . import data
+
+def render_template_with_data(template, **kwargs):
+    """ Render a template and give it access to the data module containing many
+    useful constants and data for forms.
+    """
+    return render_template(template, data=data, **kwargs)
+
+from . import crypto, mailchimp

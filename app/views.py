@@ -16,8 +16,11 @@ from datetime import datetime
 
 @app.route('/')
 def index():
-    return render_template('landing-page.html')
+    return util.render_template_with_data('landing-page.html')
 
+@app.route('/business')
+def business():
+    return util.render_template_with_data('business-landing-page.html')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -77,3 +80,5 @@ def platform_app(login):
             (login.username,),
     )
     abort(500)
+    return util.render_template_with_data('landing-page.html')
+

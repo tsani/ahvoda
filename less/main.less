@@ -19,8 +19,6 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
-    background-repeat: repeat-x;
-    background-position: top;
     background-color: white;
     color: @fg-main;
     font-family: "Open Sans", sans;
@@ -28,6 +26,7 @@ body {
     line-height: 1.45em;
     font-size: 14px;
     overflow-x: hidden;
+    position: relative;
 
     * {
         z-index: 1;
@@ -42,32 +41,26 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 200%;
-    color: @fg-main;
 }
 
 h2 {
     font-size: 175%;
-    color: @fg-main;
 }
 
 h3 {
     font-size: 150%;
-    color: @fg-main;
 }
 
 h4 {
     font-size: 135%;
-    color: @fg-main;
 }
 
 h5 {
     font-size: 115%;
-    color: @fg-main;
 }
 
 h6 {
     font-size: 100%;
-    color: @fg-main;
 }
 
 ul {
@@ -76,22 +69,13 @@ ul {
     }
 }
 
-body{
-    section:first-child {
-        margin-top: 0;
-    }
-
-    body section:last-child {
-        margin-bottom: 0;
-    }
-}
-
 /* Usable on a (sized) container such that its contents align in the total
  * center.
  */
 .total-centering {
     .display-flex();
-    .flex-flow(column nowrap);
+    .flex-nowrap();
+    .flex-direction(column);
     .justify-content(center);
     .align-items(center);
 }
@@ -127,7 +111,10 @@ body{
     &.block {
         display: inline-block;
     }
+
+    cursor: pointer;
     text-decoration: none;
+    white-space: nowrap;
     color: inherit;
     padding: 0.5em 1em;
     border-radius: 5px;
@@ -164,18 +151,7 @@ button {
 }
 
 button[disabled='disabled'] {
-}
-
-.button-success {
-    background-image: linear-gradient(to bottom, #5cb85c 0px, #419641 100%);
-    background-repeat: repeat-x;
-    border: 1px solid #3e8f3e;
-    box-shadow: 0 0 0 transparent ;
-    transition: box-shadow 0.15s ease-in-out;
-}
-
-.button-success:hover {
-    box-shadow: 0 0 5px rgba(200, 255, 200, 0.75);
+        background-color: #caa;
 }
 
 .formly-field {
@@ -259,14 +235,25 @@ ul.flat {
     padding-left: 0;
 }
 
+.semiblack-bg {
+    background-color: @semiblack-bg;
+}
+
+.semiwhite-bg {
+    background-color: @semiwhite-bg;
+}
+
 #footer {
     border-top: 1px solid #333;
     width: 100%;
+    height: 4vh;
     min-height: 5vh;
     bottom: 100%;
     text-align: center;
     .display-flex();
     .flex-flow(column nowrap);
+    .flex-nowrap();
+    .flex-direction(column);
     .justify-content(center);
 
     p {
@@ -276,4 +263,106 @@ ul.flat {
 
 .sc {
     font-variant: small-caps;
+}
+
+#top-bar {
+    width: 100%;
+    background-color: transparent;
+    padding: 1em 5em;
+    img {
+        height: 4em;
+    }
+}
+
+.display-flex() {
+    display: flex;
+    display: -ms-flexbox;
+}
+
+.flex-nowrap() {
+    -ms-flex-wrap: none;
+    flex-wrap: nowrap;
+}
+
+.flex-wrap(@a) {
+    -ms-flex-wrap: @a;
+    flex-wrap: @a;
+}
+
+.flex-direction(@a) {
+    -ms-flex-direction: @a;
+    flex-direction: @a;
+}
+
+.flex-justify-content(@a) {
+    -ms-flex-pack: @a;
+    justify-content: @a;
+}
+
+.flex-align-items(@a) {
+    -ms-flex-align: @a;
+    align-items: center;
+}
+
+.three-component-bar {
+    > * {
+        width: 33%;
+        min-width: 105px;
+        text-align: center;
+    }
+
+    > :first-child {
+        text-align: left;
+    }
+
+    > :last-child {
+        text-align: right;
+    }
+
+    .display-flex();
+    .flex-direction(row);
+    .flex-wrap(wrap);
+    .flex-align-items(center);
+    .flex-justify-content(center);
+}
+
+.fitsize {
+    max-height: 60vh;
+    max-width: 30vw;
+}
+
+.first-blah() {
+    > * {
+        margin: 1em;
+    }
+
+    h5 {
+        margin: 0;
+    }
+
+    > *:not(:first-child) {
+        height: 100%;
+        .display-flex;
+        text-align: left;
+        .flex-direction(column);
+        .flex-nowrap();
+        .flex-justify-content(center);
+    }
+}
+
+.first-left {
+    .first-blah;
+
+    > :first-child {
+        float: left;
+    }
+
+}
+
+.first-right {
+    .first-blah;
+
+    > :first-child {
+        float: right;
+    }
 }

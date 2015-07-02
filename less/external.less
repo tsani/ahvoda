@@ -1,33 +1,50 @@
 @import "main.less";
 
-body {
-    color: white;
+.flex-row {
+    .display-flex;
+    .flex-direction(row);
+    .flex-align-items(center);
+
+    > * {
+        margin: 1em auto;
+    }
+}
+
+.flex-nowrap {
+    .flex-nowrap();
+}
+
+.flex-wrap {
+    .flex-wrap(wrap);
+}
+
+.space-items {
+    > * {
+        margin: 1em;
+    }
+}
+
+.flex-spaced {
+    .display-flex;
+    .flex-direction(row);
+    .flex-nowrap();
+    .flex-align-items(center);
+    .flex-justify-content(space-between);
+}
+
+section.screenful {
+    min-height: 100%;
 }
 
 section {
+    position: relative;
     width: 100%;
-    min-height: 100%;
-    background-color: @semitrans-bg;
-
-    h1, h2, h3, h4, h5, h6 {
-        color: white;
-    }
-
-    .flex-row {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: center;
-
-        > * {
-            margin: 1em auto;
-        }
-    }
 
     .contents {
+        clear: both;
         text-align: center;
         padding: 1em;
-        margin: 1em auto;
-        max-width: 600px;
+        margin: 0em auto;
 
         h1 {
             width: 100%;
@@ -52,7 +69,9 @@ section {
             position: relative;
 
             img {
+                width: 100%;
                 min-width: 100%;
+                height: 90%;
                 min-height: 90%;
                 position: absolute;
                 -webkit-transform: translateX(-50%);
@@ -66,7 +85,7 @@ section {
             color: inherit;
             transition: 0.4s all ease;
 
-            :hover {
+            &:hover {
                 text-decoration: underline;
             }
         }
@@ -83,8 +102,45 @@ section {
     }
 }
 
+#banner {
+    color: white;
+    text-align: center;
+    background-color: @semiblack-bg;
+
+    div.banner-contents {
+        padding: 5vh;
+    }
+}
+
+#signup-container {
+    display: none;
+    height: 0;
+    overflow: hidden;
+    width: 65%;
+    margin: 1em auto;
+    text-align: left;
+}
+
+#signup-result {
+    display: none;
+    height: 0;
+    overflow: hidden;
+    width: 65%;
+    margin: 1em auto;
+}
+
+button.call-to-action {
+    .button();
+
+    background-color: @ah-blue;
+
+    &:hover {
+        background-color: lighten(@ah-blue, 10%);
+    }
+}
+
 .carousel {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -95,12 +151,12 @@ section {
     img {
         display: none;
         position: absolute;
-        top: 50%;
+        top: 100%;
         left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-             -o-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -100%);
+            -ms-transform: translate(-50%, -100%);
+             -o-transform: translate(-50%, -100%);
+                transform: translate(-50%, -100%);
         min-width: 100%;
         min-height: 100%;
     }
