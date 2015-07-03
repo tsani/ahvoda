@@ -95,7 +95,7 @@ ul {
 }
 
 .dark-gray-shadow(@type : ~"") {
-    .uniform-shadow(#333, @type);
+    .uniform-shadow(@nice-gray, @type);
 }
 
 .light-gray-shadow(@type : ~"") {
@@ -118,7 +118,7 @@ ul {
     color: inherit;
     padding: 0.5em 1em;
     border-radius: 5px;
-    border: 1px solid #333;
+    border: 1px solid @nice-gray;
     background-color: rgba(255, 255, 255, 0.8);
     .enshadow();
 
@@ -159,9 +159,9 @@ button[disabled='disabled'] {
 }
 
 .form-control() {
-    color: #333;
+    color: @nice-gray;
     background-color: white;
-    border: 1px solid #333;
+    border: 1px solid @nice-gray;
     margin: 0.25em 0;
     padding: 0.5em 1em;
     outline: none;
@@ -244,7 +244,7 @@ ul.flat {
 }
 
 #footer {
-    border-top: 1px solid #333;
+    border-top: 1px solid @nice-gray;
     width: 100%;
     height: 4vh;
     min-height: 5vh;
@@ -273,7 +273,7 @@ ul.flat {
     .justify-content(space-around);
     .align-items(center);
     width: 100%;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid @nice-gray;
     background-color: white;
 
     /* Tags in the top bar should have centered text/content. 
