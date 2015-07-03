@@ -27,15 +27,17 @@ window.username = "{{ username }}";
 {% block header %}
 {% raw %}
 <nav role='navigation' id='top-bar' ng-controller='NavCtrl as nav'>
-    <ul id="nav-left">
+    <ul class='left'>
         <li>
         <h3>
             {{ nav.manager.human.first_name }} {{ nav.manager.human.last_name }}
         </h3>
         </li>
     </ul>
-    <h1> ah! </h1>
-    <ul id='nav'>
+    <div>
+        <img class='logo' src='/static/img/ahvoda-black-logo.png' alt='ah!'/>
+    </div>
+    <ul class='right'>
         <li><a class='button block' ui-sref='listings'>Listings</a></li>
         <li><a class='button block' ui-sref='positions'>Positions</a></li>
         <li><a class='button block' ui-sref='help'>Help</a></li>

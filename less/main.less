@@ -251,7 +251,8 @@ ul.flat {
     bottom: 100%;
     text-align: center;
     .display-flex();
-    .flex-flow(column nowrap);
+    .flex-direction(column);
+    .flex-nowrap();
     .flex-nowrap();
     .flex-direction(column);
     .justify-content(center);
@@ -266,64 +267,102 @@ ul.flat {
 }
 
 #top-bar {
+    .display-flex();
+    .flex-direction(row);
+    .flex-wrap(wrap);
+    .justify-content(space-around);
+    .align-items(center);
     width: 100%;
-    background-color: transparent;
-    padding: 1em 5em;
-    img {
-        height: 4em;
+    border-bottom: 1px solid #333;
+    background-color: white;
+
+    /* Tags in the top bar should have centered text/content. 
+     * This is overridden by :first-child and :last-child selectors below. */
+    text-align: center;
+
+    /* The top bar contains three elements, so make each occupy the same
+     * space, and remove margins in case of those pesky <hN> tags. */
+    * {
+        margin: 0;
     }
-}
 
-.display-flex() {
-    display: flex;
-    display: -ms-flexbox;
-}
+    > * {
+        width: 30%;
+        min-width: 266px;
+        padding: 0.5em;
+    }
 
-.flex-nowrap() {
-    -ms-flex-wrap: none;
-    flex-wrap: nowrap;
-}
+    /* Flush leftmost tag's text against the window's left edge. */
+    > :first-child {
+        text-align: left;
+    }
 
-.flex-wrap(@a) {
-    -ms-flex-wrap: @a;
-    flex-wrap: @a;
-}
+    /* Flush rightmost tag's text against the window's right edge. */
+    > :last-child {
+        text-align: right;
+    }
 
-.flex-direction(@a) {
-    -ms-flex-direction: @a;
-    flex-direction: @a;
-}
+    a {
+        white-space: nowrap;
+        .button();
+        display: inline-block;
+    }
 
-.flex-justify-content(@a) {
-    -ms-flex-pack: @a;
-    justify-content: @a;
-}
+    img.logo {
+        max-height: 5em;
+    }
 
-.flex-align-items(@a) {
-    -ms-flex-align: @a;
-    align-items: center;
+    /* The nav is the rightmost element of the top-bar, and consists of icons
+     * that let the user navigate to the home page with the "ah!" icon and to
+     * the settings page with the cog icon. */
+    .left, .right {
+        .display-flex();
+        .flex-direction(row);
+        .flex-nowrap();
+        .align-items(center);
+
+        > * {
+            margin: 0.5em 0.5em;
+        }
+    }
+
+    .left {
+        .justify-content(flex-start);
+    }
+
+    .right {
+        .justify-content(flex-end);
+    }
 }
 
 .three-component-bar {
     > * {
         width: 33%;
-        min-width: 105px;
+        min-width: 100px;
         text-align: center;
     }
 
     > :first-child {
-        text-align: left;
+        .display-flex();
+        .flex-direction(row);
+        .flex-wrap(wrap);
+        .align-items(center);
+        .justify-content(flex-start);
     }
 
     > :last-child {
-        text-align: right;
+        .display-flex();
+        .flex-direction(row);
+        .flex-wrap(wrap);
+        .align-items(center);
+        .justify-content(flex-end);
     }
 
     .display-flex();
     .flex-direction(row);
     .flex-wrap(wrap);
-    .flex-align-items(center);
-    .flex-justify-content(center);
+    .align-items(center);
+    .justify-content(center);
 }
 
 .fitsize {
@@ -346,7 +385,7 @@ ul.flat {
         text-align: left;
         .flex-direction(column);
         .flex-nowrap();
-        .flex-justify-content(center);
+        .justify-content(center);
     }
 }
 
@@ -365,4 +404,10 @@ ul.flat {
     > :first-child {
         float: right;
     }
+}
+
+.window-wide {
+    max-width: 650px;
+    width: 95%;
+    margin: 0 auto;
 }

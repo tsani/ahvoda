@@ -1,4 +1,5 @@
 .display-flex() {
+    display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
 }
@@ -10,25 +11,29 @@
 
 .flex-direction(@a) {
     -webkit-flex-direction: @a;
+        -ms-flex-direction: @a;
             flex-direction: @a;
 }
 
 .flex-wrap(@a) {
     -webkit-flex-wrap: @a;
+        -ms-flex-wrap: @a;
             flex-wrap: @a;
 }
 
-.flex-wrap(@a) {
-    -webkit-flex-wrap: @a;
-            flex-wrap: @a;
+.flex-nowrap() {
+    .flex-wrap(nowrap);
+    -ms-flex-wrap: none;
 }
 
 .align-items(@a) {
     -webkit-align-items: @a;
+         -ms-flex-align: @a;
             align-items: @a;
 }
 
 .justify-content(@a) {
     -webkit-justify-content: @a;
+        -ms-flex-pack: @a;
             justify-content: @a;
 }

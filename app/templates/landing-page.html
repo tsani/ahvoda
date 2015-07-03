@@ -5,17 +5,22 @@ Employment on demand
 {% endblock %}
 
 {% block header %}
-<div id='top-bar' class='three-component-bar'>
-    <div>
-        <img src='/static/img/ahvoda-black-logo.png'>
-    </div>
-    <div>
-        <h1>Ahvoda</h1>
-    </div>
-    <div id='nav'>
-        <a class='button' href='/business'>Not a worker?</a>
-    </div>
-</div>
+<nav role='navigation' id='top-bar'>
+    <ul class='left'>
+        <li>
+        <img class='logo' src='/static/img/ahvoda-black-logo.png'>
+        </li>
+    </ul>
+    <h1>Ahvoda</h1>
+    <ul class='right'>
+        <li>
+        <a class='button block' href='/business'>Not a worker?</a>
+        </li>
+        <li>
+        <a class='button block' href='/login'>Login</a>
+        </li>
+    </ul>
+</nav>
 {% endblock %}
 
 {% block contents %}
@@ -47,8 +52,8 @@ Employment on demand
             and take control of your earnings
         </button>
 
-        <div id='signup-container'>
-            <form id='signup-form' action="javascript:void(0);"
+        <div id='signup-container' class='window-wide'>
+            <form class='fullwidth' id='signup-form' action="javascript:void(0);"
                     onsubmit="subscribeUser();">
                 <input type='hidden' name='signup-type' value='employee'>
                 <div>
@@ -158,7 +163,7 @@ Employment on demand
     </div>
 </section>
 
-<section id='about'>
+<section id='about' class='window-wide'>
     <div class='contents first-left scrollfade'>
         <img class='fitsize' src='/static/img/employee-app-views/view1.png'>
         <div>

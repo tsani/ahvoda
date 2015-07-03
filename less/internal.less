@@ -1,60 +1,5 @@
 @import "main.less";
 
-#top-bar {
-    .display-flex();
-    .flex-flow(row nowrap);
-    .justify-content(space-around);
-    .align-items(center);
-    width: 100%;
-    border-bottom: 1px solid #333;
-    background-color: white;
-
-    /* Tags in the top bar should have centered text/content. 
-     * This is overridden by :first-child and :last-child selectors below. */
-    text-align: center;
-
-    /* The top bar contains three elements, so make each occupy the same
-     * space, and remove margins in case of those pesky <hN> tags. */
-    * {
-        margin: 0;
-    }
-
-    > * {
-        width: 30%;
-        padding: 0.5em;
-    }
-
-    /* Flush leftmost tag's text against the window's left edge. */
-    > :first-child {
-        text-align: left;
-    }
-
-    /* Flush rightmost tag's text against the window's right edge. */
-    > :last-child {
-        text-align: right;
-    }
-
-    /* The nav is the rightmost element of the top-bar, and consists of icons
-     * that let the user navigate to the home page with the "ah!" icon and to
-     * the settings page with the cog icon. */
-    #nav {
-        .display-flex();
-        .flex-flow(row wrap);
-        .align-items(center);
-        .justify-content(flex-end);
-
-        > * {
-            margin: 0.5em 0.5em;
-        }
-
-        a {
-            white-space: nowrap;
-            .button();
-            display: inline-block;
-        }
-    }
-}
-
 form {
     h1, h2, h3, h4, h5, h6 {
         margin-bottom: 0;
@@ -120,7 +65,7 @@ dl.listing-content {
 }
 
 #main-contents {
-    min-height: 85%;
-    max-width: 650px;
+    .window-wide();
+    min-height: 85vh;
     margin: 2em auto;
 }
