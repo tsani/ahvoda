@@ -90,19 +90,19 @@ ul {
     }
 }
 
-.uniform-shadow(@color, @type : "") {
+.uniform-shadow(@color, @type : ~"") {
     box-shadow: @type 0 0 5px @color;
 }
 
-.dark-gray-shadow(@type : "") {
+.dark-gray-shadow(@type : ~"") {
     .uniform-shadow(#333, @type);
 }
 
-.light-gray-shadow(@type : "") {
+.light-gray-shadow(@type : ~"") {
     .uniform-shadow(#aaa, @type);
 }
 
-.enshadow(@type : "") {
+.enshadow(@type : ~"") {
     box-shadow: @type 0 0 0px transparent;
     transition: box-shadow 0.15s ease-in-out;
 }
