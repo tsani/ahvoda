@@ -7,7 +7,7 @@ import re
 
 EMAIL_REGEX = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 
-from app import app, db, util, models, basedir
+from app import app, db, util, models, basedir, redis
 from app.api_spec import (
         load_api,
         register_all,
@@ -347,7 +347,11 @@ def new_listing(business_id, login):
 
     db.session.commit()
 
-    response = jsonify(job.to_dict())
+    job_dict = job.to_dict()
+    job_json = json.dumps(job_dict)
+    redis.lpush(app.config['JOBS_EMAIL_LIST_NAME'], job_json)
+
+    response = jsonify(job_dict)
     response.status_code = 202
     return response
 
