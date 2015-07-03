@@ -2,6 +2,13 @@
 
 {% block headjs %}
 {{ super() }}
+<script>
+window.username = "{{ username }}";
+</script>
+{% endblock %}
+
+{% block bodyjs %}
+{{ super() }}
 <script
 src="{{ url_for('bower.static', filename='angular/angular.js') }}">
 </script>
@@ -14,13 +21,6 @@ src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
 <script
 src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
 </script>
-<script>
-window.username = "{{ username }}";
-</script>
-{% endblock %}
-
-{% block bodyjs %}
-{{ super() }}
 <script src="/static/js/app.js"></script>
 {% endblock %}
 
@@ -38,7 +38,7 @@ window.username = "{{ username }}";
         <img class='logo' src='/static/img/ahvoda-black-logo.png' alt='ah!'/>
     </div>
     <ul class='right'>
-        <li><a class='button block' ui-sref='listings'>Listings</a></li>
+        <li><a class='button block' ui-sref='listings'>Contracts</a></li>
         <li><a class='button block' ui-sref='positions'>Positions</a></li>
         <li><a class='button block' ui-sref='help'>Help</a></li>
     </ul>

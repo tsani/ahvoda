@@ -1,6 +1,6 @@
-<h1> Listings </h1>
+<h1> Contracts </h1>
 <div>
-    <a class='button block' ui-sref='new-listing'>New listing</a>
+    <a class='button block' ui-sref='new-listing'>Request contractor</a>
 </div>
 <div class='business-content' ng-repeat='business in vm.businesses'>
     <h2> {{ business.name }} </h2>
@@ -10,7 +10,7 @@
         </p>
     </div>
     <p ng-if='vm.listingGroups[business.name].length == 0'>
-    This location has no listings.
+    This location has no contracts yet.
     </p>
     <ul ng-if='vm.listingGroups[business.name].length > 0'>
         <li ng-repeat='listing in vm.listingGroups[business.name]'>
@@ -25,12 +25,9 @@
                 <dt> Details </dt>
                 <dd> {{ listing.details }} </dd>
 
-                <dt> Position </dt>
-                <dd> {{ listing.position.name }} </dd>
-
-                <dt> Employee </dt>
-                <dd>
-                    <div ng-if='listing.employee'>
+                <div ng-if='listing.employee'>
+                    <dt> Contractor </dt>
+                    <dd>
                         <dl class='listing-content'>
                             <dt>Name</dt>
                             <dd> {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }} </dd>
@@ -38,7 +35,7 @@
                             <dt>Phone Number</dt>
                             <dd> {{ listing.employee.human.contact_info.phone_number }} </dd>
                         </dl>
-                    </div>
+                    </dd>
                 </dl>
             </dl>
         </li>
