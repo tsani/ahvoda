@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "angular-formly": "~6.16.1",
+    "angular-ui-router": "~0.2.15",
     "angularjs": "~1.4.1",
     "fontawesome": "~4.3.0",
     "jquery": "~2.1.4"
