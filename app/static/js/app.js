@@ -303,6 +303,7 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
         bserv.createListing(business, listingData)
             .then(function(response) {
                 vm.form.$setSubmitted();
+                lserv.reset();
             }, function(response) {
                 console.log(JSON.stringify(response))
             });
