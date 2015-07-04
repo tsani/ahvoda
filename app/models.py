@@ -495,8 +495,6 @@ class Job(db.Model):
         if self.employee is not None:
             result['employee'] = self.employee.to_dict()
 
-        print(result.keys())
-
         return result
 
 ### Location-relation tables
