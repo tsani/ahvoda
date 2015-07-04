@@ -3,7 +3,15 @@
 @import "colors.less";
 @import "prefixes.less";
 
+/* The size for mobile devices. When the screen width is smaller that this,
+text becomes smaller and some other effects activate.
+*/
 @mobile-size: 600px;
+
+/* The size that triggers nav collapsing, specifically changing the nav from
+being a row layout into a column layout to better suit mobile devices.
+*/
+@nav-collapse-width: 800px;
 
 * {
     box-sizing: border-box;
@@ -78,16 +86,6 @@ ul {
     .flex-direction(column);
     .justify-content(center);
     .align-items(center);
-}
-
-@media (max-width: @mobile-size) {
-    body {
-        font-size: 12px;
-    }
-
-    section .contents {
-        max-width: 90%;
-    }
 }
 
 .uniform-shadow(@color, @type : ~"") {
@@ -280,26 +278,11 @@ ul.flat {
      * This is overridden by :first-child and :last-child selectors below. */
     text-align: center;
 
-    /* The top bar contains three elements, so make each occupy the same
-     * space, and remove margins in case of those pesky <hN> tags. */
-    * {
-        margin: 0;
-    }
-
     > * {
         width: 30%;
         min-width: 266px;
         padding: 0.5em;
-    }
-
-    /* Flush leftmost tag's text against the window's left edge. */
-    > :first-child {
-        text-align: left;
-    }
-
-    /* Flush rightmost tag's text against the window's right edge. */
-    > :last-child {
-        text-align: right;
+        margin: 0;
     }
 
     a {
@@ -312,9 +295,6 @@ ul.flat {
         max-height: 5em;
     }
 
-    /* The nav is the rightmost element of the top-bar, and consists of icons
-     * that let the user navigate to the home page with the "ah!" icon and to
-     * the settings page with the cog icon. */
     .left, .right {
         .display-flex();
         .flex-direction(row);
@@ -410,4 +390,30 @@ ul.flat {
     max-width: 650px;
     width: 95%;
     margin: 0 auto;
+}
+
+@media (max-width: @nav-collapse-width) {
+    #top-bar {
+        .flex-direction(column);
+        .flex-nowrap();
+        .justify-content(center);
+        
+        > * {
+            width: 100%;
+        }
+
+        .left, .right {
+            .justify-content(center);
+        }
+    }
+}
+
+@media (max-width: @mobile-size) {
+    body {
+        font-size: 12px;
+    }
+
+    section .contents {
+        max-width: 95%;
+    }
 }
