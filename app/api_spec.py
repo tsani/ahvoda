@@ -216,8 +216,8 @@ class EndpointHandler:
             # The validation decorators
             self.decorators.extend(
                     [
-                        self._validate_response,
                         self._validate_request,
+                        self._validate_response,
                         self._validate_query_string,
                     ]
             )
