@@ -107,8 +107,6 @@ function BusinessService($q, $http) {
             name: name
         }).then(function(response) {
             return response.data;
-        }, function(response) {
-            console.log(JSON.stringify(response));
         });
     }
 
@@ -125,8 +123,7 @@ function BusinessService($q, $http) {
     }
 
     srv.getManager = function() {
-        return $http.get(
-                '/api/manager/' + srv.username)
+        return $http.get('/api/manager/' + srv.username)
             .then(function(response) {
                 return response.data;
             });
@@ -304,8 +301,10 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
             .then(function(response) {
                 vm.form.$setSubmitted();
                 lserv.reset();
+                vm.success = true;
             }, function(response) {
-                console.log(JSON.stringify(response))
+                vm.form.$setSubmitted();
+                vm.success = false;
             });
     }
 }

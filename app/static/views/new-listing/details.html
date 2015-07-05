@@ -15,13 +15,27 @@
                 </button>
             </div>
             <div ng-show='vm.form.$submitted'>
-                <p>
-                    Created!
-                </p>
-                <div>
-                    <a ui-sref='listings' class='button block call-to-action'>
-                        Go to listings
-                    </a>
+                <div ng-if='vm.success'>
+                    <p>
+                        Created!
+                    </p>
+                    <div>
+                        <a ui-sref='listings' 
+                                class='button block call-to-action'>
+                            Return to listings
+                        </a>
+                    </div>
+                </div>
+                <div ng-if='!vm.success'>
+                    <p>
+                        The listing could not be created.
+                    </p>
+                    <div>
+                        <a ui-sref='listings' 
+                                class='button block call-to-action'>
+                            Return to listings
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
