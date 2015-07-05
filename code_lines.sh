@@ -7,7 +7,8 @@ cat \
         -o -name '*.html' -print \
         -o -name '*.json' -print \
         -o -name '*.js' -print \
+        -o -name '*.less' -print \
     ) \
-    <(find less -name '*.less') |
+    |
     xargs wc -l |
     sort -n
