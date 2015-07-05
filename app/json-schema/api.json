@@ -675,7 +675,8 @@
                                                     "type": "array",
                                                     "items": {
                                                         "$ref": "#/definitions/language"
-                                                    }
+                                                    },
+                                                    "minItems": 1
                                                 }
                                             },
                                             "required": [
