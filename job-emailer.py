@@ -1,6 +1,6 @@
 from redis import StrictRedis
 from smtplib import SMTP
-from secret_config import SMTP as config, JOBS_EMAIL_LIST_NAME as email_list
+from secret_config import JOB_MAILER
 
 import json, sys
 
@@ -15,7 +15,7 @@ def eprint(*args, **kwargs):
 if __name__ == '__main__':
     while True:
         eprint('Waiting for new job... ', end='')
-        job_json = redis.brpop(email_list)[1].decode('utf-8')
+        job_json = redis.brpop(JOB_MAILER['list_name'])[1].decode('utf-8')
         eprint('got job', datetime.now())
 
         eprint('Loading job... ', end='')
@@ -27,17 +27,25 @@ if __name__ == '__main__':
         eprint('done.')
 
         eprint('Sending email... ', end='')
-        with SMTP(host='localhost', port=587) as smtp:
+        with SMTP(
+                host=JOB_MAILER['smtp']['host'],
+                port=JOB_MAILER['smtp']['port'],
+        ) as smtp:
             smtp.starttls()
-            smtp.login(config['username'], config['password'])
+            smtp.login(
+                    JOB_MAILER['smtp']['username'],
+                    JOB_MAILER['smtp']['password'],
+            )
             smtp.sendmail(
-                    from_addr='mailer@mail.ahvoda.com',
-                    to_addrs=[
-                        'team@mail.ahvoda.com',
-                    ],
+                    from_addr=JOB_MAILER['from_addr'],
+                    to_addrs=JOB_MAILER['to_addrs'],
                     msg='\n'.join([
-                        "Subject: [JOB] A new listing has been created",
-                        "To: Ahvoda Team <team@mail.ahvoda.com>",
+                        "Subject: [%s] A new listing has been created" % (
+                            JOB_MAILER['subject_prefix'],
+                        ),
+                        "To: %s" % (
+                            JOB_MAILER['to'],
+                        ),
                         "",
                         json.dumps(job, indent=2),
                     ]).encode('utf-8')

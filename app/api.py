@@ -349,7 +349,10 @@ def new_listing(business_id, login):
 
     job_dict = job.to_dict()
     job_json = json.dumps(job_dict)
-    redis.lpush(app.config['JOBS_EMAIL_LIST_NAME'], job_json)
+    redis.lpush(
+            app.config['JOB_MAILER']['list_name'],
+            job_json,
+    )
 
     response = jsonify(job_dict)
     response.status_code = 202
