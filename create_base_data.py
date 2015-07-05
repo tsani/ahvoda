@@ -10,7 +10,7 @@ if __name__ == '__main__':
     db.session.autoflush = False
 
     [male, female, other_gender] = [
-            make_easy(models.Gender, **d)
+            make_easy(models.data.Gender, **d)
             for d
             in [
                 dict(
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [canada] = [
-            make_easy(models.Country, **d)
+            make_easy(models.location.Country, **d)
             for d
             in [
                 dict(
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [quebec, ontario] = [
-            make_easy(models.State, **d)
+            make_easy(models.location.State, **d)
             for d
             in [
                 dict(
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [montreal] = [
-            make_easy(models.City, **d)
+            make_easy(models.location.City, **d)
             for d
             in [
                 dict(
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [english, french] = [
-            make_easy(models.Language, **d)
+            make_easy(models.data.Language, **d)
             for d
             in [
                 dict(
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [fooddrink, nightlife] = [
-            make_easy(models.Industry, **d)
+            make_easy(models.data.Industry, **d)
             for d
             in [
                 dict(
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     job_statuses = [
-            make(models.JobStatus, *d)
+            make(models.business.JobStatus, *d)
             for d
             in [
                 (

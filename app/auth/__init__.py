@@ -22,11 +22,15 @@ def check_auth(username, password):
     The password supplied to this function must be plaintext; this function
     takes care of hashing it.
 
-    If the authentication succeeds, then a "models.Login" instance is returned.
+    If the authentication succeeds, then a "models.auth.Login" instance is returned.
     Else, this function returns "False".
     """
     # Identify the row in the database matching the given username.
-    login = db.session.query(models.Login).filter_by(username=username).first()
+    login = db.session.query(
+            models.auth.Login,
+    ).filter_by(
+            username=username,
+    ).first()
     if login is None:
         app.logger.debug("no match for username '%s'.", username)
         return None # no match for username in database
@@ -55,9 +59,9 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
     Arguments:
         pass_login (type: bool, default: True):
             If true, then the inner function must take a keyword argument named
-            "login", which is set to an instance of "models.Login" that matches
-            the authentication criteria.
-            If the request was made using cookies, then the "models.Login"
+            "login", which is set to an instance of "models.auth.Login" that
+            matches the authentication criteria.
+            If the request was made using cookies, then the "models.auth.Login"
             instance is recorded to the session associated with the request
             under the key "login".
         failure_handler (type: function, default:
@@ -78,7 +82,9 @@ def requires_auth(pass_login=True, failure_handler=failure.response_401):
             if has_session():
                 if 'login' in session:
                     if pass_login:
-                        login = models.Login.query.get(session['login']['id'])
+                        login = models.auth.Login.query.get(
+                                session['login']['id'],
+                        )
                         # TODO add check that login is still valid
                         return f(*args, login=login, **kwargs)
                     else:

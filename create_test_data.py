@@ -23,7 +23,7 @@ if __name__ == '__main__':
     db.session.autoflush = False
 
     [male, female, other_gender] = [
-            make_easy(models.Gender, **d)
+            make_easy(models.data.Gender, **d)
             for d
             in [
                 dict(
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [canada] = [
-            make_easy(models.Country, **d)
+            make_easy(models.location.Country, **d)
             for d
             in [
                 dict(
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [quebec, ontario] = [
-            make_easy(models.State, **d)
+            make_easy(models.location.State, **d)
             for d
             in [
                 dict(
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [montreal] = [
-            make_easy(models.City, **d)
+            make_easy(models.location.City, **d)
             for d
             in [
                 dict(
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [english, french] = [
-            make_easy(models.Language, **d)
+            make_easy(models.data.Language, **d)
             for d
             in [
                 dict(
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     [fooddrink, nightlife] = [
-            make_easy(models.Industry, **d)
+            make_easy(models.data.Industry, **d)
             for d
             in [
                 dict(
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     employee_contact_info = make(
-            models.ContactInfo,
+            models.data.ContactInfo,
             dict(
                 phone_number='5140000001',
             ),
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     )
 
     manager_contact_info = make(
-            models.ContactInfo,
+            models.data.ContactInfo,
             dict(
                 phone_number='5140000002',
             ),
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     )
 
     business_contact_info = make(
-            models.ContactInfo,
+            models.data.ContactInfo,
             dict(
                 phone_number='5140000003',
             ),
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     db.session.commit()
 
     human_employee = make(
-            models.Human,
+            models.data.Human,
             dict(
                 first_name='fname-employee',
             ),
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     )
 
     human_manager = make(
-            models.Human,
+            models.data.Human,
             dict(
                 first_name='fname-manager',
             ),
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     db.session.add(human_manager)
 
     home_location = make(
-            models.Location,
+            models.location.Location,
             dict(
                 address='1105 rue Woodland',
             ),
@@ -216,7 +216,7 @@ if __name__ == '__main__':
     )
 
     business_location = make(
-            models.Location,
+            models.location.Location,
             dict(
                 address="404 rue de l'Introuvable",
             ),
@@ -233,7 +233,7 @@ if __name__ == '__main__':
     db.session.add(business_location)
 
     employee = make(
-            models.Employee,
+            models.accounts.Employee,
             dict(
                 human=human_employee,
             ),
@@ -249,7 +249,7 @@ if __name__ == '__main__':
     )
 
     business = make(
-            models.Business,
+            models.business.Business,
             dict(
                 name='Test Business',
             ),
@@ -268,7 +268,7 @@ if __name__ == '__main__':
     )
 
     company = make(
-            models.Company,
+            models.data.Company,
             dict(
                 name='Awesomecorp',
             ),
@@ -281,7 +281,7 @@ if __name__ == '__main__':
     )
 
     manager = make(
-            models.Manager,
+            models.accounts.Manager,
             dict(
                 human=human_manager,
             ),
@@ -294,10 +294,11 @@ if __name__ == '__main__':
     )
 
     administrator = \
-            models.Administrator.query.first() or models.Administrator()
+            models.accounts.Administrator.query.first() or \
+            models.accounts.Administrator()
 
     employee_login = make(
-            models.Login,
+            models.auth.Login,
             dict(
                 username='test-employee',
             ),
@@ -310,7 +311,7 @@ if __name__ == '__main__':
     )
 
     manager_login = make(
-            models.Login,
+            models.auth.Login,
             dict(
                 username='test-manager',
             ),
@@ -323,7 +324,7 @@ if __name__ == '__main__':
     )
 
     administrator_login = make(
-            models.Login,
+            models.auth.Login,
             dict(
                 username='test-administrator',
             ),

@@ -7,12 +7,25 @@ import re
 
 EMAIL_REGEX = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 
-from app import app, db, util, models, basedir, redis
+from app import (
+        app,
+        db,
+        util,
+        models,
+        basedir,
+        redis,
+)
+
 from app.api_spec import (
         load_api,
         register_all,
 )
-from app.util import ignored, decorate_with, from_rfc3339
+
+from app.util import (
+        ignored,
+        decorate_with,
+        from_rfc3339,
+)
 
 endpoints = load_api(
         os.path.join(
@@ -33,7 +46,7 @@ def get_employee_details(employee_name, login):
             404,
     )
 
-    employee_login = models.Login.query.filter_by(
+    employee_login = models.auth.Login.query.filter_by(
             username=employee_name
     ).first()
 
@@ -56,7 +69,7 @@ def get_employee_details(employee_name, login):
 def patch_employee_details(login, employee_name):
     account = login.get_account()
 
-    employee_login = models.Login.query.filter_by(
+    employee_login = models.auth.Login.query.filter_by(
             username=employee_name
     ).first()
 
@@ -77,7 +90,7 @@ def patch_employee_details(login, employee_name):
     data = request.get_json()
 
     with ignored(KeyError):
-        gender = models.Gender.query(
+        gender = models.data.Gender.query(
                 name=data['human']['gender']['name'],
         ).first()
         if gender is None:
@@ -114,7 +127,7 @@ def patch_employee_details(login, employee_name):
 
     with ignored(KeyError):
         languages = [
-                models.Language.query.filter_by(
+                models.data.Language.query.filter_by(
                     iso_name=lang['iso_name']
                 ).first()
                 for lang
@@ -151,7 +164,7 @@ def patch_employee_details(login, employee_name):
                 state_data = city_data['state']
                 country_data = state_data['country']
 
-                country = models.Country.query.filter_by(
+                country = models.location.Country.query.filter_by(
                         name=country_data['name'],
                 ).first()
                 if country is None:
@@ -162,7 +175,7 @@ def patch_employee_details(login, employee_name):
                             400,
                     )
 
-                state = models.State.query.filter_by(
+                state = models.location.State.query.filter_by(
                         name=state_data['name'],
                         country=country,
                 ).first()
@@ -174,7 +187,7 @@ def patch_employee_details(login, employee_name):
                             400,
                     )
 
-                city = models.City.query.filter_by(
+                city = models.location.City.query.filter_by(
                         name=city_data['name'],
                         state=state,
                 ).first()
@@ -205,7 +218,7 @@ def patch_employee_details(login, employee_name):
 )
 def put_employee_location(employee_name, login):
     account = login.get_account()
-    employee_login = models.Login.query.filter_by(
+    employee_login = models.auth.Login.query.filter_by(
             username=employee_name,
     ).first()
     if employee_login is None or \
@@ -238,7 +251,7 @@ def get_employee_location(employee_name, login):
     )
 
     account = login.get_account()
-    employee_login = models.Login.query.filter_by(
+    employee_login = models.auth.Login.query.filter_by(
             username=employee_name,
     )
 
@@ -262,7 +275,7 @@ def get_employee_location(employee_name, login):
         endpoints['business']['listing']['collection'].handles_action('GET'),
 )
 def get_business_listings(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return util.json_die(
                 "No such business.",
@@ -283,7 +296,7 @@ def get_business_listings(business_id, login):
         endpoints['business']['listing']['collection'].handles_action('POST'),
 )
 def new_listing(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return util.json_die(
                 "No such business.",
@@ -299,7 +312,7 @@ def new_listing(business_id, login):
 
     data = request.get_json()
 
-    position = models.Position.query.get(data['position'])
+    position = models.business.Position.query.get(data['position'])
 
     if position is None or position.business != business:
         return util.json_die(
@@ -309,12 +322,12 @@ def new_listing(business_id, login):
                 404
         )
 
-    pending = models.JobStatus.query.filter_by(
+    pending = models.business.JobStatus.query.filter_by(
             name='pending'
     ).first()
 
     languages = [
-            models.Language.query.filter_by(
+            models.data.Language.query.filter_by(
                 iso_name=lang['iso_name']
             ).first()
             for lang
@@ -331,7 +344,7 @@ def new_listing(business_id, login):
             )
 
 
-    job = models.Job(
+    job = models.business.Job(
             pay=data['pay'],
             details=data['details'],
             duration=data['duration'],
@@ -362,8 +375,8 @@ def new_listing(business_id, login):
         endpoints['business']['listing']['details'].handles_action('GET'),
 )
 def get_job_details(business_id, listing_id, login):
-    business = models.Business.query.get(business_id)
-    job = models.Job.query.get(listing_id)
+    business = models.business.Business.query.get(business_id)
+    job = models.business.Job.query.get(listing_id)
 
     if business is None or \
             job is None or \
@@ -381,7 +394,7 @@ def get_job_details(business_id, listing_id, login):
         endpoints['business']['position']['collection'].handles_action('GET')
 )
 def get_positions(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return util.json_die(
                 "No such business.",
@@ -410,7 +423,7 @@ def get_positions(business_id, login):
         endpoints['business']['position']['collection'].handles_action('POST')
 )
 def new_position(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return util.json_die(
                 "No such business.",
@@ -426,7 +439,7 @@ def new_position(business_id, login):
 
     data = request.get_json()
 
-    position = models.Position(
+    position = models.business.Position(
             name=data['name'],
             business_id=business_id,
             manager_id=account.id if login.is_manager() else None
@@ -447,7 +460,7 @@ def get_position(business_id, position_id, login):
 
     # Load the business, and ensure that it exists, that it can be
     # administrated by the current account.
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None or \
         login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -457,7 +470,7 @@ def get_position(business_id, position_id, login):
 
     # Load the position, and ensure that it exists, that it is associated with
     # the current business, and that it is available.
-    position = models.Position.query.get(position_id)
+    position = models.business.Position.query.get(position_id)
     app.logger.debug('%s', str(position))
     if position is None or \
             position.business_id != business_id or \
@@ -479,7 +492,7 @@ def delete_position(business_id, position_id, login):
 
     # Load the business, and ensure that it exists, that it can be
     # administrated by the current account.
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if any([
         business is None,
         login.is_manager() and business not in account.businesses
@@ -491,7 +504,7 @@ def delete_position(business_id, position_id, login):
 
     # Load the position, and ensure that it exists, that it is associated with
     # the current business, and that it is available.
-    position = models.Position.query.get(position_id)
+    position = models.business.Position.query.get(position_id)
     app.logger.debug('%s', str(position))
     if any([
         position is None,
@@ -525,7 +538,7 @@ def patch_position(business_id, position_id, login):
 
     # Load the business, and ensure that it exists, that it can be
     # administrated by the current account.
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if any([
         business is None,
         login.is_manager() and business not in account.businesses
@@ -537,7 +550,7 @@ def patch_position(business_id, position_id, login):
 
     # Load the position, and ensure that it exists, that it is associated with
     # the current business, and that it is available.
-    position = models.Position.query.get(position_id)
+    position = models.business.Position.query.get(position_id)
     if any([
         position is None,
         position.business_id != business_id,
@@ -565,7 +578,7 @@ def patch_position(business_id, position_id, login):
 )
 def approve_employee(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None or \
             login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -573,7 +586,7 @@ def approve_employee(business_id, listing_id, login):
                 404,
         )
 
-    job = models.Job.query.get(listing_id)
+    job = models.business.Job.query.get(listing_id)
     if job is None or \
             job not in business.jobs:
         return util.json_die(
@@ -589,7 +602,7 @@ def approve_employee(business_id, listing_id, login):
 
     data = request.get_json()
 
-    employee_to_approve = models.Employee.query.get(
+    employee_to_approve = models.accounts.Employee.query.get(
             data['name'],
     )
 
@@ -623,7 +636,7 @@ def approve_employee(business_id, listing_id, login):
 )
 def get_approved_employee(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None or \
             login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -631,7 +644,7 @@ def get_approved_employee(business_id, listing_id, login):
                 404,
         )
 
-    job = models.Job.query.get(listing_id)
+    job = models.business.Job.query.get(listing_id)
     if job is None or \
             job not in business.jobs:
         return util.json_die(
@@ -656,7 +669,7 @@ def get_approved_employee(business_id, listing_id, login):
 )
 def post_employee_arrival(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None or \
             login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -664,7 +677,7 @@ def post_employee_arrival(business_id, listing_id, login):
                 404,
         )
 
-    job = models.Job.query.get(listing_id)
+    job = models.business.Job.query.get(listing_id)
     if job is None or \
             job not in business.jobs:
         return util.json_die(
@@ -697,7 +710,7 @@ def post_employee_arrival(business_id, listing_id, login):
 )
 def post_employee_arrival(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None or \
             login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -705,7 +718,7 @@ def post_employee_arrival(business_id, listing_id, login):
                 404,
         )
 
-    job = models.Job.query.get(listing_id)
+    job = models.business.Job.query.get(listing_id)
     if job is None or \
             job not in business.jobs:
         return util.json_die(
@@ -734,7 +747,7 @@ def post_employee_arrival(business_id, listing_id, login):
         endpoints['business']['details'].handles_action('GET')
 )
 def get_business_details(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return json_die(
                 "No such business.",
@@ -750,8 +763,8 @@ def get_business_details(business_id, login):
 )
 def apply_to_job(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
-    job = models.Job.query.get(listing_id)
+    business = models.business.Business.query.get(business_id)
+    job = models.business.Job.query.get(listing_id)
 
     if business is None:
         return util.json_die(
@@ -779,7 +792,7 @@ def apply_to_job(business_id, listing_id, login):
                 403,
         )
 
-    employee = models.Employee.query.filter_by(
+    employee = models.accounts.Employee.query.filter_by(
             username=data['name'],
     )
 
@@ -803,8 +816,8 @@ def apply_to_job(business_id, listing_id, login):
 )
 def get_applicants(business_id, listing_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
-    job = models.Job.query.get(listing_id)
+    business = models.business.Business.query.get(business_id)
+    job = models.business.Job.query.get(listing_id)
 
     if business is None:
         return util.json_die(
@@ -832,7 +845,7 @@ def get_applicants(business_id, listing_id, login):
         endpoints['business']['manager']['collection'].handles_action('GET')
 )
 def get_business_managers(business_id, login):
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
     if business is None:
         return util.json_die(
                 "No such business.",
@@ -854,7 +867,7 @@ def get_business_managers(business_id, login):
 )
 def add_manager_to_business(business_id, login):
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
 
     if login.is_manager() and business not in account.businesses:
         return util.json_die(
@@ -864,7 +877,7 @@ def add_manager_to_business(business_id, login):
 
     data = request.get_json()
 
-    manager_login = models.Login.query.filter_by(
+    manager_login = models.auth.Login.query.filter_by(
             username=data['name'],
     ).first()
 
@@ -895,9 +908,9 @@ def remove_manager_from_business(business_id, manager_name, login):
     )
 
     account = login.get_account()
-    business = models.Business.query.get(business_id)
+    business = models.business.Business.query.get(business_id)
 
-    manager_login = models.Login.query.filter_by(
+    manager_login = models.auth.Login.query.filter_by(
             username=manager_name,
     ).first()
 
@@ -938,7 +951,7 @@ def get_managed_businesses(manager_name, login):
     if login.is_manager():
         manager = login.get_account()
     else:
-        manager_login = models.Login.query.filter_by(
+        manager_login = models.auth.Login.query.filter_by(
                 username=manager_name
         ).first()
         if manager_login is None or not manager_login.is_manager():
@@ -962,7 +975,7 @@ def get_managed_businesses(manager_name, login):
         endpoints['manager']['details'].handles_action('GET'),
 )
 def get_manager_details(manager_name, login):
-    manager_login = models.Login.query.filter_by(
+    manager_login = models.auth.Login.query.filter_by(
             username=manager_name,
     ).first()
 
@@ -996,7 +1009,7 @@ def get_listings(login):
     # Each criterion forms a condition group. Each condition group is an AND in
     # the conditions, whereas each member of each group is an OR.
     for status_name in request.args.getlist('status'):
-        status = models.JobStatus.query.filter_by(
+        status = models.business.JobStatus.query.filter_by(
                 name=status_name
         ).first()
         if status is None:
@@ -1007,11 +1020,11 @@ def get_listings(login):
                     404,
             )
         criteria['status'].append(
-                models.Job.status == status,
+                models.business.Job.status == status,
         )
 
     for business_id in request.args.getlist('business'):
-        business = models.Business.query.get(business_id)
+        business = models.business.Business.query.get(business_id)
         if business is None:
             return util.json_die(
                     "No business with id %d." % (
@@ -1020,11 +1033,11 @@ def get_listings(login):
                     404,
             )
         criteria['business'].append(
-                models.Job.business_id == business_id,
+                models.business.Job.business_id == business_id,
         )
 
     for manager_name in request.args.getlist('created_by'):
-        manager_login = models.Login.query.filter_by(
+        manager_login = models.auth.Login.query.filter_by(
                 username=manager_name,
         ).first()
         if manager_login is None or not manager_login.is_manager():
@@ -1038,12 +1051,12 @@ def get_listings(login):
         manager = manager_login.get_account()
 
         criteria['manager'].append(
-                models.Job.manager_id == manager.id,
+                models.business.Job.manager_id == manager.id,
         )
 
     for employee_name in request.args.getlist('dispatched_to') + \
             request.args.getlist('worked_by'):
-        employee_login = models.Login.query.filter_by(
+        employee_login = models.auth.Login.query.filter_by(
                 username=employee_name,
         )
         if employee_login is None or not employee_login.is_employee():
@@ -1057,7 +1070,7 @@ def get_listings(login):
         employee = employee_login.get_account()
 
         criteria['employee'].append(
-                models.Job.employee_id == employee.id,
+                models.business.Job.employee_id == employee.id,
         )
 
     try:
@@ -1068,7 +1081,7 @@ def get_listings(login):
         pass
     else:
         criteria['since'].append(
-                models.Job.create_date > since_date,
+                models.business.Job.create_date > since_date,
         )
 
     try:
@@ -1079,7 +1092,7 @@ def get_listings(login):
         pass
     else:
         criteria['before'].append(
-                models.Job.create_date < before_date,
+                models.business.Job.create_date < before_date,
         )
 
     try:
@@ -1087,7 +1100,7 @@ def get_listings(login):
     except KeyError:
         max_count = 100
 
-    results = models.Job.query.filter(
+    results = models.business.Job.query.filter(
             db.and_(
                 *[
                     db.or_(
