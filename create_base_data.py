@@ -129,6 +129,7 @@ if __name__ == '__main__':
                     dict(
                         name='pending',
                         friendly_name='pending',
+                        priority=40,
                     ),
                 ),
                 (
@@ -138,6 +139,7 @@ if __name__ == '__main__':
                     dict(
                         name='submitted',
                         friendly_name='submitted',
+                        priority=30,
                     ),
                 ),
                 (
@@ -147,6 +149,7 @@ if __name__ == '__main__':
                     dict(
                         name='inProgress',
                         friendly_name='in progress',
+                        priority=20,
                     ),
                 ),
                 (
@@ -156,6 +159,7 @@ if __name__ == '__main__':
                     dict(
                         name='cancelled',
                         friendly_name='cancelled',
+                        priority=100,
                     ),
                 ),
                 (
@@ -165,6 +169,7 @@ if __name__ == '__main__':
                     dict(
                         name='completed',
                         friendly_name='completed',
+                        priority=150,
                     ),
                 ),
                 (
@@ -174,6 +179,7 @@ if __name__ == '__main__':
                     dict(
                         name='stale',
                         friendly_name='stale',
+                        priority=200,
                     ),
                 ),
                 (
@@ -183,6 +189,7 @@ if __name__ == '__main__':
                     dict(
                         name='aborted',
                         friendly_name='aborted',
+                        priority=70,
                     )
                 )
             ]

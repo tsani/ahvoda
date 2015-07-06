@@ -1100,7 +1100,9 @@ def get_listings(login):
     except KeyError:
         max_count = 100
 
-    results = models.business.Job.query.filter(
+    results = models.business.Job.query.join(
+            models.business.Job.status,
+    ).filter(
             db.and_(
                 *[
                     db.or_(
@@ -1110,6 +1112,9 @@ def get_listings(login):
                     in criteria.values()
                 ]
             ),
+    ).order_by(
+            models.business.JobStatus.priority,
+            models.business.Job.create_date.desc(),
     ).limit(max_count).all()
 
     return jsonify(

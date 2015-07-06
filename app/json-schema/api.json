@@ -1002,7 +1002,8 @@
             "properties": {
                 "id": { "$ref": "#/definitions/id" },
                 "friendly_name": { "type": "string" },
-                "name": { "$ref": "#/definitions/job_status_name" }
+                "name": { "$ref": "#/definitions/job_status_name" },
+                "priority": { "type": "number" }
             }
         },
         "job_status_name": {

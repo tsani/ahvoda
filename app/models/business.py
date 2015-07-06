@@ -143,11 +143,18 @@ class JobStatus(db.Model):
             nullable=False,
     )
 
+    priority = db.Column(
+            db.Integer,
+            nullable=False,
+            unique=True,
+    )
+
     def to_dict(self):
         return dict(
                 id=self.id,
                 name=self.name,
                 friendly_name=self.friendly_name,
+                priority=self.priority,
         )
 
 class Company(db.Model):
