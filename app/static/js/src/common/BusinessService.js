@@ -74,6 +74,14 @@ function BusinessService($q, $http) {
             });
     }
 
+    srv.getPosition = function(business, positionId) {
+        return $http.get(
+                '/api/business/' + business.id + '/positions/' + positionId)
+            .then(function(response) {
+                return response.data;
+            });
+    }
+
     srv.createPosition = function(business, name) {
         return $http.post('/api/business/' + business.id + '/positions', {
             name: name
