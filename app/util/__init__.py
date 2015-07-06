@@ -14,12 +14,12 @@ from functools import wraps
 from itertools import chain
 
 def to_rfc3339(dt):
-    """ Represent a datetime object in rfc3339 with UTC offset. """
+    """ Represent a datetime or date object in rfc3339 with UTC offset. """
     return timestamp_to_rfc3339_utcoffset(
             (
-                datetime.combine(dt, datetime.min.time())
-                if isinstance(dt, date) else
                 dt
+                if isinstance(dt, datetime) else
+                datetime.combine(dt, datetime.min.time())
             ).timestamp()
     )
 
