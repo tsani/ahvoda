@@ -289,7 +289,7 @@ class Position(db.Model):
     )
 
     create_date = db.Column(
-            db.Date,
+            db.DateTime,
             nullable=False,
             server_default=db.func.now(),
     )
