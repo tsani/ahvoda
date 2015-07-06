@@ -1,5 +1,9 @@
 {% extends "layout-internal.html" %}
 
+{% block htmltag %}
+<html ng-app='BusinessApp'>
+{% endblock %}
+
 {% block headjs %}
 {{ super() }}
 <script>
@@ -21,7 +25,7 @@ src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
 <script
 src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
 </script>
-<script src="/static/js/app.js"></script>
+<script src="/static/js/dist/business-app.min.js"></script>
 {% endblock %}
 
 {% block header %}

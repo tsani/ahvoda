@@ -1,18 +1,20 @@
 Setup
 =====
 
-1. Create and activate a virtualenv with python 3.
+Create a python3 virtualenv
 
     virtualenv venv
     source venv/bin/activate
 
-2. Install the dependencies of the project.
+Build the app
 
-    pip install -r requirements.txt
+    make
 
-3. Test out the server!
+Get a `secret_config.py` file and tweak it. The important properties are
 
-    ./run.py
+* `SQLALCHEMY_DATABASE_URI`: describes where the database is.
+
+The rest don't require tweaking, but contain sensitive information.
 
 Contact
 =======

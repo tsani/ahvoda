@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
-<html ng-app='app'>
+{% block htmltag %}
+<html>
+{% endblock %}
 
 <head>
 <title>Ahvoda | {% block title %}Employment on Demand{% endblock %}</title>
@@ -15,23 +17,23 @@
 {# Set favicon #}
 <link rel="icon" href="/static/img/ahvoda-favicon.png" type="image/png">
 
-<!-- Font Awesome -->
+{# Font Awesome #}
 <link rel="stylesheet" 
 href="{{ url_for('bower.static', filename='fontawesome/css/font-awesome.css') }}">
 
 {% block headjs %}
-<!-- jQuery -->
+{# jQuery #}
 <script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}">
 </script>
-<!-- Our general JavaScript -->
+{# General JavaScript #}
 <script src='/static/js/env.js'></script>
 {% endblock %}
 
-<!-- Our styles -->
+{# Our styles #}
 {% block css %}
 {% endblock %}
 
-<!-- Google analytics -->
+{# Google Analytics #}
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
