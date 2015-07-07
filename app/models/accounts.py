@@ -48,6 +48,12 @@ class Manager(db.Model):
             unique=True,
     )
 
+    is_tos_approved = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default='f',
+    )
+
     businesses = db.relationship(
             'Business',
             secondary='managerset',
