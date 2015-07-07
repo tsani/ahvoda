@@ -62,7 +62,7 @@
             "manager": {
                 "type": "directory",
                 "contents": {
-                    "details": {
+                    "instance": {
                         "type": "endpoint",
                         "description": "Detailed information about a manager.",
                         "url": "/api/manager/<manager_name>",
@@ -118,7 +118,7 @@
             "employee": {
                 "type": "directory",
                 "contents": {
-                    "details": {
+                    "instance": {
                         "type": "endpoint",
                         "description": "Detailed information about an employee.",
                         "url": "/api/employee/<employee_name>",
@@ -189,7 +189,7 @@
             "business": {
                 "type": "directory",
                 "contents": {
-                    "details": {
+                    "instance": {
                         "type": "endpoint",
                         "url": "/api/businesses/<int:business_id>",
                         "description": "Detailed information about a business.",
@@ -407,7 +407,7 @@
                     "listing": {
                         "type": "directory",
                         "contents": {
-                            "details": {
+                            "instance": {
                                 "type": "endpoint",
                                 "url":
                                 "/api/businesses/<int:business_id>/listings/<int:listing_id>",

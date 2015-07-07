@@ -37,9 +37,9 @@ endpoints = load_api(
 ### EMPLOYEE
 
 @decorate_with(
-        endpoints['employee']['details'].handles_action('GET')
+        endpoints['employee']['instance'].handles_action('GET')
 )
-def get_employee_details(employee_name, login):
+def get_employee(employee_name, login):
     """ The handler to execute for the GET request method. """
     die = lambda: util.json_die(
             "No such employee.",
@@ -64,9 +64,9 @@ def get_employee_details(employee_name, login):
     )
 
 @decorate_with(
-        endpoints['employee']['details'].handles_action('PATCH')
+        endpoints['employee']['instance'].handles_action('PATCH')
 )
-def patch_employee_details(login, employee_name):
+def patch_employee(login, employee_name):
     account = login.get_account()
 
     employee_login = models.auth.Login.query.filter_by(
@@ -372,9 +372,9 @@ def new_listing(business_id, login):
     return response
 
 @decorate_with(
-        endpoints['business']['listing']['details'].handles_action('GET'),
+        endpoints['business']['listing']['instance'].handles_action('GET'),
 )
-def get_job_details(business_id, listing_id, login):
+def get_job(business_id, listing_id, login):
     business = models.business.Business.query.get(business_id)
     job = models.business.Job.query.get(listing_id)
 
@@ -744,9 +744,9 @@ def post_employee_arrival(business_id, listing_id, login):
     )
 
 @decorate_with(
-        endpoints['business']['details'].handles_action('GET')
+        endpoints['business']['instance'].handles_action('GET')
 )
-def get_business_details(business_id, login):
+def get_business(business_id, login):
     business = models.business.Business.query.get(business_id)
     if business is None:
         return json_die(
@@ -972,9 +972,9 @@ def get_managed_businesses(manager_name, login):
     )
 
 @decorate_with(
-        endpoints['manager']['details'].handles_action('GET'),
+        endpoints['manager']['instance'].handles_action('GET'),
 )
-def get_manager_details(manager_name, login):
+def get_manager(manager_name, login):
     manager_login = models.auth.Login.query.filter_by(
             username=manager_name,
     ).first()
