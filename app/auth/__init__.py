@@ -173,10 +173,37 @@ def requires_employee(f):
 
     return decorated
 
+def requires_administrator(f):
+    """ Decorate a function to ensure that only users authenticated as
+    administrators can access the wrapped resource.
+
+    The decorated function takes a "login" keyword argument, and should be
+    chained with the "requires_auth" helper.
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'login' not in kwargs:
+            raise TypeError('requires_administrator did not receive a "Login" '
+                    'instance')
+
+        if kwargs['login'].is_administrator():
+            app.logger.debug("identified administrator account")
+        else:
+            app.logger.info(
+                    "failed to identify user %s as administrator",
+                    (kwargs['login'].username,),
+            )
+            return failure.response_403("This page requires an administrator "
+                    "account.")
+
+        return f(*args, **kwargs)
+
+    return decorated
+
 def requires_account(account_type):
     """ Produces `requires_employee` or `requires_manager` based on a string
-    argument. Raises a ValueError if the `account_type` is neither "employee"
-    nor "manager".
+    argument. Raises a ValueError if the `account_type` is neither "employee",
+    "manager", nor "administrator".
     """
     check = lambda s: s == account_type
 
@@ -184,8 +211,12 @@ def requires_account(account_type):
         return requires_manager
     elif check("employee"):
         return requires_employee
+    elif check("administrator"):
+        return requires_administrator
     else:
         raise ValueError(
-                "Account type %s is neither 'employee' nor 'manager'." % (
-                    account_type,)
+                "Account type %s is neither 'employee', 'manager', nor "
+                "'administrator'." % (
+                    account_type,
+                )
         )
