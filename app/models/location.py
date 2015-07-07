@@ -141,4 +141,3 @@ class Location(db.Model):
                 longitude=self.longitude,
             ),
         )
-
