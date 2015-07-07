@@ -27,6 +27,17 @@ def from_rfc3339(rfc3339):
     """ Parse an rfc3339 string into a datetime object. """
     return datetime.utcfromtimestamp(rfc3339_to_timestamp(rfc3339))
 
+def format_location(location):
+    """ Format a dictionary representation of a models.location.Location
+    object.
+    """
+    return ', '.join([
+        location['address'],
+        location['city']['name'],
+        location['city']['state']['name'],
+        location['city']['state']['country']['name'],
+    ])
+
 def decorator_list(fseq):
     """ Combines several decorators in a list into a single decorator.
 
