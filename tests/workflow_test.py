@@ -12,7 +12,7 @@ def failed():
 if __name__ == '__main__':
     r = requests.get(
             make_url(
-                '/api/business/%d/positions' % (
+                '/api/businesses/%d/positions' % (
                     business_id,
                 ),
             ),
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     if not data['positions']:
         r = requests.post(
                 make_url(
-                    '/api/business/%d/positions' % (
+                    '/api/businesses/%d/positions' % (
                         business_id,
                     ),
                 ),
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     job = requests.post(
             make_url(
-                '/api/business/%d/listings' % (
+                '/api/businesses/%d/listings' % (
                     business_id,
                 )
             ),
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings/%d/applicants' % (
+                '/api/businesses/%d/listings/%d/applicants' % (
                     business_id,
                     job['id'],
                 ),
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     r = requests.get(
             make_url(
-                '/api/business/%d/listings/%d/applicants' % (
+                '/api/businesses/%d/listings/%d/applicants' % (
                     business_id,
                     job['id'],
                 ),
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings/%d/employee' % (
+                '/api/businesses/%d/listings/%d/employee' % (
                     business_id,
                     job['id'],
                 ),
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings/%d/employee/arrival' % (
+                '/api/businesses/%d/listings/%d/employee/arrival' % (
                     business_id,
                     job['id'],
                 ),
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings/%d/employee/departure' % (
+                '/api/businesses/%d/listings/%d/employee/departure' % (
                     business_id,
                     job['id'],
                 ),

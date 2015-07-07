@@ -191,7 +191,7 @@
                 "contents": {
                     "details": {
                         "type": "endpoint",
-                        "url": "/api/business/<int:business_id>",
+                        "url": "/api/businesses/<int:business_id>",
                         "description": "Detailed information about a business.",
                         "verbs": {
                             "GET": {
@@ -230,7 +230,7 @@
                         "contents": {
                             "collection": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/managers",
+                                "url": "/api/businesses/<int:business_id>/managers",
                                 "description": "Collection of managers at a business.",
                                 "verbs": {
                                     "GET": {
@@ -280,7 +280,7 @@
                             },
                             "instance": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/managers/<manager_name>",
+                                "url": "/api/businesses/<int:business_id>/managers/<manager_name>",
                                 "description": "Instance of a manager at a business.",
                                 "verbs": {
                                     "DELETE": {
@@ -301,7 +301,7 @@
                         "contents": {
                             "collection": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/positions",
+                                "url": "/api/businesses/<int:business_id>/positions",
                                 "description": "Create a new position.",
                                 "verbs": {
                                     "POST": {
@@ -347,7 +347,7 @@
                             },
                             "instance": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/positions/<int:position_id>",
+                                "url": "/api/businesses/<int:business_id>/positions/<int:position_id>",
                                 "description": "Instance of a single position within a business.",
                                 "verbs": {
                                     "GET": {
@@ -410,7 +410,7 @@
                             "details": {
                                 "type": "endpoint",
                                 "url":
-                                "/api/business/<int:business_id>/listings/<int:listing_id>",
+                                "/api/businesses/<int:business_id>/listings/<int:listing_id>",
                                 "description": "Detailed information about a listing.",
                                 "verbs": {
                                     "GET": {
@@ -444,7 +444,7 @@
                             "apply": {
                                 "type": "endpoint",
                                 "description": "Apply to a job.",
-                                "url": "/api/business/<int:business_id>/listings/<int:listing_id>/applicants",
+                                "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/applicants",
                                 "verbs": {
                                     "POST": {
                                         "accountTypes": [ "employee" ],
@@ -502,7 +502,7 @@
                                 "contents": {
                                     "arrival": {
                                         "type": "endpoint",
-                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee/arrival",
+                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee/arrival",
                                         "description": "The arrival time of an employee.",
                                         "verbs": {
                                             "POST": {
@@ -539,7 +539,7 @@
                                     },
                                     "departure": {
                                         "type": "endpoint",
-                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee/departure",
+                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee/departure",
                                         "description": "The departure time of an employee.",
                                         "verbs": {
                                             "POST": {
@@ -576,7 +576,7 @@
                                     },
                                     "approve": {
                                         "type": "endpoint",
-                                        "url": "/api/business/<int:business_id>/listings/<int:listing_id>/employee",
+                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee",
                                         "description": "The employee selected for the job.",
                                         "verbs": {
                                             "POST": {
@@ -629,7 +629,7 @@
                             },
                             "collection": {
                                 "type": "endpoint",
-                                "url": "/api/business/<int:business_id>/listings",
+                                "url": "/api/businesses/<int:business_id>/listings",
                                 "description": "Collection of listings.",
                                 "verbs": {
                                     "GET": {

@@ -45,7 +45,7 @@ function BusinessService($q, $http) {
     };
 
     srv.getBusiness = function(businessId) {
-        return $http.get('/api/business/' + businessId)
+        return $http.get('/api/businesses/' + businessId)
             .then(function(response) {
                 return response.data;
             });
@@ -61,14 +61,14 @@ function BusinessService($q, $http) {
 
     srv.createListing = function(business, listing) {
         return $http.post(
-                '/api/business/' + business.id + '/listings', listing)
+                '/api/businesses/' + business.id + '/listings', listing)
             .then(function(response) {
                 return response.data;
             });
     }
 
     srv.getPositions = function(business) {
-        return $http.get('/api/business/' + business.id + '/positions')
+        return $http.get('/api/businesses/' + business.id + '/positions')
             .then(function(response) {
                 return response.data.positions;
             });
@@ -76,14 +76,14 @@ function BusinessService($q, $http) {
 
     srv.getPosition = function(business, positionId) {
         return $http.get(
-                '/api/business/' + business.id + '/positions/' + positionId)
+                '/api/businesses/' + business.id + '/positions/' + positionId)
             .then(function(response) {
                 return response.data;
             });
     }
 
     srv.createPosition = function(business, name) {
-        return $http.post('/api/business/' + business.id + '/positions', {
+        return $http.post('/api/businesses/' + business.id + '/positions', {
             name: name
         }).then(function(response) {
             return response.data;
@@ -92,14 +92,14 @@ function BusinessService($q, $http) {
 
     srv.patchPosition = function(business, positionId, name) {
         return $http.patch(
-                '/api/business/' + business.id + '/positions/' + positionId, {
+                '/api/businesses/' + business.id + '/positions/' + positionId, {
                     name: name
                 });
     }
 
     srv.deletePosition = function(business, positionId) {
         return $http.delete(
-                '/api/business/' + business.id + '/positions/' + positionId);
+                '/api/businesses/' + business.id + '/positions/' + positionId);
     }
 
     srv.getManager = function() {

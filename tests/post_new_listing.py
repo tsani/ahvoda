@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     r = requests.get(
             make_url(
-                '/api/business/%d/positions' % (
+                '/api/businesses/%d/positions' % (
                     business['id'],
                 ),
             ),
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/listings' % (
+                '/api/businesses/%d/listings' % (
                     business['id'],
                 )
             ),

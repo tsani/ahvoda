@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     r = requests.delete(
             make_url(
-                '/api/business/%d/managers/%s' % (
+                '/api/businesses/%d/managers/%s' % (
                     business['id'],
                     manager_username,
                 ),
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     r = requests.post(
             make_url(
-                '/api/business/%d/managers' % (
+                '/api/businesses/%d/managers' % (
                     business['id'],
                 ),
             ),

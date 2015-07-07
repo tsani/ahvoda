@@ -15,14 +15,14 @@ def filter2xx(r):
 
 def get_positions(business_id):
     return requests.get(
-            make_url('/api/business/%d/positions' % business_id),
+            make_url('/api/businesses/%d/positions' % business_id),
             auth=manager_auth,
     )
 
 def get_position(business_id, position_id):
     return requests.get(
             make_url(
-                '/api/business/%d/positions/%d' % (
+                '/api/businesses/%d/positions/%d' % (
                     business_id,
                     position_id,
                 ),
@@ -32,7 +32,7 @@ def get_position(business_id, position_id):
 
 def new_position(business_id, name):
     return requests.post(
-            make_url('/api/business/%d/positions' % business_id),
+            make_url('/api/businesses/%d/positions' % business_id),
             auth=manager_auth,
             data=json.dumps(
                 dict(
@@ -47,7 +47,7 @@ def new_position(business_id, name):
 def patch_position(business_id, position_id, name):
     return requests.patch(
             make_url(
-                '/api/business/%d/positions/%d' % (
+                '/api/businesses/%d/positions/%d' % (
                     business_id,
                     position_id,
                 ),
@@ -66,7 +66,7 @@ def patch_position(business_id, position_id, name):
 def delete_position(business_id, position_id):
     return requests.delete(
             make_url(
-                '/api/business/%d/positions/%d' % (
+                '/api/businesses/%d/positions/%d' % (
                     business_id,
                     position_id,
                 ),
