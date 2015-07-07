@@ -759,6 +759,15 @@ def get_business(business_id, login):
     )
 
 @decorate_with(
+        endpoints['business']['instance'].handles_action('PATCH')
+)
+def patch_business(business_id, login):
+    return util.json_die(
+            "This endpoint is not available at this time.",
+            500,
+    )
+
+@decorate_with(
         endpoints['business']['listing']['apply'].handles_action('POST')
 )
 def apply_to_job(business_id, listing_id, login):
