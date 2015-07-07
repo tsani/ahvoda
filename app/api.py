@@ -27,6 +27,10 @@ from app.util import (
         from_rfc3339,
 )
 
+from app.geocoding import (
+        Geocoding,
+)
+
 endpoints = load_api(
         os.path.join(
             basedir,
@@ -765,6 +769,80 @@ def patch_business(business_id, login):
     return util.json_die(
             "This endpoint is not available at this time.",
             500,
+    )
+
+@decorate_with(
+        endpoints['business']['collection'].handles_action('POST')
+)
+def new_business(login):
+    db.session.autoflush = False
+
+    data = request.get_json()
+
+    city = models.location.City.query.get(data['location']['city_id'])
+
+    if city is None:
+        return util.json_die(
+                "No such city.",
+                404,
+        )
+
+    full_address = util.format_location(
+            dict(
+                address=data['location']['address'],
+                city=city.to_dict(),
+            ),
+    )
+
+    # TODO do geocoding in a separate worker notified by a Redis message queue
+    geocoding = Geocoding.lookup(full_address)
+    best_match = geocoding.results[0]
+
+    app.logger.debug(
+            '%s %s',
+            (full_address, best_match),
+    )
+
+    location = models.location.Location(
+            address=data['location']['address'],
+            postal_code=data['location']['postal_code'],
+            city=city,
+            latitude=best_match.position.latitude,
+            longitude=best_match.position.longitude,
+    )
+
+    contact_info = models.data.ContactInfo(
+            phone_number=data['contact_info']['phone_number'],
+            email_address=data['contact_info']['email_address'],
+    )
+
+    industry = models.data.Industry.query.filter_by(
+            name='fooddrink',
+    ).one()
+
+    languages = [
+            models.data.Language.query.filter_by(
+                iso_name=d['iso_name'],
+            ).one()
+            for d
+            in data['languages']
+    ]
+
+    business = models.business.Business(
+            name=data['name'],
+            description=data['description'],
+            is_verified=False,
+            location=location,
+            industry=industry,
+            contact_info=contact_info,
+            languages=languages,
+    )
+
+    db.session.add(business)
+    db.session.commit()
+
+    return jsonify(
+            business.to_dict(),
     )
 
 @decorate_with(
