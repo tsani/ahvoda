@@ -4,46 +4,45 @@
         Request contractor
     </a>
 </div>
-<dl class='business-content' ng-repeat='business in vm.businesses'>
-    <dt><h2> {{ business.name }} </h2></dt>
-    <dd>
+<dl class='business-list' ng-repeat='business in vm.businesses'>
+    <dt>
+        <h2> {{ business.name }} </h2>
         <p>
         {{ vm.formatAddress(business.location) }} 
         </p>
+    </dt>
+    <dd>
         <p ng-if='vm.listingGroups[business.name].length == 0'>
         This location has no contracts yet.
         </p>
         <dl ng-if='vm.listingGroups[business.name].length > 0'
-                class='listing-content'>
-            <div ng-repeat='listing in vm.listingGroups[business.name]'>
-                <dt><h3> {{ listing.position.name }} </h3></dt>
+                class='listings-list'>
+            <div class='item' ng-repeat='listing in vm.listingGroups[business.name]'>
+                <dt>
+                    <div class='listing-header'>
+                        <h3> {{ listing.position.name }} </h3>
+                        <div>
+                            <p class='listing-pay'> {{ listing.pay }}$/h </p>
+                            <p class='listing-status'> {{ listing.status.friendly_name }} </p>
+                        </div>
+                    </div>
+                    <div class='listing-create-time'>
+                        {{ listing.create_date }}
+                    </div>
+                </dt>
                 <dd>
-                    <dl class='listing-content'>
-                        <dt> Status </dt>
-                        <dd> {{ listing.status.friendly_name }} </dd>
+                    <div> {{ listing.details }} </div>
 
-                        <dt> Created at </dt>
-                        <dd> {{ listing.create_date }} </dd>
+                    <div class='contractor-info' ng-if='listing.employee'>
+                        <h4> Contractor </h4>
+                        <dl>
+                            <dt>Name</dt>
+                            <dd> {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }} </dd>
 
-                        <dt> Pay </dt>
-                        <dd> {{ listing.pay }}$/h </dd>
-
-                        <dt> Details </dt>
-                        <dd> {{ listing.details }} </dd>
-
-                        <div ng-if='listing.employee'>
-                            <dt> Contractor </dt>
-                            <dd>
-                                <dl class='listing-content'>
-                                    <dt>Name</dt>
-                                    <dd> {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }} </dd>
-
-                                    <dt>Phone Number</dt>
-                                    <dd> {{ listing.employee.human.contact_info.phone_number }} </dd>
-                                </dl>
-                            </dd>
+                            <dt>Phone Number</dt>
+                            <dd> {{ listing.employee.human.contact_info.phone_number }} </dd>
                         </dl>
-                    </dl>
+                    </div>
                 </dd>
             </div>
         </dl>

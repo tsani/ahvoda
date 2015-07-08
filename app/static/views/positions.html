@@ -1,15 +1,25 @@
 <h1> Positions </h1>
 <div>
-    <a class='button block' ui-sref='new-position'>New position</a>
+    <a class='button block call-to-action' ui-sref='new-position'>
+        New position
+    </a>
 </div>
-<div ng-repeat='business in vm.businesses'>
-    <h2> {{ business.name }} </h2>
-    <p ng-if='vm.positionGroups[business.name].length == 0'>
-    This location has no positions.
-    </p>
-    <ul ng-if='vm.positionGroups[business.name].length > 0'>
-        <li ng-repeat='position in vm.positionGroups[business.name]'>
-            <h3> {{ position.name }} </h3>
-        </li>
-    </ul>
-</div>
+<dl class='business-list' ng-repeat='business in vm.businesses'>
+    <dt>
+        <h2> {{ business.name }} </h2>
+        <p ng-if='vm.positionGroups[business.name].length == 0'>
+        This location has no positions yet.
+        </p>
+    </dt>
+    <dd>
+        <dl class='listings-list' ng-if='vm.positionGroups[business.name].length > 0'>
+            <div class='item' ng-repeat='position in vm.positionGroups[business.name]'>
+                <dt>
+                    <h3> {{ position.name }} </h3>
+                </dt>
+                <dd>
+                </dd>
+            </div>
+        </dl>
+    </dd>
+</dl>

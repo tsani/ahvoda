@@ -128,14 +128,10 @@ section {
     margin: 1em auto;
 }
 
-button.call-to-action {
+.call-to-action {
     white-space: inherit;
-
-    background-color: @ah-blue;
-
-    &:hover {
-        background-color: lighten(@ah-blue, 10%);
-    }
+    .button(@ah-blue);
+    color: white;
 }
 
 .carousel {

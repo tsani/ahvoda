@@ -1,43 +1,57 @@
-/* Main Ahvoda palette colors */
-@base-green:    #b8f0b2;
-@base-blue:     #6683b6;
-@base-beige:    #fffe83;
+// The main foreground and background colors.
+@fg-main:       #111;
+@bg-main:       #fbfbfb;
 
-@light-green:   lighten(@base-green, 15%);
-@light-blue:    lighten(@base-blue, 15%);
-@light-beige:   lighten(@base-beige, 15%);
+// The definition of a "card" style.
+@bg-card:       #f0f0f0; // Card background
 
-@lighter-green: lighten(@base-green, 30%);
-@lighter-blue:  lighten(@base-blue, 30%);
-@lighter-beige: lighten(@base-beige, 30%);
+.card-border-color(@base) {
+    border-color:
+        lighten(@base, 7%, relative)
+        darken(@base, 7%, relative)
+        darken(@base, 14%, relative);
+}
 
-@dark-green:    darken(@base-green, 10%);
-@dark-blue:     darken(@base-blue, 10%);
-@dark-beige:    darken(@base-beige, 10%);
+.outset-card-border-color(@base) {
+    border-color:
+        darken(@base, 7%, relative)
+        darken(@base, 7%, relative)
+        lighten(@base, 14%, relative);
+}
 
-@darker-green:  darken(@base-green, 30%);
-@darker-blue:   darken(@base-blue, 30%);
-@darker-beige:  darken(@base-beige, 30%);
+// Gives an element a basic card styling.
+.card-border(@bg : @bg-card) {
+    border-style: solid;
+    border-width: 1px;
+    .card-border-color(@bg);
+}
 
-@fg-main:       #4a4a49;
+.outset-card-border(@bg : @bg-card) {
+    border-style: solid;
+    border-width: 1px;
+    .outset-card-border-color(@bg);
+}
 
-/* Solarized colors */
-@sol-base03:    #002b36;
-@sol-base02:    #073642;
-@sol-base01:    #586e75;
-@sol-base00:    #657b83;
-@sol-base0:     #839496;
-@sol-base1:     #93a1a1;
-@sol-base2:     #eee8d5;
-@sol-base3:     #fdf6e3;
-@sol-yellow:    #b58900;
-@sol-orange:    #cb4b16;
-@sol-red:       #dc322f;
-@sol-magenta:   #d33682;
-@sol-violet:    #6c71c4;
-@sol-blue:      #268bd2;
-@sol-cyan:      #2aa198;
-@sol-green:     #859900;
+// The background color for controls such as buttons and input fields.
+@bg-control:      @bg-main;
+
+// The background color for input controls such as text, select, and textarea
+// fields.
+@bg-form-control: lighten(@bg-control, 10%, relative);
+
+// Function to make a color into a version of itself to be used on :hover.
+.fn-color-hover(@base-color) {
+    @-: lighten(@base-color, 15%, relative);
+}
+
+// Function to make a color into a version of itself to be used on :active.
+.fn-color-active(@base-color) {
+    @-: darken(@base-color, 7%, relative);
+}
+
+.fn-color-focus(@base-color) {
+    @-: lighten(@base-color, 25%, relative);
+}
 
 @trans-bg:      transparent;
 @semitrans-amt: 65%;
@@ -47,5 +61,15 @@
 
 @nice-gray:     #333;
 
-@ah-blue:       @sol-blue;
+@ah-blue:       #268bd2;
+@ah-red:        #dc322f;
+@ah-green:      lighten(#859900, 10%, relative);
+@ah-violet:     #6c71c4;
 @ah-blue-trans: fade(@ah-blue, @semitrans-amt);
+
+@fg-error:      darken(@ah-red, 25%, relative);
+@bg-error:      @ah-red;
+
+@fg-valid:      darken(@ah-green, 25%, relative);
+@bg-valid:      @ah-green;
+
