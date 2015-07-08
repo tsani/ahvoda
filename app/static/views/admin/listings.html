@@ -1,0 +1,47 @@
+<h1> Contracts </h1>
+
+<dl class='listings-list'>
+    <div class='item' ng-repeat='listing in vm.listings'>
+        <dt>
+            <div class='listing-header'>
+                <div>
+                    <h3> {{ listing.business.name }} </h3>
+                    <h3> {{ listing.position.name }} </h3>
+                    <p> {{ vm.formatAddress(listing.business.location) }} </p>
+                </div>
+                <div>
+                    <p class='listing-pay'> {{ listing.pay }}$/h </p>
+                    <p class='listing-status'> {{ listing.status.friendly_name }} </p>
+                </div>
+            </div>
+        </dt>
+        <dd>
+            <div> {{ listing.details }} </div>
+
+            <div class='contractor-info' ng-if='listing.employee'>
+                <h4> Contractor </h4>
+                <dl>
+                    <dt>Name</dt>
+                    <dd> {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }} </dd>
+
+                    <dt>Phone Number</dt>
+                    <dd> {{ listing.employee.human.contact_info.phone_number }} </dd>
+                </dl>
+            </div>
+
+            <div class='contractor-info' ng-if='!listing.employee'>
+                <form novalidate class='separate-form fullwidth' 
+                        ng-submit='listing.associateEmployee()'>
+                    <formly-form
+                            model='listing.employeeFormModel'
+                            fields='listing.employeeFormFields'
+                            form='listing.employeeFormData'>
+                        <button type='submit'>
+                            Dispatch
+                        </button>
+                    </formly-form>
+                </form>
+            </div>
+        </dd>
+    </div>
+</ul>

@@ -12,9 +12,10 @@ angular
                         url: '/listings',
                         templateUrl: '/static/views/listings.html',
                         resolve: {
+                            util: 'UtilityService',
                             bserv: 'BusinessService',
                             businesses: function(bserv) {
-                                return bserv.getBusinesses();
+                                return bserv.getManagerBusinesses();
                             },
                             listingGroups: [
                                 'businesses',
@@ -25,6 +26,7 @@ angular
                             ]
                         },
                         controller: [
+                            'util',
                             'listingGroups',
                             'businesses',
                             ListingsListCtrl
@@ -39,18 +41,15 @@ angular
                             businesses: [
                                 'bserv',
                                 function(bserv) {
-                                    return bserv.getBusinesses();
+                                    return bserv.getManagerBusinesses();
                                 }
                             ],
                             positionGroups: [
                                 'bserv',
                                 'businesses',
                                 function(bserv, businesses) {
-                                    console.log('getting position groups');
                                     return bserv.getPositionGroups(businesses)
                                         .then(function(positionGroups) {
-                                            console.log(
-                                                JSON.stringify(positionGroups));
                                             return positionGroups;
                                         });
                                 }
@@ -83,10 +82,8 @@ angular
                             businesses: [
                                 'bserv', 
                                 function(bserv) {
-                                    console.log('hi');
-                                    return bserv.getBusinesses()
+                                    return bserv.getManagerBusinesses()
                                         .then(function(data) {
-                                            console.log('hello');
                                             return data;
                                         });
                                 }
@@ -152,10 +149,8 @@ angular
                             businesses: [
                                 'bserv',
                                 function(bserv) {
-                                    console.log('hi');
-                                    return bserv.getBusinesses()
+                                    return bserv.getManagerBusinesses()
                                         .then(function(data) {
-                                            console.log('hello');
                                             return data;
                                         });
                                 }
@@ -187,7 +182,6 @@ angular
                                 'business',
                                 'bserv',
                                 function(business, bserv) {
-                                    console.log('get positions');
                                     return bserv.getPositions(business);
                                 }
                             ]
@@ -204,6 +198,7 @@ angular
             }
     ])
     .service('BusinessService', ['$q', '$http', BusinessService])
+    .service('UtilityService', UtilityService)
     .service('LocationSelectService', LocationSelectService)
     .service('ListingCreatorService', ListingCreatorService)
     .controller('NavCtrl', ['BusinessService', NavCtrl])

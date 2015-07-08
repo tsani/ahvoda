@@ -767,7 +767,9 @@ def approve_employee(business_id, listing_id, login):
                 404,
         )
 
-    if job not in employee_to_approve.applications:
+    # Admins can force people to apply, basically.
+    if not login.is_administrator() and \
+            job not in employee_to_approve.applications:
         return util.json_die(
                 "Can't approve an employee that didn't apply to the listing.",
                 400,
@@ -781,7 +783,7 @@ def approve_employee(business_id, listing_id, login):
     response = jsonify(
             job.to_dict()
     )
-    response.status_code = 202
+    response.status_code = 200
     return response
 
 @decorate_with(

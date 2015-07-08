@@ -352,7 +352,7 @@
                             },
                             "DELETE": {
                                 "accountTypes": [ "administrator" ],
-                                "resposnes": {
+                                "responses": {
                                     "204": {},
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -1131,7 +1131,7 @@
                                                     "additionalProperties": false
                                                 },
                                                 "responses": {
-                                                    "202": {
+                                                    "200": {
                                                         "$ref": "#/definitions/listing"
                                                     },
                                                     "400": {

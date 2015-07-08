@@ -9,6 +9,11 @@ cat \
         -o -name '*.js' -print \
         -o -name '*.less' -print \
     ) \
+    <(find tests \
+        -name '*.py' \
+    ) \
+    <(echo "create_test_data.py") \
+    <(echo "create_base_data.py") \
     |
     xargs wc -l |
     sort -n

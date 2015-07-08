@@ -29,7 +29,7 @@ body {
     width: 100%;
     background-color: @bg-main;
     color: @fg-main;
-    font-family: "Open Sans", helveltica, arial, sans;
+    font-family: "Open Sans", helvetica, arial, sans;
     z-index: 0;
     line-height: 1.33;
     font-size: 14px;
@@ -42,7 +42,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Open Sans", sans;
+    font-family: "Open Sans", helvetica, arial, sans;
     font-weight: bold;
 }
 
@@ -314,7 +314,7 @@ ul.flat {
     .left, .right {
         .display-flex();
         .flex-direction(row);
-        .flex-nowrap();
+        .flex-wrap(wrap);
         .align-items(center);
 
         > * {

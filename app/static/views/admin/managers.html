@@ -1,0 +1,79 @@
+<div>
+    <h1> Create a manager </h1>
+    <form novalidate class='separate-form fullwidth'
+            ng-submit='vm.createManager()'>
+        <formly-form
+                model='vm.newManagerFormModel'
+                fields='vm.newManagerFormFields'
+                form='vm.newManagerFormData'>
+            <div class='center-holder'>
+                <button type='submit'>
+                    Create manager
+                </button>
+            </div>
+        </formly-form>
+    </form>
+</div>
+        
+<div>
+    <h1> Managers </h1>
+    <ul class='flat manager-list'>
+        <li class='card' ng-repeat='manager in vm.managers'>
+            <h2> {{ manager.human.first_name }} {{ manager.human.last_name }} </h2>
+            <div>
+                <ul class='flat'>
+                    <li>
+                    <i class='fa fa-envelope'></i> 
+                    {{ manager.human.contact_info.email_address }}
+                    </li>
+                    <li>
+                    <i class='fa fa-phone'></i>
+                    {{ manager.human.contact_info.phone_number }}
+                    </li>
+                </ul>
+            </div>
+            <h3> Managed businesses </h3>
+            <div ng-if='manager.businesses.length === 0'>
+                <p> This manager has no associated businesses yet. </p>
+            </div>
+            <form novalidate class='separate-form fullwidth'
+                    ng-submit='manager.associateBusiness()'
+                    name='business-associate-{{manager.username}}'>
+                <formly-form
+                        model='manager.formModel'
+                        fields='manager.formFields'
+                        form='manager.formData'>
+                    <button type='submit'>
+                        Associate business
+                    </button>
+                </formly-form>
+            </form>
+            <div ng-if='manager.businesses'>
+                <ul class='flat'>
+                    <li ng-repeat='business in manager.businesses'>
+                        <div class='business-header'>
+                            <h4> {{ business.name }} </h4>
+                            <button ng-click='manager.dissociateBusiness(business.id)'>
+                                Dissociate business
+                            </button>
+                        </div>
+                        <ul class='flat'>
+                            <li>
+                            <i class='fa fa-building'></i>
+                            {{ vm.formatAddress(business.location) }}
+                            </li>
+                            <li>
+                            <i class='fa fa-envelope'></i>
+                            {{ business.contact_info.email_address }}
+                            </li>
+                            <li>
+                            <i class='fa fa-phone'></i>
+                            {{ business.contact_info.phone_number }}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
