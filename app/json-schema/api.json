@@ -815,7 +815,8 @@
             "description": "All information to use to contact someone.",
             "properties": {
                 "phone_number": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "phone-number"
                 },
                 "email_address": {
                     "type": "string",
@@ -931,7 +932,8 @@
                     "$ref": "#/definitions/city"
                 },
                 "postal_code": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "postal-code"
                 },
                 "location": {
                     "$ref": "#/definitions/location"
