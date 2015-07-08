@@ -5,6 +5,146 @@
     "root": {
         "type": "directory",
         "contents": {
+            "manager": {
+                "type": "directory",
+                "contents": {
+                    "collection": {
+                        "type": "endpoint",
+                        "url": "/api/managers",
+                        "description": "Collection of managers.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "administrator" ],
+                                "responses": {
+                                    "200": {
+                                        "type": "object",
+                                        "properties": {
+                                            "managers": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/manager"
+                                                }
+                                            }
+                                        },
+                                        "required": [ "managers" ],
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "POST": {
+                                "accountTypes": [ "administrator" ],
+                                "request": {
+                                    "type": "object",
+                                    "properties": {
+                                        "username": { "type": "string" },
+                                        "password": { "type": "string" },
+                                        "first_name": { "type": "string" },
+                                        "last_name": { "type": "string" },
+                                        "gender_name": { "type": "string" },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "email_address": {
+                                            "type": "string",
+                                            "format": "email"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "format": "phone"
+                                        }
+                                    },
+                                    "required": [
+                                        "username",
+                                        "password",
+                                        "first_name",
+                                        "last_name",
+                                        "gender_name",
+                                        "birth_date",
+                                        "email_address",
+                                        "phone_number"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/manager"
+                                    },
+                                    "400": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "instance": {
+                        "type": "endpoint",
+                        "url": "/api/managers/<manager_username>",
+                        "description": "An instance of a manager.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "manager" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/manager"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "DELETE": {
+                                "accountTypes": [ "administrator" ],
+                                "resposnes": {
+                                    "204": {},
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "business": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "description": "Manage the businesses managed by a manager.",
+                                "url": "/api/managers/<manager_name>/businesses",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "businesses": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/business"
+                                                        }
+                                                    },
+                                                    "required": "businesses",
+                                                    "additionalProperties": false
+                                                }
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "listings": {
                 "type": "endpoint",
                 "url": "/api/listings",
@@ -59,19 +199,29 @@
                     }
                 }
             },
-            "manager": {
+            "employee": {
                 "type": "directory",
                 "contents": {
-                    "instance": {
+                    "collection": {
                         "type": "endpoint",
-                        "description": "Detailed information about a manager.",
-                        "url": "/api/manager/<manager_name>",
+                        "url": "/api/employees",
+                        "description": "Collection of employees.",
                         "verbs": {
                             "GET": {
-                                "accountTypes": [ "manager", "employee" ],
+                                "accountTypes": [ "administrator" ],
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/manager"
+                                        "type": "object",
+                                        "properties": {
+                                            "employees": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/employee"
+                                                }
+                                            }
+                                        },
+                                        "required": [ "employees" ],
+                                        "additionalProperties": false
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -80,44 +230,6 @@
                             }
                         }
                     },
-                    "business": {
-                        "type": "directory",
-                        "contents": {
-                            "collection": {
-                                "type": "endpoint",
-                                "description": "Manage the businesses managed by a manager.",
-                                "url": "/api/manager/<manager_name>/businesses",
-                                "verbs": {
-                                    "GET": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "businesses": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "#/definitions/business"
-                                                        }
-                                                    },
-                                                    "required": "businesses",
-                                                    "additionalProperties": false
-                                                }
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "employee": {
-                "type": "directory",
-                "contents": {
                     "instance": {
                         "type": "endpoint",
                         "description": "Detailed information about an employee.",
@@ -130,6 +242,9 @@
                                         "$ref": "#/definitions/employee"
                                     },
                                     "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
                                         "$ref": "#/errors/message"
                                     }
                                 }
@@ -230,6 +345,24 @@
                         "url": "/api/businesses",
                         "description": "Collection of businesses.",
                         "verbs": {
+                            "GET": {
+                                "accountTypes": [ "administrator" ],
+                                "responses": {
+                                    "200": {
+                                        "type": "object",
+                                        "properties": {
+                                            "businesses": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/business"
+                                                }
+                                            },
+                                            "required": [ "businesses" ],
+                                            "additionalProperties": "false"
+                                        }
+                                    }
+                                }
+                            },
                             "POST": {
                                 "accountTypes": [ "administrator" ],
                                 "request": {

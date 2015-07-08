@@ -3,6 +3,7 @@ from flask import jsonify, request, Response
 import datetime, json, os
 
 from collections import defaultdict
+from binascii import hexlify
 import re
 
 EMAIL_REGEX = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
@@ -39,6 +40,21 @@ endpoints = load_api(
 )
 
 ### EMPLOYEE
+
+@decorate_with(
+        endpoints['employee']['collection'].handles_action('GET'),
+)
+def get_employees(login):
+    employees = models.accounts.Employee.query.all()
+    return jsonify(
+            dict(
+                employees=[
+                    e.to_dict()
+                    for e
+                    in employees
+                ],
+            ),
+    )
 
 @decorate_with(
         endpoints['employee']['instance'].handles_action('GET')
@@ -748,6 +764,21 @@ def post_employee_arrival(business_id, listing_id, login):
     )
 
 @decorate_with(
+        endpoints['business']['collection'].handles_action('GET')
+)
+def get_businesses(login):
+    businesses = models.business.Business.query.all()
+    return jsonify(
+            dict(
+                businesses=[
+                    b.to_dict()
+                    for b
+                    in businesses
+                ],
+            ),
+    )
+
+@decorate_with(
         endpoints['business']['instance'].handles_action('GET')
 )
 def get_business(business_id, login):
@@ -976,6 +1007,12 @@ def add_manager_to_business(business_id, login):
 
     manager = manager_login.get_account()
 
+    if manager in business.managers:
+        return util.json_die(
+                "This manager is already associated to that business.",
+                400,
+        )
+
     business.managers.append(manager)
 
     db.session.add(business)
@@ -1059,11 +1096,75 @@ def get_managed_businesses(manager_name, login):
     )
 
 @decorate_with(
+        endpoints['manager']['collection'].handles_action('GET'),
+)
+def get_managers(login):
+    managers = models.accounts.Manager.query.all()
+    return jsonify(
+            dict(
+                managers=[
+                    m.to_dict()
+                    for m
+                    in managers
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['manager']['collection'].handles_action('POST'),
+)
+def new_manager(login):
+    data = request.get_json()
+
+    try:
+        gender = models.data.Gender.query.filter_by(
+                name=data['gender_name'],
+        ).one()
+    except: # TODO use the proper exception
+        return util.json_die(
+                "No such gender.",
+                404,
+        )
+
+    contact_info = models.data.ContactInfo(
+            email_address=data['email_address'],
+            phone_number=data['phone_number'],
+    )
+
+    human = models.data.Human(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        birth_date=from_rfc3339(data['birth_date']),
+        gender=gender,
+        contact_info=contact_info,
+    )
+
+    hashed_password, salt = util.crypto.make_password(data['password'])
+
+    new_login = models.auth.Login(
+            username=data['username'],
+            password=hexlify(hashed_password).decode('utf-8'),
+            password_salt=hexlify(salt).decode('utf-8'),
+    )
+
+    manager = models.accounts.Manager(
+        human=human,
+        login=new_login,
+    )
+
+    db.session.add(manager)
+    db.session.commit()
+
+    return jsonify(
+            manager.to_dict(),
+    )
+
+@decorate_with(
         endpoints['manager']['instance'].handles_action('GET'),
 )
-def get_manager(manager_name, login):
+def get_manager(manager_username, login):
     manager_login = models.auth.Login.query.filter_by(
-            username=manager_name,
+            username=manager_username,
     ).first()
 
     if manager_login is None or not manager_login.is_manager():
@@ -1182,12 +1283,7 @@ def get_listings(login):
                 models.business.Job.create_date < before_date,
         )
 
-    try:
-        max_count = request.args['max']
-    except KeyError:
-        max_count = 100
-
-    results = models.business.Job.query.join(
+    results_query = models.business.Job.query.join(
             models.business.Job.status,
     ).filter(
             db.and_(
@@ -1202,7 +1298,17 @@ def get_listings(login):
     ).order_by(
             models.business.JobStatus.priority,
             models.business.Job.create_date.desc(),
-    ).limit(max_count).all()
+    )
+
+    try:
+        max_count = request.args['max']
+    except KeyError:
+        max_count = 0 if login.is_administrator() else 100
+
+    if max_count:
+        results_query = results_query.limit(max_count)
+
+    results = results_query.all()
 
     return jsonify(
             dict(
@@ -1235,7 +1341,10 @@ def subscribe_user():
     try:
         subscription_type = req_data['signup-type']
     except KeyError:
-        return json_die_str('Invalid submission.', 400)
+        return util.json_die(
+                'Invalid submission.',
+                400,
+        )
 
     has = lambda s: s in req_data
 
@@ -1316,7 +1425,10 @@ def subscribe_user():
             print(merge)
             return merge
     else:
-        json_die_str("Invalid subscription type.", 400)
+        util.json_die(
+                "Invalid subscription type.",
+                400,
+        )
 
     for prop in props_to_check:
         if has(prop):
