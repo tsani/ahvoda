@@ -1,0 +1,58 @@
+{% extends "layout-internal.html" %}
+
+{% block headjs %}
+{{ super() }}
+<script>
+window.username = "{{ username }}";
+window.accountType = "{{ account_type }}";
+</script>
+{% endblock %}
+
+{% block bodyjs %}
+{{ super() }}
+<script
+src="{{ url_for('bower.static', filename='angular/angular.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='angular-ui-router/release/angular-ui-router.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
+</script>
+<script
+src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
+</script>
+<script src="/static/js/dist/ahvoda-app.min.js"></script>
+{% endblock %}
+
+{% block header %}
+<nav role='navigation' id='top-bar' ng-controller='NavCtrl as nav'>
+    <ul class='left'>
+        {% raw %}
+        <li>
+        <h3 ng-if='nav.manager'>
+            {{ nav.manager.human.first_name }} {{ nav.manager.human.last_name }}
+        </h3>
+        <h3 ng-if='nav.employee'>
+            {{ nav.employee.human.first_name }} {{ nav.employee.human.last_name }}
+        </h3>
+        <h3 ng-if='nav.administrator'>
+            Administrator
+        </h3>
+        </li>
+        {% endraw %}
+    </ul>
+    <div>
+        <img class='logo' src='/static/img/ahvoda-black-logo.png' alt='ah!'/>
+    </div>
+    <ul class='right'>
+        {% block navitems %}
+        {% endblock %}
+    </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block contents %}
+<div ui-view></div>
+{% endblock %}

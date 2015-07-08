@@ -1,56 +1,11 @@
-{% extends "layout-internal.html" %}
+{% extends "webapp.html" %}
 
 {% block htmltag %}
 <html ng-app='BusinessApp'>
 {% endblock %}
 
-{% block headjs %}
-{{ super() }}
-<script>
-window.username = "{{ username }}";
-</script>
-{% endblock %}
-
-{% block bodyjs %}
-{{ super() }}
-<script
-src="{{ url_for('bower.static', filename='angular/angular.js') }}">
-</script>
-<script
-src="{{ url_for('bower.static', filename='angular-ui-router/release/angular-ui-router.js') }}">
-</script>
-<script
-src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
-</script>
-<script
-src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
-</script>
-<script src="/static/js/dist/business-app.min.js"></script>
-{% endblock %}
-
-{% block header %}
-{% raw %}
-<nav role='navigation' id='top-bar' ng-controller='NavCtrl as nav'>
-    <ul class='left'>
-        <li>
-        <h3>
-            {{ nav.manager.human.first_name }} {{ nav.manager.human.last_name }}
-        </h3>
-        </li>
-    </ul>
-    <div>
-        <img class='logo' src='/static/img/ahvoda-black-logo.png' alt='ah!'/>
-    </div>
-    <ul class='right'>
-        <li><a class='button block' ui-sref='listings'>Contracts</a></li>
-        <li><a class='button block' ui-sref='positions'>Positions</a></li>
-        <li><a class='button block' ui-sref='help'>Help</a></li>
-    </ul>
-    </div>
-</nav>
-{% endraw %}
-{% endblock %}
-
-{% block contents %}
-<div ui-view></div>
+{% block navitems %}
+<li><a class='button block' ui-sref='listings'>Contracts</a></li>
+<li><a class='button block' ui-sref='positions'>Positions</a></li>
+<li><a class='button block' ui-sref='help'>Help</a></li>
 {% endblock %}

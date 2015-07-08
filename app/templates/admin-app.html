@@ -1,0 +1,13 @@
+{% extends "webapp.html" %}
+
+{% block htmltag %}
+<html ng-app='AdminApp'>
+{% endblock %}
+
+{% block navitems %}
+<li><a class='button block' ui-sref='overview'>Overview</a></li>
+<li><a class='button block' ui-sref='listings'>Contracts</a></li>
+<li><a class='button block' ui-sref='employees'>Contractors</a></li>
+<li><a class='button block' ui-sref='managers'>Managers</a></li>
+<li><a class='button block' ui-sref='businesses'>Businesses</a></li>
+{% endblock %}

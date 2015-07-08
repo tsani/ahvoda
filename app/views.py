@@ -52,14 +52,24 @@ def login():
         ),
 )
 def platform_app(login):
-    render_with_username = util.supply(username=login.username)(
-            render_template,
-    )
+    render_with_info = util.supply(
+            username=login.username,
+            account_type=[
+                name
+                for name, thunk
+                in [
+                    ('administrator', login.is_administrator),
+                    ('manager', login.is_manager),
+                    ('employee', login.is_employee),
+                ]
+                if thunk()
+            ][0]
+    )(render_template)
 
     cases = [
             (
                 login.is_manager,
-                lambda: render_with_username('business-app.html'),
+                lambda: render_with_info('business-app.html'),
             ),
             (
                 login.is_employee,
@@ -67,7 +77,7 @@ def platform_app(login):
             ),
             (
                 login.is_administrator,
-                lambda: render_with_username('admin-app.html'),
+                lambda: render_with_info('admin-app.html'),
             ),
     ]
 
@@ -80,5 +90,3 @@ def platform_app(login):
             (login.username,),
     )
     abort(500)
-    return util.render_template_with_data('landing-page.html')
-

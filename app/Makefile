@@ -22,7 +22,7 @@ CSSC=uglifycss
 # The JavaScript source files
 JSSRCFILES=$(shell find $(JSSRC) -name '*.js' -type f)
 
-BUSINESSAPP=business-app
+BUSINESSAPP=ahvoda-app
 
 # All the LESS source code.
 LESSFILES=$(shell find $(LESSSRC) -name '*.less' -type f)
