@@ -125,27 +125,7 @@ angular
     .service('BusinessService', ['$q', '$http', BusinessService])
     .service('UtilityService', UtilityService)
     .controller('NavCtrl', ['BusinessService', NavCtrl])
+    .directive('ahMulticheckbox', ahMulticheckbox)
     .run(['formlyConfig', function(formlyConfig) {
-        console.log('starting admin app');
-        // Configure all form types.
-        [
-            {
-                name: 'input',
-                templateUrl: '/static/widgets/form/basic-input.html'
-            },
-            {
-                name: 'textarea',
-                templateUrl: '/static/widgets/form/textarea-input.html'
-            },
-            {
-                name: 'select',
-                templateUrl: '/static/widgets/form/select.html'
-            },
-            {
-                name: 'checkbox',
-                templateUrl: '/static/widgets/form/checkbox.html'
-            }
-        ].forEach(function(e) {
-            formlyConfig.setType(e);
-        });
+        configureFormly(formlyConfig);
     }]);
