@@ -49,18 +49,36 @@ form {
     .card-border(@bg-card);
 }
 
-ul.manager-list {
+.wrapped-row-header() {
+    .display-flex();
+    .flex-direction(row);
+    .flex-wrap(wrap);
+    .justify-content(space-between);
+    .align-items(center);
+}
+
+.human-list() {
     > li {
         padding: 2em;
     }
 
-    div.business-header {
-        .display-flex();
-        .flex-direction(row);
-        .flex-wrap(wrap);
-        .justify-content(space-between);
-        .align-items(center);
+    div.detail {
+        margin-top: 4em;
     }
+
+    div.account-header {
+        h2, h3, p {
+            margin: 0;
+        }
+    }
+
+    div.detail-header {
+        .wrapped-row-header();
+    }
+}
+
+ul.employee-list, ul.manager-list, ul.business-list {
+    .human-list();
 }
 
 dl.business-list {

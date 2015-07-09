@@ -14,21 +14,26 @@
         </formly-form>
     </form>
 </div>
-        
+
 <div>
     <h1> Managers </h1>
     <ul class='flat manager-list'>
         <li class='card' ng-repeat='manager in vm.managers'>
-            <h2> {{ manager.human.first_name }} {{ manager.human.last_name }} </h2>
+            <div class='account-header'>
+                <h2>
+                    {{ manager.human.first_name }} {{ manager.human.last_name }}
+                </h2>
+                <p>
+                    <em>{{ manager.username }}</em>
+                </p>
+            </div>
             <div>
                 <ul class='flat'>
                     <li>
-                    <i class='fa fa-envelope'></i> 
-                    {{ manager.human.contact_info.email_address }}
+                    <i class='fa fa-envelope'></i> {{ manager.human.contact_info.email_address }}
                     </li>
                     <li>
-                    <i class='fa fa-phone'></i>
-                    {{ manager.human.contact_info.phone_number }}
+                    <i class='fa fa-phone'></i> {{ manager.human.contact_info.phone_number }}
                     </li>
                 </ul>
             </div>
@@ -51,7 +56,7 @@
             <div ng-if='manager.businesses'>
                 <ul class='flat'>
                     <li ng-repeat='business in manager.businesses'>
-                        <div class='business-header'>
+                        <div class='detail-header'>
                             <h4> {{ business.name }} </h4>
                             <button ng-click='manager.dissociateBusiness(business.id)'>
                                 Dissociate business
@@ -59,16 +64,13 @@
                         </div>
                         <ul class='flat'>
                             <li>
-                            <i class='fa fa-building'></i>
-                            {{ vm.formatAddress(business.location) }}
+                            <i class='fa fa-building'></i> {{ vm.formatAddress(business.location) }}
                             </li>
                             <li>
-                            <i class='fa fa-envelope'></i>
-                            {{ business.contact_info.email_address }}
+                            <i class='fa fa-envelope'></i> {{ business.contact_info.email_address }}
                             </li>
                             <li>
-                            <i class='fa fa-phone'></i>
-                            {{ business.contact_info.phone_number }}
+                            <i class='fa fa-phone'></i> {{ business.contact_info.phone_number }}
                             </li>
                         </ul>
                     </li>

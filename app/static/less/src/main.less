@@ -117,6 +117,8 @@ ul {
     background-color: @bg;
     .card-border(@bg);
     border-bottom-width: 2px;
+    transition:
+        background-color 0.15s ease;
 
     &:hover {
         .fn-color-hover(@bg); background-color: @-;
@@ -127,6 +129,10 @@ ul {
         background-color: @-;
         border-color: @-;
     }
+}
+
+.button {
+    .button();
 }
 
 form {

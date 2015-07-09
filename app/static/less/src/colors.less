@@ -1,9 +1,9 @@
 // The main foreground and background colors.
 @fg-main:       #111;
-@bg-main:       #fbfbfb;
+@bg-main:       #f0f0f0;
 
 // The definition of a "card" style.
-@bg-card:       #f0f0f0; // Card background
+@bg-card:       darken(@bg-main, 7%, relative); // Card background
 
 .card-border-color(@base) {
     border-color:
@@ -33,7 +33,7 @@
 }
 
 // The background color for controls such as buttons and input fields.
-@bg-control:      @bg-main;
+@bg-control:      lighten(@bg-main, 10%, relative);
 
 // The background color for input controls such as text, select, and textarea
 // fields.
