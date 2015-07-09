@@ -80,6 +80,28 @@ class JobLanguageSet(db.Model):
             nullable=False,
     )
 
+class PositionLanguageSet(db.Model):
+    __tablename__ = 'positionlanguageset'
+
+    __table_args__ = (
+            db.PrimaryKeyConstraint(
+                'language_id',
+                'position_id',
+            ),
+    )
+
+    language_id = db.Column(
+            db.Integer,
+            db.ForeignKey('language.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
+    position_id = db.Column(
+            db.Integer,
+            db.ForeignKey('position.id', ondelete='CASCADE'),
+            nullable=False,
+    )
+
 class ManagerSet(db.Model):
     __tablename__ = 'managerset'
 
@@ -96,4 +118,3 @@ class ManagerSet(db.Model):
             db.Integer,
             db.ForeignKey('business.id', ondelete='CASCADE'),
     )
-

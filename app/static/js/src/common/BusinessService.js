@@ -3,8 +3,61 @@ function BusinessService($q, $http) {
 
     srv.username = window.username;
 
-    srv.getBusinesses = function() {
-        return $http.get('/api/manager/' + this.username + '/businesses')
+    console.log("Account type " + srv.accountType);
+
+    srv.getCities = function() {
+        return $http.get('/api/data/cities')
+            .then(function(response) {
+                return response.data.cities;
+            });
+    };
+
+    srv.getStates = function() {
+        return $http.get('/api/data/states')
+            .then(function(response) {
+                return response.data.states;
+            });
+    };
+
+    srv.getCountries = function() {
+        return $http.get('/api/data/countries')
+            .then(function(response) {
+                return response.data.countries;
+            });
+    };
+
+    srv.getLanguages = function() {
+        return $http.get('/api/data/languages')
+            .then(function(response) {
+                return response.data.languages;
+            });
+    };
+
+    srv.getGenders = function() {
+        return $http.get('/api/data/genders')
+            .then(function(response) {
+                return response.data.genders;
+            }, failureLogger);
+    };
+
+    srv.addManagerToBusiness = function(managerUsername, businessId) {
+        return $http.post('/api/businesses/' + businessId + '/managers', {
+            name: managerUsername
+        }).then(function(response) {
+            return response.data;
+        });
+    };
+
+    srv.removeManagerFromBusiness = function(managerUsername, businessId) {
+        return $http.delete('/api/businesses/' + businessId 
+                + '/managers/' + managerUsername);
+    };
+
+    srv.getManagerBusinesses = function(username) {
+        if(typeof(username) === 'undefined')
+            username = this.username;
+
+        return $http.get('/api/managers/' + username + '/businesses')
             .then(function(response) {
                 return response.data.businesses;
             });
@@ -82,12 +135,13 @@ function BusinessService($q, $http) {
             });
     }
 
-    srv.createPosition = function(business, name) {
-        return $http.post('/api/businesses/' + business.id + '/positions', {
-            name: name
-        }).then(function(response) {
-            return response.data;
-        });
+    srv.createPosition = function(business, position) {
+        return $http.post(
+                '/api/businesses/' + business.id + '/positions',
+                position)
+            .then(function(response) {
+                return response.data;
+            });
     }
 
     srv.patchPosition = function(business, positionId, name) {

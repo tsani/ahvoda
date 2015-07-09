@@ -5,6 +5,257 @@
     "root": {
         "type": "directory",
         "contents": {
+            "data": {
+                "type": "directory",
+                "contents": {
+                    "gender": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/data/genders",
+                                "description": "Collection of genders.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "genders": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/gender"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "genders" ],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/data/genders/<int:gender_id>",
+                                "description": "Instance of a gender.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/gender"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "country": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/data/countries",
+                                "description": "Collection of countries.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "countries": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/country"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "countries" ],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/data/countries/<int:country_id>",
+                                "description": "An instance of a country.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/country"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "state": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/data/states",
+                                "description": "Collection of states.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "query_string": {
+                                            "type": "object",
+                                            "properties": {
+                                                "country_id": {
+                                                    "$ref": "#/definitions/id"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "states": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/state"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "states" ],
+                                                "additionalProperties": false
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/data/states/<int:state_id>",
+                                "description": "Instance of a state.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/state"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "city": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/data/cities",
+                                "description": "Collection of cities.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "cities": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/city"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "cities" ],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/data/cities/<int:city_id>",
+                                "description": "Instance of a city.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/city"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "language": {
+                        "type": "directory",
+                        "contents": {
+                            "collection": {
+                                "type": "endpoint",
+                                "url": "/api/data/languages",
+                                "description": "Collection of languages.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "languages": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/definitions/language"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [ "languages" ],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "instance": {
+                                "type": "endpoint",
+                                "url": "/api/data/languages/<iso_name>",
+                                "description": "Instance of a language.",
+                                "verbs": {
+                                    "GET": {
+                                        "accountTypes": [ "employee", "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "#/definitions/language"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "manager": {
                 "type": "directory",
                 "contents": {
