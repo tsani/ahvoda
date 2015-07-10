@@ -94,6 +94,7 @@ class Employee(db.Model):
     is_verified = db.Column(
             db.Boolean,
             nullable=False,
+            server_default='f',
     )
 
     human_id = db.Column(

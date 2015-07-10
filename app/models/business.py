@@ -288,6 +288,20 @@ class Position(db.Model):
             nullable=False,
     )
 
+    default_pay = db.Column(
+            db.Float,
+    )
+
+    default_details = db.Column(
+            db.String,
+    )
+
+    default_languages = db.relationship(
+            'Language',
+            backref='positions',
+            secondary='positionlanguageset',
+    )
+
     create_date = db.Column(
             db.DateTime,
             nullable=False,
@@ -327,6 +341,13 @@ class Position(db.Model):
                 id=self.id,
                 name=self.name,
                 create_date=to_rfc3339(self.create_date),
+                default_languages=[
+                    lang.to_dict()
+                    for lang
+                    in self.default_languages
+                ],
+                default_pay=self.default_pay,
+                default_details=self.default_details,
         )
 
 class Job(db.Model):
@@ -351,6 +372,7 @@ class Job(db.Model):
             db.DateTime,
             nullable=False,
             server_default=db.func.now(),
+            index=True,
     )
 
     arrival_date = db.Column(
@@ -372,18 +394,21 @@ class Job(db.Model):
             db.Integer,
             db.ForeignKey('position.id'),
             nullable=False,
+            index=True,
     )
 
     employee_id = db.Column(
             db.Integer,
             db.ForeignKey('employee.id', ondelete='SET NULL'),
             nullable=True,
+            index=True,
     )
 
     manager_id = db.Column(
             db.Integer,
             db.ForeignKey('manager.id', ondelete='SET NULL'),
             nullable=True,
+            index=True,
     )
 
     rating_id = db.Column(
@@ -396,12 +421,14 @@ class Job(db.Model):
             db.Integer,
             db.ForeignKey('business.id'),
             nullable=False,
+            index=True,
     )
 
     status_id = db.Column(
             db.Integer,
             db.ForeignKey('jobstatus.id'),
             nullable=False,
+            index=True,
     )
 
     position = db.relationship(

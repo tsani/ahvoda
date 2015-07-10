@@ -580,6 +580,9 @@ def new_position(business_id, login):
 
     position = models.business.Position(
             name=data['name'],
+            default_pay=data['default_pay'],
+            default_details=data['default_details'],
+            default_languages=default_languages,
             business_id=business_id,
             manager_id=account.id if login.is_manager() else None
     )

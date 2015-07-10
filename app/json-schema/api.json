@@ -579,9 +579,29 @@
                                             "properties": {
                                                 "name": {
                                                     "type": "string"
+                                                },
+                                                "default_pay": {
+                                                    "type": "number",
+                                                    "minimum": 0,
+                                                    "exclusiveMinimum": true
+                                                },
+                                                "default_details": {
+                                                    "type": "string"
+                                                },
+                                                "default_languages": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/definitions/language"
+                                                    },
+                                                    "minItems": 1
                                                 }
                                             },
-                                            "required": [ "name" ],
+                                            "required": [
+                                                "name",
+                                                "default_pay",
+                                                "default_details",
+                                                "default_languages"
+                                            ],
                                             "additionalProperties": false
                                         },
                                         "responses": {
@@ -1262,7 +1282,22 @@
             "properties": {
                 "id": { "$ref": "#/definitions/id" },
                 "name": { "type": "string" },
-                "create_date": { "$ref": "#/definitions/date_time" }
+                "create_date": { "$ref": "#/definitions/date_time" },
+                "default_pay": {
+                    "anyOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/salary" }
+                    ]
+                },
+                "default_details": {
+                    "type": [ "null", "string" ]
+                },
+                "default_languages": {
+                    "type": [ "null", "array" ],
+                    "items": {
+                        "$ref": "#/definitions/language"
+                    }
+                }
             },
             "required": [ "id", "name", "create_date" ],
             "additionalProperties": false
