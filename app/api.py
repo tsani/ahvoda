@@ -2,6 +2,7 @@ from flask import jsonify, request, Response
 
 import datetime, json, os
 
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from collections import defaultdict
 from binascii import hexlify
 import re
@@ -54,6 +55,103 @@ def get_employees(login):
                     in employees
                 ],
             ),
+    )
+
+@decorate_with(
+        endpoints['employee']['collection'].handles_action('POST'),
+)
+def new_employee(login):
+    data = request.get_json()
+
+    gender = models.data.Gender.query.get(
+            data['gender_id'],
+    )
+
+    if gender is None:
+        return util.json_die(
+                "No such gender.",
+                404,
+        )
+
+    contact_info = models.data.ContactInfo(
+            email_address=data['email_address'],
+            phone_number=data['phone_number'],
+    )
+
+    human = models.data.Human(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        birth_date=from_rfc3339(data['birth_date']),
+        gender=gender,
+        contact_info=contact_info,
+    )
+
+    hashed_password, salt = util.crypto.make_password(data['password'])
+
+    new_login = models.auth.Login(
+            username=data['username'],
+            password=hexlify(hashed_password).decode('utf-8'),
+            password_salt=hexlify(salt).decode('utf-8'),
+    )
+
+    city = models.location.City.query.get(
+            data['city_id'],
+    )
+
+    if city is None:
+        return util.json_die(
+                "No such city.",
+                404,
+        )
+
+    full_address = util.format_location(
+            dict(
+                address=data['address'],
+                city=city.to_dict(),
+            ),
+    )
+
+    # TODO move geocoding to a separate worker !
+    geocoding = Geocoding.lookup(full_address)
+    best_match = geocoding.results[0]
+
+    location = models.location.Location(
+            address=data['address'],
+            postal_code=data['postal_code'],
+            city=city,
+            latitude=best_match.position.latitude,
+            longitude=best_match.position.longitude,
+    )
+
+    languages = []
+    for language in data['languages']:
+        lang = models.data.Language.query.filter_by(
+            iso_name=language['iso_name'],
+        ).first()
+
+        if lang is None:
+            return util.json_die(
+                    "No such language '%s'." % (
+                        language['iso_name'],
+                    ),
+                    404,
+            )
+        else:
+            languages.append(lang)
+
+    employee = models.accounts.Employee(
+            login=new_login,
+            human=human,
+            home_location=location,
+            languages=languages,
+            is_verified=False
+    )
+
+    db.session.add(employee)
+    db.session.commit()
+
+    return jsonify(
+            employee.to_dict(),
     )
 
 @decorate_with(
@@ -459,6 +557,27 @@ def new_position(business_id, login):
 
     data = request.get_json()
 
+    default_languages = []
+    for l in data['default_languages']:
+        try:
+            lang = models.data.Language.query.filter_by(
+                    iso_name=l['iso_name'],
+            ).one()
+        except NoResultFound:
+            return util.json_die(
+                    "No such language '%s'." % (
+                        l['iso_name'],
+                    ),
+                    404,
+            )
+        except MultipleResultsFound:
+            return util.json_die(
+                    'Unexpected server error. (Multiple languages found.)',
+                    500,
+            )
+        else:
+            default_languages.append(lang)
+
     position = models.business.Position(
             name=data['name'],
             business_id=business_id,
@@ -622,9 +741,22 @@ def approve_employee(business_id, listing_id, login):
 
     data = request.get_json()
 
-    employee_to_approve = models.accounts.Employee.query.get(
-            data['name'],
-    )
+    try:
+        employee_login = models.auth.Login.query.filter_by(
+                username=data['name'],
+        ).one()
+    except NoResultFound:
+        return util.json_die(
+                "No such employee.",
+                404,
+        )
+    except MultipleResultsFound:
+        return util.json_die(
+                "Unexpected server error. (Multiple accounts found.)",
+                500,
+        )
+
+    employee_to_approve = employee_login.get_account()
 
     if employee_to_approve is None:
         return util.json_die(
@@ -1116,11 +1248,11 @@ def get_managers(login):
 def new_manager(login):
     data = request.get_json()
 
-    try:
-        gender = models.data.Gender.query.filter_by(
-                name=data['gender_name'],
-        ).one()
-    except: # TODO use the proper exception
+    gender = models.data.Gender.query.get(
+            data['gender_id'],
+    )
+
+    if gender is None:
         return util.json_die(
                 "No such gender.",
                 404,
@@ -1318,6 +1450,161 @@ def get_listings(login):
                     in results
                 ],
             ),
+    )
+
+@decorate_with(
+        endpoints['data']['language']['collection'].handles_action('GET'),
+)
+def get_languages(login):
+    languages = models.data.Language.query.all()
+    return jsonify(
+            dict(
+                languages=[
+                    lang.to_dict()
+                    for lang
+                    in languages
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['data']['language']['instance'].handles_action('GET'),
+)
+def get_language(iso_name, login):
+    try:
+        language = models.data.Language.query.filter_by(
+                iso_name=iso_name,
+        ).one()
+    except NoResultFound:
+        return util.json_die(
+                'No such language.',
+                404,
+        )
+    except MultipleResultsFound:
+        return util.json_die(
+                'Unexpected server error. (Multiple languages found.)',
+                500,
+        )
+
+    return jsonify(
+            language.to_dict(),
+    )
+
+@decorate_with(
+        endpoints['data']['gender']['collection'].handles_action('GET'),
+)
+def get_genders(login):
+    genders = models.data.Gender.query.all()
+    return jsonify(
+            dict(
+                genders=[
+                    g.to_dict()
+                    for g
+                    in genders
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['data']['gender']['instance'].handles_action('GET'),
+)
+def get_gender(gender_id, name):
+    gender = models.data.Gender.query.get(gender_id)
+    if gender is None:
+        return util.json_die(
+                'No such gender.',
+                404,
+        )
+    return jsonify(
+            gender.to_dict(),
+    )
+
+@decorate_with(
+        endpoints['data']['country']['collection'].handles_action('GET'),
+)
+def get_countries(login):
+    countries = models.location.Country.query.all()
+    return jsonify(
+            dict(
+                countries=[
+                    c.to_dict()
+                    for c
+                    in countries
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['data']['country']['instance'].handles_action('GET'),
+)
+def get_country(country_id, login):
+    country = models.location.Country.query.get(country_id)
+    if country is None:
+        return util.json_die(
+                'No such country.',
+                404,
+        )
+    return jsonify(
+            country.to_dict(),
+    )
+
+@decorate_with(
+        endpoints['data']['state']['collection'].handles_action('GET'),
+)
+def get_states(login):
+    states = models.location.State.query.all()
+    return jsonify(
+            dict(
+                states=[
+                    s.to_dict()
+                    for s
+                    in states
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['data']['state']['instance'].handles_action('GET'),
+)
+def get_state(state_id, login):
+    state = models.location.State.query.get(state_id)
+    if state is None:
+        return util.json_die(
+                'No such state.',
+                404,
+        )
+    return jsonify(
+            state.to_dict(),
+    )
+
+@decorate_with(
+        endpoints['data']['city']['collection'].handles_action('GET'),
+)
+def get_cities(login):
+    cities = models.location.City.query.all()
+    return jsonify(
+            dict(
+                cities=[
+                    c.to_dict()
+                    for c
+                    in cities
+                ],
+            ),
+
+    )
+
+@decorate_with(
+        endpoints['data']['city']['instance'].handles_action('GET'),
+)
+def get_city(city_id, login):
+    city = models.location.City.query.get(city_id)
+    if city is None:
+        return util.json_die(
+                'No such city.',
+                404,
+        )
+    return jsonify(
+            city.to_dict(),
     )
 
 register_all(endpoints, app, strict=False)

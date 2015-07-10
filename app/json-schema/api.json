@@ -40,7 +40,7 @@
                                         "password": { "type": "string" },
                                         "first_name": { "type": "string" },
                                         "last_name": { "type": "string" },
-                                        "gender_name": { "type": "string" },
+                                        "gender_id": { "type": "string" },
                                         "birth_date": {
                                             "type": "string",
                                             "format": "date"
@@ -59,7 +59,7 @@
                                         "password",
                                         "first_name",
                                         "last_name",
-                                        "gender_name",
+                                        "gender_id",
                                         "birth_date",
                                         "email_address",
                                         "phone_number"
@@ -222,6 +222,75 @@
                                         },
                                         "required": [ "employees" ],
                                         "additionalProperties": false
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "POST": {
+                                "accountTypes": [ "administrator" ],
+                                "request": {
+                                    "type": "object",
+                                    "properties": {
+                                        "username": { "type": "string" },
+                                        "password": { "type": "string" },
+                                        "first_name": { "type": "string" },
+                                        "last_name": { "type": "string" },
+                                        "gender_id": {
+                                            "$ref": "#/definitions/id"
+                                        },
+                                        "birth_date": {
+                                            "type": "string",
+                                            "format": "date"
+                                        },
+                                        "email_address": {
+                                            "type": "string",
+                                            "format": "email"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "format": "phone"
+                                        },
+                                        "postal_code": {
+                                            "type": "string",
+                                            "format": "postal-code"
+                                        },
+                                        "address": {
+                                            "type": "string"
+                                        },
+                                        "city_id": {
+                                            "$ref": "#/definitions/id"
+                                        },
+                                        "languages": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/language"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "username",
+                                        "password",
+                                        "first_name",
+                                        "last_name",
+                                        "gender_id",
+                                        "birth_date",
+                                        "email_address",
+                                        "postal_code",
+                                        "phone_number",
+                                        "address",
+                                        "city_id",
+                                        "languages"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/employee"
+                                    },
+                                    "400": {
+                                        "$ref": "#/errors/message"
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
