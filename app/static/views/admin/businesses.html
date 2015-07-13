@@ -1,0 +1,56 @@
+<div>
+    <h1> Create a business </h1>
+    <form novalidate class='separate-form fullwidth'
+            ng-submit='vm.createBusiness()'>
+        <formly-form
+                model='vm.createForm.model'
+                fields='vm.createForm.fields'
+                form='vm.createForm.data'>
+            <div class='center-holder' ng-if='!vm.createForm.data.$submitted'>
+                <button type='submit'>
+                    Create
+                </button>
+            </div>
+        </formly-form>
+    </form>
+</div>
+
+<div>
+    <h1> Businesses </h1>
+    <ul class='flat business-list'>
+        <li class='card' ng-repeat='business in vm.businesses' 
+                id='business-li-{{ business.id }}'>
+            <div class='account-header'>
+                <h2>
+                    {{ business.name }}
+                </h2>
+                <ul class='flat'>
+                    <li>
+                        <i class='fa fa-envelope'></i>
+                        {{ business.contact_info.email_address }}
+                    </li>
+                    <li>
+                        <i class='fa fa-phone'></i>
+                        {{ business.contact_info.phone_number }}
+                    </li>
+                    <li>
+                        <i class='fa fa-building'></i> 
+                        {{ vm.formatAddress(business.location) }}
+                    </li>
+                </ul>
+            </div>
+            <div class='detail' ng-if='business.managers'>
+                <p ng-if='business.managers.length === 0'>
+                    This business has no managers yet.
+                </p>
+                <div ng-if='business.managers.length > 0'>
+                    <h2> Managers </h2>
+                    <ul class='flat manager-list'>
+                        <li ng-repeat='manager in business.managers'>
+                        <div ah-manager='manager'></div>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

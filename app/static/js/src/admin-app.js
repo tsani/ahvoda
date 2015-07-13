@@ -140,6 +140,52 @@ angular
                         ],
                         controllerAs: 'vm'
                     })
+                    .state('businesses', {
+                        url: '/businesses',
+                        templateUrl: '/static/views/admin/businesses.html',
+                        resolve: {
+                            locationData: [
+                                '$q',
+                                'BusinessService',
+                                function($q, bs) {
+                                    return $q.all([
+                                        bs.getCities(),
+                                        bs.getStates(),
+                                        bs.getCountries()
+                                    ]).then(function(data) {
+                                        return {
+                                            cities: data[0],
+                                            states: data[1],
+                                            countries: data[2]
+                                        };
+                                    });
+                                }
+                            ],
+                            businesses: [
+                                'BusinessService',
+                                function(bserv) {
+                                    return bserv.getBusinesses();
+                                }
+                            ],
+                            languages: [
+                                'BusinessService',
+                                function(bs) {
+                                    return bs.getLanguages();
+                                }
+                            ]
+                        },
+                        controller: [
+                            '$timeout',
+                            '$location',
+                            'BusinessService',
+                            'UtilityService',
+                            'businesses',
+                            'locationData',
+                            'languages',
+                            AdminBusinessListCtrl
+                        ],
+                        controllerAs: 'vm'
+                    })
                     .state('listings', {
                         url: '/listings',
                         templateUrl: '/static/views/admin/listings.html',
