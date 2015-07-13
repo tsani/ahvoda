@@ -291,7 +291,9 @@
                                         "password": { "type": "string" },
                                         "first_name": { "type": "string" },
                                         "last_name": { "type": "string" },
-                                        "gender_id": { "type": "string" },
+                                        "gender_id": {
+                                            "$ref": "#/definitions/id"
+                                        },
                                         "birth_date": {
                                             "type": "string",
                                             "format": "date"
