@@ -181,7 +181,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
             password: m.password,
             first_name: m.firstName,
             last_name: m.lastName,
-            gender_name: m.gender,
+            gender_id: parseInt(m.gender),
             birth_date: m.birthDate + 'T00:00:00Z',
             email_address: m.emailAddress,
             phone_number: m.phoneNumber
