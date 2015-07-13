@@ -15,9 +15,58 @@
         <dl class='listings-list' ng-if='vm.positionGroups[business.name].length > 0'>
             <div class='item' ng-repeat='position in vm.positionGroups[business.name]'>
                 <dt>
-                    <h3> {{ position.name }} </h3>
+                    <div class='listing-header'>
+                        <div>
+                            <h3> {{ position.name }} </h3>
+                            <p>
+                            Created
+                            on {{ vm.util.formatDate(position.create_date) }}
+                            at {{ vm.util.formatTime(position.create_date) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p ng-if='position.default_pay'>
+                            Default pay:
+                            <span class='listing-pay'>
+                                {{ position.default_pay }}$/h
+                            </span>
+                            </p>
+                            <p ng-if='!position.default_pay'>
+                            No default pay.
+                            </p>
+                            <p ng-if='position.default_duration'>
+                            Default duration:
+                            <span>
+                                {{ position.default_duration }}h
+                            </span>
+                            </p>
+                            <p ng-if='!position.default_duration'>
+                            No default duration.
+                            </p>
+                            <p ng-if='position.default_languages.length > 0'>
+                                Default languages:
+                                <ul>
+                                    <li ng-repeat='lang in position.default_languages'>
+                                    {{ lang.name }}
+                                    </li>
+                                </ul>
+                            </p>
+                            <p ng-if='position.default_languages.length === 0'>
+                                No default languages.
+                            </p>
+                        </div>
+                    </div>
                 </dt>
                 <dd>
+                    <div ng-if='position.default_details'>
+                        <h6>Default description:</h6>
+                        <p>
+                        {{ position.default_details }}
+                        </p>
+                    </div>
+                    <p ng-if='!position.default_details'>
+                    <strong>No default description.</strong>
+                    </p>
                 </dd>
             </div>
         </dl>

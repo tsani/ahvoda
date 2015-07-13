@@ -56,6 +56,7 @@ angular
                             ]
                         },
                         controller: [
+                            'UtilityService',
                             'positionGroups',
                             'businesses',
                             PositionsListCtrl
