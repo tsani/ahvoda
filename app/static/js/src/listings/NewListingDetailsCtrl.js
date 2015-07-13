@@ -45,9 +45,12 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
             key: 'position',
             type: 'select',
             templateOptions: {
-                choices: positions,
-                getValue: function(p) { return p.id; },
-                getContent: function(p) { return p.name; },
+                choices: positions.map(function(p) {
+                    return {
+                        value: p.id,
+                        name: p.name
+                    };
+                }),
                 label: 'Position',
                 required: true,
                 onChange: vm.updateFieldDefaults

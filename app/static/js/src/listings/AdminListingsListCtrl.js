@@ -11,11 +11,12 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
                 key: 'employee',
                 type: 'select',
                 templateOptions: {
-                    choices: employees,
-                    getValue: function(e) { return e.username; },
-                    getContent: function(e) {
-                        return e.human.first_name + ' ' + e.human.last_name;
-                    },
+                    choices: employees.map(function(e) {
+                        return {
+                            name: e.human.first_name + ' ' + e.human.last_name,
+                            value: e.username
+                        };
+                    }),
                     required: true
                 }
             }

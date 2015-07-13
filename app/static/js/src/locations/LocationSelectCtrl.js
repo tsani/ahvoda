@@ -10,13 +10,12 @@ function makeLocationSelectCtrl(successState) {
                 type: 'select',
                 templateOptions: {
                     label: 'Location',
-                    choices: businesses,
-                    getValue: function(b) {
-                        return b.id;
-                    },
-                    getContent: function(b) {
-                        return b.name;
-                    },
+                    choices: businesses.map(function(b) {
+                        return {
+                            name: b.name,
+                            value: b.id
+                        };
+                    }),
                     label: 'Location',
                     required: true 
                 }

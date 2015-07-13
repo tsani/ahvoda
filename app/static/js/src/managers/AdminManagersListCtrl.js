@@ -66,13 +66,12 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
             key: 'gender',
             type: 'select',
             templateOptions: {
-                choices: [
-                    'male',
-                    'female',
-                    'other'
-                ],
-                getValue: function(x) { return x; },
-                getContent: function(x) { return x; },
+                choices: genders.map(function(g) {
+                    return {
+                        name: g.name,
+                        value: g.id
+                    }
+                }),
                 label: 'Gender',
                 required: true
             }
@@ -92,20 +91,22 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
         if(typeof(manager.businesses) === 'undefined')
             manager.businesses = [];
 
+        var bs = businesses.map(function(b) {
+            return {
+                name: b.name + ' (' +
+                          vm.formatAddress(b.location) +
+                          ')',
+                value: b.id
+            };
+        });
+
         manager.formModel = {};
         manager.formFields = [
             {
                 key: 'business',
                 type: 'select',
                 templateOptions: {
-                    choices: businesses,
-                    getValue: function(b) { return b.id; },
-                    getContent: function(b) {
-                        return b.name + 
-                                ' (' + 
-                                vm.formatAddress(b.location) + 
-                                ')';
-                    },
+                    choices: bs,
                     required: true
                 }
             }
