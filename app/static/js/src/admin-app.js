@@ -8,27 +8,26 @@ angular
                         url: '/overview',
                         templateUrl: '/static/views/admin/overview.html',
                         resolve: {
-                            bserv: 'BusinessService',
                             businesses: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getBusinesses();
                                 }
                             ],
                             managers: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getManagers();
                                 }
                             ],
                             listings: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getListings();
                                 }
                             ],
                             employees: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getEmployees();
                                 }
@@ -47,10 +46,8 @@ angular
                         url: '/managers',
                         templateUrl: '/static/views/admin/managers.html',
                         resolve: {
-                            util: 'UtilityService',
-                            bserv: 'BusinessService',
                             businesses: [
-                                'bserv', 
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getBusinesses();
                                 }
@@ -66,15 +63,15 @@ angular
                                 }
                             ],
                             managers: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getManagers();
                                 }
                             ]
                         },
                         controller: [
-                            'util',
-                            'bserv',
+                            'UtilityService',
+                            'BusinessService',
                             'genders',
                             'businesses',
                             'managers',
@@ -101,24 +98,22 @@ angular
                         url: '/listings',
                         templateUrl: '/static/views/admin/listings.html',
                         resolve: {
-                            bserv: 'BusinessService',
-                            util: 'UtilityService',
                             employees: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getEmployees();
                                 }
                             ],
                             listings: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getListings();
                                 }
                             ]
                         },
                         controller: [
-                            'bserv',
-                            'util',
+                            'BusinessService',
+                            'UtilityService',
                             'employees',
                             'listings',
                             AdminListingsListCtrl

@@ -12,21 +12,22 @@ angular
                         url: '/listings',
                         templateUrl: '/static/views/listings.html',
                         resolve: {
-                            util: 'UtilityService',
-                            bserv: 'BusinessService',
-                            businesses: function(bserv) {
-                                return bserv.getManagerBusinesses();
-                            },
+                            businesses: [
+                                'BusinessService',
+                                function(bserv) {
+                                    return bserv.getManagerBusinesses();
+                                }
+                            ],
                             listingGroups: [
                                 'businesses',
-                                'bserv',
+                                'BusinessService',
                                 function(businesses, bserv) {
                                     return bserv.getListingGroups(businesses);
                                 }
                             ]
                         },
                         controller: [
-                            'util',
+                            'UtilityService',
                             'listingGroups',
                             'businesses',
                             ListingsListCtrl
@@ -37,15 +38,15 @@ angular
                         url: '/positions',
                         templateUrl: '/static/views/positions.html',
                         resolve: {
-                            bserv: 'BusinessService',
                             businesses: [
+                                'BusinessService',
                                 'bserv',
                                 function(bserv) {
                                     return bserv.getManagerBusinesses();
                                 }
                             ],
                             positionGroups: [
-                                'bserv',
+                                'BusinessService',
                                 'businesses',
                                 function(bserv, businesses) {
                                     return bserv.getPositionGroups(businesses)
@@ -77,10 +78,9 @@ angular
                         url: '/select-location',
                         templateUrl: '/static/views/select-location.html',
                         resolve: {
-                            bserv: 'BusinessService',
                             locserv: 'LocationSelectService',
                             businesses: [
-                                'bserv', 
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getManagerBusinesses()
                                         .then(function(data) {
@@ -101,19 +101,16 @@ angular
                         url: '/:businessId',
                         templateUrl: '/static/views/new-listing/details.html',
                         resolve: {
-                            bserv: 'BusinessService',
-                            lserv: 'ListingCreatorService',
-                            locserv: 'LocationSelectService',
                             business: [
-                                'locserv',
-                                'bserv',
+                                'LocationSelectService',
+                                'BusinessService',
                                 function(locserv, bserv) {
                                     return bserv.getBusiness(
                                             locserv.locations.pop().location);
                                 }
                             ],
                             positions: [
-                                'bserv',
+                                'BusinessService',
                                 'business',
                                 function(bserv, business) {
                                     return bserv.getPositions(business);
@@ -122,8 +119,8 @@ angular
                         },
                         controller: [
                             '$state',
-                            'lserv',
-                            'bserv',
+                            'ListingCreatorService',
+                            'BusinessService',
                             'business',
                             'positions',
                             NewListingDetailsCtrl,
@@ -144,10 +141,8 @@ angular
                         url: '/select-location',
                         templateUrl: '/static/views/select-location.html',
                         resolve: {
-                            bserv: 'BusinessService',
-                            locserv: 'LocationSelectService',
                             businesses: [
-                                'bserv',
+                                'BusinessService',
                                 function(bserv) {
                                     return bserv.getManagerBusinesses()
                                         .then(function(data) {
@@ -158,7 +153,7 @@ angular
                         },
                         controller: [
                             '$state',
-                            'locserv',
+                            'LocationSelectService',
                             'businesses',
                             makeLocationSelectCtrl('new-position.details')
                         ],
@@ -168,11 +163,9 @@ angular
                         url: '/details',
                         templateUrl: '/static/views/new-position/details.html',
                         resolve: {
-                            locserv: 'LocationSelectService',
-                            bserv: 'BusinessService',
                             business: [
-                                'locserv',
-                                'bserv',
+                                'LocationSelectService',
+                                'BusinessService',
                                 function(locserv, bserv) {
                                     return bserv.getBusiness(
                                             locserv.locations.pop().location);
@@ -180,7 +173,7 @@ angular
                             ],
                             positions: [
                                 'business',
-                                'bserv',
+                                'BusinessService',
                                 function(business, bserv) {
                                     return bserv.getPositions(business);
                                 }
@@ -190,7 +183,7 @@ angular
                             '$state',
                             'business',
                             'positions',
-                            'bserv',
+                            'BusinessService',
                             NewPositionDetailsCtrl
                         ],
                         controllerAs: 'vm'
