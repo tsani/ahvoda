@@ -553,7 +553,7 @@
                     "instance": {
                         "type": "endpoint",
                         "description": "Detailed information about an employee.",
-                        "url": "/api/employee/<employee_name>",
+                        "url": "/api/employees/<employee_name>",
                         "verbs": {
                             "GET": {
                                 "accountTypes": [ "employee", "manager" ],
@@ -589,7 +589,7 @@
                     "location": {
                         "type": "endpoint",
                         "description": "The current 'flag' location of an employee.",
-                        "url": "/api/employee/<employee_name>/location",
+                        "url": "/api/employees/<employee_name>/location",
                         "verbs": {
                             "GET": {
                                 "accountTypes": [ "employee", "manager" ],
