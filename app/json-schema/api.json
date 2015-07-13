@@ -303,8 +303,7 @@
                                             "format": "email"
                                         },
                                         "phone_number": {
-                                            "type": "string",
-                                            "format": "phone"
+                                            "$ref": "#/definitions/phone_number"
                                         }
                                     },
                                     "required": [
@@ -502,8 +501,7 @@
                                             "format": "email"
                                         },
                                         "phone_number": {
-                                            "type": "string",
-                                            "format": "phone"
+                                            "$ref": "#/definitions/phone_number"
                                         },
                                         "postal_code": {
                                             "type": "string",
@@ -713,8 +711,7 @@
                                                     "format": "email"
                                                 },
                                                 "phone_number": {
-                                                    "type": "string",
-                                                    "format": "phone-number"
+                                                    "$ref": "#/definitions/phone_number"
                                                 }
                                             },
                                             "required": [ "email_address", "phone_number" ],
@@ -1287,8 +1284,7 @@
             "description": "All information to use to contact someone.",
             "properties": {
                 "phone_number": {
-                    "type": "string",
-                    "format": "phone-number"
+                    "$ref": "#/definitions/phone_number"
                 },
                 "email_address": {
                     "type": "string",
@@ -1575,6 +1571,10 @@
                 "stale",
                 "aborted"
             ]
+        },
+        "phone_number": {
+            "type": "string",
+            "format": "phone-number"
         }
     },
     "errors": {
