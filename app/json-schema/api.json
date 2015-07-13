@@ -1390,8 +1390,7 @@
             "description": "Represents a legally fixed location, with an address as well as geographical coordinates.",
             "properties": {
                 "id": {
-                    "type": "integer",
-                    "minimum": 0
+                    "$ref": "#/definitions/id"
                 },
                 "address": {
                     "type": "string"
