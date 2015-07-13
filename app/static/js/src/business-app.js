@@ -40,7 +40,6 @@ angular
                         resolve: {
                             businesses: [
                                 'BusinessService',
-                                'bserv',
                                 function(bserv) {
                                     return bserv.getManagerBusinesses();
                                 }
