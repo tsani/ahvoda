@@ -68,6 +68,13 @@ function BusinessService($q, $http) {
             }, failureLogger);
     };
 
+    srv.getBusinessManagers = function(businessId) {
+        return $http.get('/api/businesses/' + businessId + '/managers')
+            .then(function(response) {
+                return response.data.managers;
+            }, failureLogger);
+    };
+
     srv.getListingGroups = function(businesses) {
         return $q.all(businesses.map(function(b) {
             return srv.getListings(b)
@@ -140,6 +147,13 @@ function BusinessService($q, $http) {
                 return response.data.listings;
             }, failureLogger);
     }
+
+    srv.createBusiness = function(data) {
+        return $http.post('/api/businesses', data)
+            .then(function(response) {
+                return response.data;
+            }, failureLogger);
+    };
 
     srv.createManager = function(data) {
         return $http.post('/api/managers', data)
