@@ -172,6 +172,7 @@ angular
     .service('UtilityService', UtilityService)
     .controller('NavCtrl', ['BusinessService', NavCtrl])
     .directive('ahMulticheckbox', ahMulticheckbox)
+    .directive('ahManager', ahManager)
     .run(['formlyConfig', function(formlyConfig) {
         configureFormly(formlyConfig);
     }]);

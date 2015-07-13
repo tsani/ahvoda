@@ -19,24 +19,7 @@
     <h1> Managers </h1>
     <ul class='flat manager-list'>
         <li class='card' ng-repeat='manager in vm.managers'>
-            <div class='account-header'>
-                <h2>
-                    {{ manager.human.first_name }} {{ manager.human.last_name }}
-                </h2>
-                <p>
-                    <em>{{ manager.username }}</em>
-                </p>
-            </div>
-            <div>
-                <ul class='flat'>
-                    <li>
-                    <i class='fa fa-envelope'></i> {{ manager.human.contact_info.email_address }}
-                    </li>
-                    <li>
-                    <i class='fa fa-phone'></i> {{ manager.human.contact_info.phone_number }}
-                    </li>
-                </ul>
-            </div>
+            <div ah-manager='manager'></div>
             <h3> Managed businesses </h3>
             <div ng-if='manager.businesses.length === 0'>
                 <p> This manager has no associated businesses yet. </p>
