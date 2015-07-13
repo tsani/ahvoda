@@ -1,6 +1,6 @@
 function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locationData, employees) {
     var vm = this;
-    vm.formatAddress = util.formatAddress;
+    vm.util = util;
 
     vm.employees = employees;
 

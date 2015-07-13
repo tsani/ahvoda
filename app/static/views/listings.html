@@ -8,7 +8,7 @@
     <dt>
         <h2> {{ business.name }} </h2>
         <p>
-        {{ vm.formatAddress(business.location) }} 
+        {{ vm.util.formatAddress(business.location) }}
         </p>
     </dt>
     <dd>
@@ -24,8 +24,8 @@
                             <h3> {{ listing.position.name }} </h3>
                             <div class='listing-create-time'>
                                 Created
-                                on {{ vm.formatDate(listing.create_date) }}
-                                at {{ vm.formatTime(listing.create_date) }}
+                                on {{ vm.util.formatDate(listing.create_date) }}
+                                at {{ vm.util.formatTime(listing.create_date) }}
                                 ({{ listing.create_date}})
                             </div>
                         </div>

@@ -1,10 +1,10 @@
 function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
     var vm = this;
     vm.managers = managers;
-    
+
     console.log(JSON.stringify(managers));
 
-    vm.formatAddress = util.formatAddress;
+    vm.util = util;
 
     vm.newManagerFormModel = {};
     vm.newManagerFormFields = [
@@ -94,7 +94,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
         var bs = businesses.map(function(b) {
             return {
                 name: b.name + ' (' +
-                          vm.formatAddress(b.location) +
+                          vm.util.formatAddress(b.location) +
                           ')',
                 value: b.id
             };

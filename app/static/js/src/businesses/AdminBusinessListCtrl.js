@@ -10,7 +10,7 @@ function AdminBusinessListCtrl(
     var vm = this;
 
     vm.businesses = businesses;
-    vm.formatAddress = util.formatAddress;
+    vm.util = util;
 
     function registerBusiness(business) {
         business.managers = [];
