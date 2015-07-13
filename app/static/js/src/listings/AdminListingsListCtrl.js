@@ -1,6 +1,8 @@
 function AdminListingsListCtrl(bserv, util, employees, listings) {
     var vm = this;
     vm.formatAddress = util.formatAddress;
+    vm.formatDate = util.formatDate;
+    vm.formatTime = util.formatTime;
 
     vm.listings = listings;
 

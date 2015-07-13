@@ -5,4 +5,6 @@ function ListingsListCtrl(util, listingGroups, businesses) {
     vm.businesses = businesses;
 
     vm.formatAddress = util.formatAddress;
+    vm.formatTime = util.formatTime;
+    vm.formatDate = util.formatDate;
 }

@@ -8,6 +8,11 @@
                     <h3> {{ listing.business.name }} </h3>
                     <h3> {{ listing.position.name }} </h3>
                     <p> {{ vm.formatAddress(listing.business.location) }} </p>
+                    <p>
+                    Created
+                    on {{ vm.formatDate(listing.create_date) }}
+                    at {{ vm.formatTime(listing.create_date) }}
+                    </p>
                 </div>
                 <div>
                     <p class='listing-pay'> {{ listing.pay }}$/h </p>

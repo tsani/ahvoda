@@ -20,14 +20,19 @@
             <div class='item' ng-repeat='listing in vm.listingGroups[business.name]'>
                 <dt>
                     <div class='listing-header'>
-                        <h3> {{ listing.position.name }} </h3>
+                        <div>
+                            <h3> {{ listing.position.name }} </h3>
+                            <div class='listing-create-time'>
+                                Created
+                                on {{ vm.formatDate(listing.create_date) }}
+                                at {{ vm.formatTime(listing.create_date) }}
+                                ({{ listing.create_date}})
+                            </div>
+                        </div>
                         <div>
                             <p class='listing-pay'> {{ listing.pay }}$/h </p>
                             <p class='listing-status'> {{ listing.status.friendly_name }} </p>
                         </div>
-                    </div>
-                    <div class='listing-create-time'>
-                        {{ listing.create_date }}
                     </div>
                 </dt>
                 <dd>
