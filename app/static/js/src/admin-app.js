@@ -80,15 +80,61 @@ angular
                         controllerAs: 'vm'
                     })
                     .state('employees', {
-                        url: '/employees',
+                        url: '/contractors',
                         templateUrl: '/static/views/admin/employees.html',
                         resolve: {
-                            bserv: 'BusinessService',
-                            employees: function(bserv) {
-                                return bserv.getEmployees();
-                            }
+                            languages: [
+                                'BusinessService',
+                                function(bserv) {
+                                    return bserv.getLanguages()
+                                        .then(function(r) {
+                                            console.log(JSON.stringify(r));
+                                            return r;
+                                        });
+                                }
+                            ],
+                            locationData: [
+                                '$q',
+                                'BusinessService',
+                                function($q, bserv) {
+                                    return $q.all({
+                                        countries: bserv.getCountries(),
+                                        states: bserv.getStates(),
+                                        cities: bserv.getCities()
+                                    }).then(function(r) {
+                                        console.log(JSON.stringify(r));
+                                        return r;
+                                    });
+                                }
+                            ],
+                            genders: [
+                                'BusinessService',
+                                function(bserv) {
+                                    return bserv.getGenders()
+                                        .then(function(r) {
+                                            console.log(JSON.stringify(r));
+                                            return r;
+                                        });
+                                }
+                            ],
+                            employees: [
+                                'BusinessService',
+                                function(bserv) {
+                                    return bserv.getEmployees()
+                                        .then(function(r) {
+                                            console.log(JSON.stringify(r));
+                                            return r;
+                                        });
+                                }
+                            ]
                         },
                         controller: [
+                            '$timeout',
+                            'BusinessService',
+                            'UtilityService',
+                            'languages',
+                            'genders',
+                            'locationData',
                             'employees',
                             AdminEmployeesListCtrl
                         ],

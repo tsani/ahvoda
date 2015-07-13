@@ -1,0 +1,48 @@
+<div>
+    <h1> Create an employee </h1>
+    <form novalidate class='separate-form fullwidth'
+            ng-submit='vm.createEmployee()'>
+        <formly-form
+                model='vm.newEmployeeFormModel'
+                fields='vm.newEmployeeFormFields'
+                form='vm.newEmployeeFormData'
+                options='vm.newEmployeeFormOptions'>
+            <div class='center-holder'>
+                <button type='submit' ng-if='!form.$submitted'>
+                    Create employee
+                </button>
+                <p ng-if='form.$submitted'>
+                Created!
+                </p>
+            </div>
+        </formly-form>
+    </form>
+</div>
+
+<div>
+    <h1> Employees </h1>
+    <ul class='flat employee-list'>
+        <li class='card' ng-repeat='employee in vm.employees'>
+            <div class='account-header'>
+                <h2>
+                    {{ employee.human.first_name }} {{ employee.human.last_name }}
+                </h2>
+                <p>
+                    <em> {{ employee.username }} </em>
+                </p>
+            </div>
+            <div>
+                <ul class='flat'>
+                    <li>
+                    <i class='fa fa-home'></i> {{ vm.formatAddress(employee.home_location) }}
+                    <li>
+                    <i class='fa fa-envelope'></i> {{ employee.human.contact_info.email_address }}
+                    </li>
+                    <li>
+                    <i class='fa fa-phone'></i> {{ employee.human.contact_info.phone_number }}
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
