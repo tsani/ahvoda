@@ -142,10 +142,11 @@ function BusinessService($q, $http) {
         if(typeof(business) !== 'undefined')
             qs.business = business.id;
 
-        return $http.get('/api/listings', qs)
-            .then(function(response) {
-                return response.data.listings;
-            }, failureLogger);
+        return $http.get('/api/listings', {
+            params: qs
+        }).then(function(response) {
+            return response.data.listings;
+        }, failureLogger);
     }
 
     srv.createBusiness = function(data) {
