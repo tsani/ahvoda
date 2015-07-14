@@ -256,6 +256,66 @@
                     }
                 }
             },
+            "device": {
+                "type": "directory",
+                "contents": {
+                    "collection": {
+                        "type": "endpoint",
+                        "url": "/api/devices",
+                        "description": "Collection of devices.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "administrator" ],
+                                "responses": {
+                                    "200": {
+                                        "type": "object",
+                                        "properties": {
+                                            "devices": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/device"
+                                                }
+                                            }
+                                        },
+                                        "required": [ "devices" ],
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "POST": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "request": {
+                                    "type": "object",
+                                    "properties": {
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "reg": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [ "username", "reg" ],
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "#/definitions/device"
+                                    },
+                                    "400": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "manager": {
                 "type": "directory",
                 "contents": {
@@ -1571,6 +1631,18 @@
         "phone_number": {
             "type": "string",
             "format": "phone-number"
+        },
+        "device": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/id"
+                },
+                "reg": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
         }
     },
     "errors": {

@@ -3,6 +3,7 @@ from flask import jsonify, request, Response
 import datetime, json, os
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.exc import IntegrityError
 from collections import defaultdict
 from binascii import hexlify
 import re
@@ -1637,6 +1638,67 @@ def get_city(city_id, login):
         )
     return jsonify(
             city.to_dict(),
+    )
+
+@decorate_with(
+        endpoints['device']['collection'].handles_action('GET'),
+)
+def get_devices(login):
+    devices = models.accounts.AndroidDevice.query.all()
+    return jsonify(
+            dict(
+                devices=[
+                    d.to_dict()
+                    for d
+                    in devices
+                ],
+            ),
+    )
+
+@decorate_with(
+        endpoints['device']['collection'].handles_action('POST'),
+)
+def new_device(login):
+    data = request.get_json()
+
+    user_login = models.auth.Login.query.filter_by(
+            username=data['username'],
+    ).first()
+
+    if user_login is None:
+        return util.json_die(
+                'No such user "%s".' % (
+                    data['username'],
+                ),
+                404,
+        )
+
+    if not login.is_administrator() and user_login != login:
+        return util.json_die(
+                'You are not permitted to add devices to the user "%s".' % (
+                    data['username'],
+                ),
+                403,
+        )
+
+    device = models.accounts.AndroidDevice(
+        reg=data['reg'],
+    )
+    user_login.android_devices.append(
+            device,
+    )
+
+    try:
+        db.session.add(user_login)
+        db.session.commit()
+    except IntegrityError:
+        return util.json_die(
+                'This device is already registered.',
+                400,
+        )
+
+    return jsonify(
+            device.to_dict(),
     )
 
 register_all(endpoints, app, strict=False)
