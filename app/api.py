@@ -1349,6 +1349,15 @@ def get_listings(login):
         )
 
     for business_id in request.args.getlist('business'):
+        try:
+            business_id = int(business_id)
+        except ValueError:
+            return util.json_die(
+                    'Invalid business id "%s".' % (
+                        business_id,
+                    ),
+                    400,
+            )
         business = models.business.Business.query.get(business_id)
         if business is None:
             return util.json_die(
@@ -1438,9 +1447,15 @@ def get_listings(login):
     )
 
     try:
-        max_count = request.args['max']
+        max_count = int(request.args['max'])
     except KeyError:
         max_count = 0 if login.is_administrator() else 100
+    except ValueError:
+        return util.json_die(
+                'Invalid maximum "%s".' % (
+                    request.args['max'],
+                ),
+        )
 
     if max_count:
         results_query = results_query.limit(max_count)

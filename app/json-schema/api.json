@@ -115,7 +115,7 @@
                                             "type": "object",
                                             "properties": {
                                                 "country_id": {
-                                                    "$ref": "#/definitions/id"
+                                                    "type": "string"
                                                 }
                                             },
                                             "additionalProperties": false
@@ -410,15 +410,12 @@
                                 "status": { "$ref": "#/definitions/job_status_name" },
                                 "since": { "$ref": "#/definitions/date_time" },
                                 "before": { "$ref": "#/definitions/date_time" },
-                                "max": {
-                                    "type": "integer",
-                                    "minimum": 1
-                                },
+                                "max": { "type": "string" },
                                 "created_by": {
                                     "description": "Username of the manager that created the listing.",
                                     "type": "string"
                                 },
-                                "business": { "$ref": "#/definitions/id" },
+                                "business": { "type": "string" },
                                 "dispatched_to": {
                                     "description": "Username of the employee receiving the listing.",
                                     "type": "string"
