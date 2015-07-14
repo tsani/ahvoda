@@ -1,5 +1,4 @@
 function configureFormly(formlyConfig) {
-    console.log('configuring formly');
     [
         {
             name: 'input',

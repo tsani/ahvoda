@@ -30,8 +30,6 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
                     listing.employee = updatedListing.employee;
                 });
         };
-
-        console.log("Registered listing for postion " + listing.position.name);
     }
 
     function updateListings() {

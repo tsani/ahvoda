@@ -13,7 +13,6 @@ function UtilityService() {
     var pad = function(s) {
         var p = s.toString();
         var q = p.length === 1 ? '0' + p : p;
-        console.log(q);
         return q;
     };
 

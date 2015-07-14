@@ -152,7 +152,6 @@ function AdminBusinessListCtrl(
                     };
                 })
         }).then(function(business) {
-            console.log(JSON.stringify(business));
             registerBusiness(business);
             vm.createForm.data.$setSubmitted();
             vm.businesses.push(business);

@@ -2,8 +2,6 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
     var vm = this;
     vm.managers = managers;
 
-    console.log(JSON.stringify(managers));
-
     vm.util = util;
 
     vm.newManagerFormModel = {};
@@ -155,19 +153,14 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
                         console.log('failed to delete manager');
                 });
         }
-
-        console.log("Registered manager " + manager.username);
     }
 
     vm.updateManagers = function() {
-        console.log('updating managers');
         for(var i = 0; i < vm.managers.length; i++) {
             (function(manager) {
-                console.log("username at first: " + manager.username);
                 bserv.getManagerBusinesses(manager.username)
                     .then(function(businesses) {
                         manager.businesses = businesses;
-                        console.log("username after: " + manager.username);
                         registerManager(manager);
                     });
             })(vm.managers[i]);

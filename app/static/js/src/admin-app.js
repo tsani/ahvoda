@@ -57,7 +57,6 @@ angular
                                 function(bserv) {
                                     return bserv.getGenders()
                                         .then(function(gs) {
-                                            console.log(JSON.stringify(gs));
                                             return gs;
                                         });
                                 }
@@ -88,7 +87,6 @@ angular
                                 function(bserv) {
                                     return bserv.getLanguages()
                                         .then(function(r) {
-                                            console.log(JSON.stringify(r));
                                             return r;
                                         });
                                 }
@@ -102,7 +100,6 @@ angular
                                         states: bserv.getStates(),
                                         cities: bserv.getCities()
                                     }).then(function(r) {
-                                        console.log(JSON.stringify(r));
                                         return r;
                                     });
                                 }
@@ -112,7 +109,6 @@ angular
                                 function(bserv) {
                                     return bserv.getGenders()
                                         .then(function(r) {
-                                            console.log(JSON.stringify(r));
                                             return r;
                                         });
                                 }
@@ -122,7 +118,6 @@ angular
                                 function(bserv) {
                                     return bserv.getEmployees()
                                         .then(function(r) {
-                                            console.log(JSON.stringify(r));
                                             return r;
                                         });
                                 }

@@ -2,7 +2,6 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
     var vm = this;
 
     vm.back = function() {
-        console.log('going back a step');
         lserv.reset();
         $state.go('^.select-location');
     }
@@ -27,11 +26,9 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
 
             if(p.default_languages) {
                 vm.data.languages = vm.data.languages || {};
-                console.log(JSON.stringify(vm.data.languages));
                 for(var j = 0; j < p.default_languages.length; j++) {
                     vm.data.languages[p.default_languages[j].iso_name] = true;
                 }
-                console.log(JSON.stringify(vm.data.languages));
             }
         }
     }
