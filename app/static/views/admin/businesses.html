@@ -18,12 +18,12 @@
 <div>
     <h1> Businesses </h1>
     <ul class='flat business-list'>
-        <li class='card' ng-repeat='business in vm.businesses' 
+        <li class='card' ng-repeat='business in vm.businesses'
                 id='business-li-{{ business.id }}'>
             <div class='account-header'>
-                <h2>
-                    {{ business.name }}
-                </h2>
+                <div>
+                    <h2> {{ business.name }} </h2>
+                </div>
                 <ul class='flat'>
                     <li>
                         <i class='fa fa-envelope'></i>
@@ -41,7 +41,7 @@
             </div>
             <div class='detail' ng-if='business.managers'>
                 <p ng-if='business.managers.length === 0'>
-                    This business has no managers yet.
+                    <strong>This business has no managers yet.</strong>
                 </p>
                 <div ng-if='business.managers.length > 0'>
                     <h2> Managers </h2>

@@ -38,15 +38,16 @@
                 <dd>
                     <div> {{ listing.details }} </div>
 
-                    <div class='contractor-info' ng-if='listing.employee'>
-                        <h4> Contractor </h4>
-                        <dl>
-                            <dt>Name</dt>
-                            <dd> {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }} </dd>
-
-                            <dt>Phone Number</dt>
-                            <dd> {{ listing.employee.human.contact_info.phone_number }} </dd>
-                        </dl>
+                    <div class='contractor-info'>
+                        <div ng-if='listing.employee'>
+                            <h4> Contractor - {{ listing.employee.human.first_name }} {{ listing.employee.human.last_name }}</h4>
+                            <ul class='flat'>
+                                <li><i class='fa fa-phone'></i> {{ listing.employee.human.contact_info.phone_number }} </li>
+                            </ul>
+                        </div>
+                        <div ng-if='!listing.employee'>
+                            <strong>No contractor is assigned yet.</strong>
+                        </div>
                     </div>
                 </dd>
             </div>

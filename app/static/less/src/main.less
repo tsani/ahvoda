@@ -70,12 +70,6 @@ h6 {
     font-size: 100%;
 }
 
-ul {
-    li {
-        list-style-type: none;
-    }
-}
-
 /* Usable on a (sized) container such that its contents align in the total
  * center.
  */
@@ -222,9 +216,10 @@ dl {
 }
 
 ul {
+    list-style-position: inside;
+    margin: none;
     padding-left: 1em;
     text-align: left;
-    list-style-type: none;
 }
 
 /* Elements with this class will fade in when they enter the viewport. */
@@ -244,10 +239,11 @@ ul {
     text-align: center;
 }
 
-/* "flatten" a <ul>, removing the indentation of its children. */
+/* "flatten" a <ul>, removing the indentation of its children and the disc. */
 ul.flat {
     margin: 0;
     padding-left: 0;
+    list-style-type: none;
 }
 
 .semiblack-bg {

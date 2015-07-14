@@ -132,7 +132,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
 
         manager.associateBusiness = function() {
             bserv.addManagerToBusiness(
-                manager.username, 
+                manager.username,
                 manager.formModel.business)
                 .then(function(business) {
                     manager.businesses.push(business);

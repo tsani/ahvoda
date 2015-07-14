@@ -27,7 +27,7 @@ src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
 
 {% block header %}
 <nav role='navigation' id='top-bar' ng-controller='NavCtrl as nav'>
-    <ul class='left'>
+    <ul class='left flat'>
         {% raw %}
         <li>
         <h3 ng-if='nav.manager'>
@@ -45,7 +45,7 @@ src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
     <div>
         <img class='logo' src='/static/img/ahvoda-black-logo.png' alt='ah!'/>
     </div>
-    <ul class='right'>
+    <ul class='right flat'>
         {% block navitems %}
         {% endblock %}
     </ul>
