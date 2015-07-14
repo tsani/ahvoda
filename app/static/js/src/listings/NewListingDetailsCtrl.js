@@ -10,32 +10,28 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
     vm.data = lserv.data;
 
     vm.updateFieldDefaults = function() {
-        console.log('updating field defaults for', vm.data.position);
         for(var i = 0; i < positions.length; i++) {
             var p = positions[i];
-            if(p.id == vm.data.position) {
-                if(p.name === 'Busboy') {
-                    vm.data.pay = 11;
-                    vm.data.details = 'Bus tables.';
-                    vm.data['language-en'] = true;
-                    vm.data.duration = 3;
+
+            if(p.default_pay) {
+                vm.data.pay = p.default_pay;
+            }
+
+            if(p.default_details) {
+                vm.data.details = p.default_details;
+            }
+
+            if(p.default_duration) {
+                vm.data.duration = p.default_duration;
+            }
+
+            if(p.default_languages) {
+                vm.data.languages = vm.data.languages || {};
+                console.log(JSON.stringify(vm.data.languages));
+                for(var j = 0; j < p.default_languages.length; j++) {
+                    vm.data.languages[p.default_languages[j].iso_name] = true;
                 }
-                else if(p.name == 'Dishwasher') {
-                    vm.data.pay = 12;
-                    vm.data.details = [
-                        'Wash dishes, glassware, flatware, pots, and pans using dishwashing machine or by hand.',
-                        'Place clean dishes, utensils, and cooking equipment in the appropriate storage areas.',
-                        'Maintain cleanliness of kitchen work areas, equipment, and utensils.'
-                    ].join('\n\n');
-                    vm.data['language-en'] = true;
-                    vm.data.duration = 4;
-                }
-                else if(p.name == 'Floor washer') {
-                    vm.data.pay = 14;
-                    vm.data.details = 'Wash floors';
-                    vm.data['language-en'] = true;
-                    vm.data.duration = 2;
-                }
+                console.log(JSON.stringify(vm.data.languages));
             }
         }
     }
@@ -85,35 +81,38 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
                 placeholder: '3.5',
                 required: true
             }
-        }
-    ].concat(business.languages.map(function(lang) {
-        return {
-            key: 'language-' + lang.iso_name,
-            type: 'input',
+        },
+        {
+            key: 'languages',
+            type: 'multicheckbox',
             templateOptions: {
-                type: 'checkbox',
-                label: lang.name
+                label: 'Languages',
+                choices: business.languages.map(function(lang) {
+                    return {
+                        name: lang.name,
+                        value: lang.iso_name
+                    };
+                })
             }
-        };
-    }));
+        }
+    ];
 
     vm.submit = function() {
         var listingData = {
             details: vm.data.details,
             pay: parseFloat(vm.data.pay),
             duration: parseFloat(vm.data.duration),
-            languages: [],
+            languages: Object.keys(vm.data.languages)
+                .filter(function(k) {
+                    return vm.data.languages[k];
+                })
+                .map(function(k) {
+                    return {
+                        iso_name: k
+                    };
+                }),
             position: parseInt(vm.data.position)
         };
-
-        business.languages.forEach(function(lang) {
-            var lang_model = vm.data['language-' + lang.iso_name];
-            if(typeof(lang_model) !== 'undefined' && lang_model) {
-                listingData.languages.push({
-                    iso_name: lang.iso_name
-                });
-            }
-        });
 
         bserv.createListing(business, listingData)
             .then(function(response) {
