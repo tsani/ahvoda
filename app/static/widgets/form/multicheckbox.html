@@ -4,8 +4,9 @@
 <ul class='flat'>
     <li ng-repeat='choice in to.choices'>
         <label class='multicheckbox-item'>
-            <input type='checkbox' value='{{ choice.value }}' 
-                    ng-model='model[options.key][choice.value]'>
+            <input type='checkbox' value='{{ choice.value }}'
+                    ng-model='model[options.key][choice.value]'
+                    {{ choice.checked ? 'checked' : '' }}>
             <span class='name'>
                 {{ choice.name }}
             </span>

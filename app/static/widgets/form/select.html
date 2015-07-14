@@ -2,7 +2,8 @@
     {{ to.label }}
 </label>
 <select ng-model='model[options.key]' ng-change='to.onChange()'>
-    <option ng-repeat='choice in to.choices' value='{{ choice.value }}'>
+    <option ng-repeat='choice in to.choices' value='{{ choice.value }}'
+            {{ choice.selected ? 'selected' : '' }}>
         {{ choice.name }}
     </option>
 </select>
