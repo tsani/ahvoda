@@ -44,6 +44,11 @@ class Login(db.Model):
         return dict(
                 id=self.id,
                 username=self.username,
+                android_devices=[
+                    d.to_dict()
+                    for d
+                    in self.android_devices
+                ],
         )
 
     def get_account(self):

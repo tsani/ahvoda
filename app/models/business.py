@@ -32,7 +32,7 @@ class JobMatch(db.Model):
     __tablename__ = 'jobmatch'
 
     __table_args__ = (
-            db.PrimaryKeyConstraint(
+            db.UniqueConstraint(
                 'employee_id',
                 'job_id',
             ),
@@ -42,6 +42,7 @@ class JobMatch(db.Model):
             db.Integer,
             unique=True,
             nullable=False,
+            primary_key=True,
     )
 
     create_date = db.Column(
@@ -65,11 +66,15 @@ class JobMatch(db.Model):
     employee_id = db.Column(
             db.Integer,
             db.ForeignKey('employee.id'),
+            nullable=False,
+            index=True,
     )
 
     job_id = db.Column(
             db.Integer,
             db.ForeignKey('job.id'),
+            nullable=False,
+            index=True,
     )
 
     employee = db.relationship(

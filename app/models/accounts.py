@@ -1,6 +1,38 @@
 from app import db
 from app.util import to_rfc3339
 
+class AndroidDevice(db.Model):
+    __tablename__ = 'androiddevice'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+    )
+
+    login_id = db.Column(
+            db.Integer,
+            db.ForeignKey('login.id', ondelete='CASCADE'),
+            nullable=False,
+            index=True,
+    )
+
+    reg = db.Column(
+            db.String,
+            nullable=False,
+            unique=True,
+    )
+
+    login = db.relationship(
+            'Login',
+            backref='android_devices',
+    )
+
+    def to_dict(self):
+        return dict(
+                id=self.id,
+                reg=self.reg,
+        )
+
 class Administrator(db.Model):
     __tablename__ = 'administrator'
 
