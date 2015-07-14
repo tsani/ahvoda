@@ -1,9 +1,0 @@
-<label> {{ to.label }} </label>
-<div>
-    <div ng-repeat='choice in to.choices'>
-    <label>
-        {{ to.getContent(choice) }}
-        <input value="{{ to.getValue(choice) }}" type='checkbox' 
-        ng-model="options.model.languages[to.getValue(choice)]">
-    </label>
-</div>
