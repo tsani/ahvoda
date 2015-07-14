@@ -222,9 +222,9 @@ function BusinessService($q, $http) {
                 });
     }
 
-    srv.deletePosition = function(business, positionId) {
+    srv.deletePosition = function(businessId, positionId) {
         return $http.delete(
-                '/api/businesses/' + business.id + '/positions/' + positionId);
+                '/api/businesses/' + businessId + '/positions/' + positionId);
     }
 
     srv.getManager = function() {
