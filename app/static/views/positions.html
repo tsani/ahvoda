@@ -1,19 +1,23 @@
 <h1> Positions </h1>
-<div>
-    <a class='button block call-to-action' ui-sref='new-position'>
-        New position
-    </a>
-</div>
 <dl class='business-list' ng-repeat='business in vm.businesses'>
     <dt>
         <h2> {{ business.name }} </h2>
-        <p ng-if='vm.positionGroups[business.name].length == 0'>
+        <p>
+        {{ vm.util.formatAddress(business.location) }}
+        </p>
+        <p ng-if='business.positions.length == 0'>
         This location has no positions yet.
         </p>
+        <div class='new-listing-positions-list'>
+            <a class='button block call-to-action'
+                ui-sref='new-position({businessId: business.id})'>
+                Add position at {{ business.name }}
+            </a>
+        </div>
     </dt>
     <dd>
-        <dl class='listings-list' ng-if='vm.positionGroups[business.name].length > 0'>
-            <div class='item' ng-repeat='position in vm.positionGroups[business.name]'>
+        <dl class='listings-list' ng-if='business.positions.length > 0'>
+            <div class='item' ng-repeat='position in business.positions'>
                 <dt>
                     <div class='listing-header'>
                         <div>
@@ -25,6 +29,11 @@
                             </p>
                         </div>
                         <div>
+                            <div class='center-holder'>
+                                <button ng-click='vm.deletePosition(business, position)'>
+                                    Delete
+                                </button>
+                            </div>
                             <p ng-if='position.default_pay'>
                             Default pay:
                             <span class='listing-pay'>
@@ -59,7 +68,6 @@
                 </dt>
                 <dd>
                     <div ng-if='position.default_details'>
-                        <h6>Default description:</h6>
                         <p>
                         {{ position.default_details }}
                         </p>

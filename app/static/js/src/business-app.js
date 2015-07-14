@@ -13,22 +13,40 @@ angular
                         templateUrl: '/static/views/listings.html',
                         resolve: {
                             businesses: [
+                                '$q',
                                 'BusinessService',
-                                function(bserv) {
-                                    return bserv.getManagerBusinesses();
-                                }
-                            ],
-                            listingGroups: [
-                                'businesses',
-                                'BusinessService',
-                                function(businesses, bserv) {
-                                    return bserv.getListingGroups(businesses);
+                                function($q, bserv) {
+                                    return bserv.getManagerBusinesses()
+                                        .then(function(bs) {
+                                            return $q.all(bs.map(function(b) {
+                                                return $q.all([
+                                                    bserv.getPositions(b)
+                                                        .then(function(ps) {
+                                                            b.positions = ps;
+                                                            return ps;
+                                                        }),
+                                                    bserv.getListings(b)
+                                                        .then(function(ls) {
+                                                            b.listings = ls;
+                                                            return ls;
+                                                        })
+                                                ])
+                                                .then(function(bss) {
+                                                    return b;
+                                                });
+                                            }))
+                                            .then(function(bs) {
+                                                return bs;
+                                            });
+                                        })
+                                        .then(function(bs) {
+                                            return bs;
+                                        })
                                 }
                             ]
                         },
                         controller: [
                             'UtilityService',
-                            'listingGroups',
                             'businesses',
                             ListingsListCtrl
                         ],
@@ -39,74 +57,51 @@ angular
                         templateUrl: '/static/views/positions.html',
                         resolve: {
                             businesses: [
+                                '$q',
                                 'BusinessService',
-                                function(bserv) {
-                                    return bserv.getManagerBusinesses();
-                                }
-                            ],
-                            positionGroups: [
-                                'BusinessService',
-                                'businesses',
-                                function(bserv, businesses) {
-                                    return bserv.getPositionGroups(businesses)
-                                        .then(function(positionGroups) {
-                                            return positionGroups;
-                                        });
+                                function($q, bserv) {
+                                    return bserv.getManagerBusinesses()
+                                        .then(function(bs) {
+                                            return $q.all(bs.map(function(b) {
+                                                return $q.all([
+                                                    bserv.getPositions(b)
+                                                        .then(function(ps) {
+                                                            b.positions = ps;
+                                                            return ps;
+                                                        })
+                                                ])
+                                                .then(function(bss) {
+                                                    return b;
+                                                });
+                                            }))
+                                            .then(function(bs) {
+                                                return bs;
+                                            });
+                                        })
+                                        .then(function(bs) {
+                                            return bs;
+                                        })
                                 }
                             ]
                         },
                         controller: [
+                            'BusinessService',
                             'UtilityService',
-                            'positionGroups',
                             'businesses',
                             PositionsListCtrl
                         ],
                         controllerAs: 'vm'
                     })
-                    // State for creating a new listing
                     .state('new-listing', {
-                        url: '/new-listing',
+                        url: '/new-listing/:businessId?positionId',
                         templateUrl: '/static/views/new-listing.html',
-                        controller: [
-                            '$state',
-                            function($state) {
-                                $state.go('new-listing.select-location');
-                            }
-                        ]
-                    })
-                    .state('new-listing.select-location', {
-                        url: '/select-location',
-                        templateUrl: '/static/views/select-location.html',
-                        resolve: {
-                            locserv: 'LocationSelectService',
-                            businesses: [
-                                'BusinessService',
-                                function(bserv) {
-                                    return bserv.getManagerBusinesses()
-                                        .then(function(data) {
-                                            return data;
-                                        });
-                                }
-                            ]
-                        },
-                        controller: [
-                            '$state',
-                            'locserv',
-                            'businesses',
-                            makeLocationSelectCtrl('new-listing.details')
-                        ],
-                        controllerAs: 'locationSelect'
-                    })
-                    .state('new-listing.details', {
-                        url: '/:businessId',
-                        templateUrl: '/static/views/new-listing/details.html',
                         resolve: {
                             business: [
-                                'LocationSelectService',
+                                '$stateParams',
                                 'BusinessService',
-                                function(locserv, bserv) {
+                                function($stateParams, bserv) {
                                     return bserv.getBusiness(
-                                            locserv.locations.pop().location);
+                                        $stateParams.businessId);
                                 }
                             ],
                             positions: [
@@ -115,60 +110,43 @@ angular
                                 function(bserv, business) {
                                     return bserv.getPositions(business);
                                 }
-                            ]
-                        },
-                        controller: [
-                            '$state',
-                            'ListingCreatorService',
-                            'BusinessService',
-                            'business',
-                            'positions',
-                            NewListingDetailsCtrl,
-                        ],
-                        controllerAs: 'vm'
-                    })
-                    .state('new-position', {
-                        url: '/new-position',
-                        templateUrl: '/static/views/new-position.html',
-                        controller: [
-                            '$state',
-                            function($state) {
-                                $state.go('new-position.select-location');
-                            }
-                        ]
-                    })
-                    .state('new-position.select-location', {
-                        url: '/select-location',
-                        templateUrl: '/static/views/select-location.html',
-                        resolve: {
-                            businesses: [
-                                'BusinessService',
-                                function(bserv) {
-                                    return bserv.getManagerBusinesses()
-                                        .then(function(data) {
-                                            return data;
-                                        });
+                            ],
+                            defaultPosition: [
+                                '$stateParams',
+                                'positions',
+                                function($stateParams, positions) {
+                                    if(typeof($stateParams.positionId) === 'undefined') {
+                                        return null;
+                                    }
+                                    var id = parseInt($stateParams.positionId);
+                                    for(var i = 0; i < positions.length; i++) {
+                                        if(positions[i].id === id)
+                                            return positions[i];
+                                    }
+                                    return null;
                                 }
                             ]
                         },
                         controller: [
                             '$state',
-                            'LocationSelectService',
-                            'businesses',
-                            makeLocationSelectCtrl('new-position.details')
+                            'BusinessService',
+                            'business',
+                            'positions',
+                            'defaultPosition',
+                            NewListingDetailsCtrl,
                         ],
-                        controllerAs: 'locationSelect'
+                        controllerAs: 'vm'
                     })
-                    .state('new-position.details', {
-                        url: '/details',
-                        templateUrl: '/static/views/new-position/details.html',
+                    .state('new-position', {
+                        url: '/new-position?businessId',
+                        templateUrl: '/static/views/new-position.html',
                         resolve: {
                             business: [
-                                'LocationSelectService',
+                                '$stateParams',
                                 'BusinessService',
-                                function(locserv, bserv) {
+                                function($stateParams, bserv) {
                                     return bserv.getBusiness(
-                                            locserv.locations.pop().location);
+                                        $stateParams.businessId);
                                 }
                             ],
                             positions: [
@@ -192,8 +170,6 @@ angular
     ])
     .service('BusinessService', ['$q', '$http', BusinessService])
     .service('UtilityService', UtilityService)
-    .service('LocationSelectService', LocationSelectService)
-    .service('ListingCreatorService', ListingCreatorService)
     .controller('NavCtrl', ['BusinessService', NavCtrl])
     .directive('ahMulticheckbox', ahMulticheckbox)
     .run(['formlyConfig', function(formlyConfig) {

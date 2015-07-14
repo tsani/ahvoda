@@ -55,10 +55,7 @@ angular
                             genders: [
                                 'BusinessService',
                                 function(bserv) {
-                                    return bserv.getGenders()
-                                        .then(function(gs) {
-                                            return gs;
-                                        });
+                                    return bserv.getGenders();
                                 }
                             ],
                             managers: [
@@ -85,10 +82,7 @@ angular
                             languages: [
                                 'BusinessService',
                                 function(bserv) {
-                                    return bserv.getLanguages()
-                                        .then(function(r) {
-                                            return r;
-                                        });
+                                    return bserv.getLanguages();
                                 }
                             ],
                             locationData: [
@@ -116,10 +110,7 @@ angular
                             employees: [
                                 'BusinessService',
                                 function(bserv) {
-                                    return bserv.getEmployees()
-                                        .then(function(r) {
-                                            return r;
-                                        });
+                                    return bserv.getEmployees();
                                 }
                             ]
                         },

@@ -1,10 +1,10 @@
 function AdminBusinessListCtrl(
-    $timeout, 
-    $location, 
-    bserv, 
-    util, 
-    businesses, 
-    locationData, 
+    $timeout,
+    $location,
+    bserv,
+    util,
+    businesses,
+    locationData,
     languages
 ) {
     var vm = this;

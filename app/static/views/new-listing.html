@@ -1,2 +1,44 @@
-<h2> Create a new listing </h2>
-<ui-view/>
+<h2> Create a new listing at {{ vm.business.name }} </h2>
+<h3> Choose job details </h3>
+<form class='separate-form fullwidth'
+        novalidate ng-submit='vm.submit()'>
+    <formly-form
+            model='vm.data'
+            fields='vm.fields'
+            form='vm.form'>
+        <div class='center-holder'>
+            <div ng-hide='vm.form.$submitted'>
+                <button ng-click='vm.back()' type='button'>
+                    Back
+                </button>
+                <button type='submit' ng-disabled='vm.form.$invalid'>
+                    Submit
+                </button>
+            </div>
+            <div ng-show='vm.form.$submitted'>
+                <div ng-if='vm.success'>
+                    <p>
+                        Created!
+                    </p>
+                    <div>
+                        <a ui-sref='listings'
+                                class='button block call-to-action'>
+                            Return to listings
+                        </a>
+                    </div>
+                </div>
+                <div ng-if='!vm.success'>
+                    <p>
+                        The listing could not be created.
+                    </p>
+                    <div>
+                        <a ui-sref='listings'
+                                class='button block call-to-action'>
+                            Return to listings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </formly-form>
+</form>

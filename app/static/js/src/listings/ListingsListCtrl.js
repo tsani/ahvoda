@@ -1,7 +1,6 @@
-function ListingsListCtrl(util, listingGroups, businesses) {
+function ListingsListCtrl(util, businesses) {
     var vm = this;
 
-    vm.listingGroups = listingGroups;
     vm.businesses = businesses;
 
     vm.util = util;

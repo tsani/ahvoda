@@ -1,34 +1,44 @@
-function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
+function NewListingDetailsCtrl(
+    $state,
+    bserv,
+    business,
+    positions,
+    defaultPosition
+) {
     var vm = this;
 
-    vm.back = function() {
-        lserv.reset();
-        $state.go('^.select-location');
-    }
+    vm.business = business;
 
-    vm.data = lserv.data;
+    vm.defaultPosition = defaultPosition;
+
+    vm.data = {
+        position: defaultPosition.id
+    };
 
     vm.updateFieldDefaults = function() {
         for(var i = 0; i < positions.length; i++) {
             var p = positions[i];
 
-            if(p.default_pay) {
-                vm.data.pay = p.default_pay;
-            }
-
-            if(p.default_details) {
-                vm.data.details = p.default_details;
-            }
-
-            if(p.default_duration) {
-                vm.data.duration = p.default_duration;
-            }
-
-            if(p.default_languages) {
-                vm.data.languages = vm.data.languages || {};
-                for(var j = 0; j < p.default_languages.length; j++) {
-                    vm.data.languages[p.default_languages[j].iso_name] = true;
+            if(p.id === vm.data.position) {
+                if(p.default_pay) {
+                    vm.data.pay = p.default_pay;
                 }
+
+                if(p.default_details) {
+                    vm.data.details = p.default_details;
+                }
+
+                if(p.default_duration) {
+                    vm.data.duration = p.default_duration;
+                }
+
+                if(p.default_languages) {
+                    vm.data.languages = vm.data.languages || {};
+                    for(var j = 0; j < p.default_languages.length; j++) {
+                        vm.data.languages[p.default_languages[j].iso_name] = true;
+                    }
+                }
+                break;
             }
         }
     }
@@ -41,7 +51,8 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
                 choices: positions.map(function(p) {
                     return {
                         value: p.id,
-                        name: p.name
+                        name: p.name,
+                        selected: p.id === vm.defaultPosition.id
                     };
                 }),
                 label: 'Position',
@@ -114,11 +125,12 @@ function NewListingDetailsCtrl($state, lserv, bserv, business, positions) {
         bserv.createListing(business, listingData)
             .then(function(response) {
                 vm.form.$setSubmitted();
-                lserv.reset();
                 vm.success = true;
             }, function(response) {
                 vm.form.$setSubmitted();
                 vm.success = false;
             });
     }
+
+    vm.updateFieldDefaults();
 }

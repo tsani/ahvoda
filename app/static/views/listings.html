@@ -1,23 +1,31 @@
 <h1> Contracts </h1>
-<div>
-    <a class='button block call-to-action' ui-sref='new-listing'>
-        Request contractor
-    </a>
-</div>
 <dl class='business-list' ng-repeat='business in vm.businesses'>
     <dt>
         <h2> {{ business.name }} </h2>
         <p>
         {{ vm.util.formatAddress(business.location) }}
         </p>
+        <p ng-if='business.positions.length === 0'>
+        This business currently has no positions.
+        </p>
+        <div class='new-listing-positions-list'>
+            <a class='button block call-to-action' ng-repeat='position in business.positions'
+                    ui-sref='new-listing({businessId: business.id, positionId: position.id})'>
+                Get a {{ position.name }}
+            </a>
+            <a class='button block call-to-action'
+                    ui-sref='new-position({businessId: business.id})'>
+                New position
+            </a>
+        </div>
     </dt>
     <dd>
-        <p ng-if='vm.listingGroups[business.name].length == 0'>
+        <p ng-if='business.listings.length === 0'>
         This location has no contracts yet.
         </p>
-        <dl ng-if='vm.listingGroups[business.name].length > 0'
+        <dl ng-if='business.listings.length > 0'
                 class='listings-list'>
-            <div class='item' ng-repeat='listing in vm.listingGroups[business.name]'>
+            <div class='item' ng-repeat='listing in business.listings'>
                 <dt>
                     <div class='listing-header'>
                         <div>

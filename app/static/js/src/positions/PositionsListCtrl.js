@@ -1,8 +1,19 @@
-function PositionsListCtrl(util, positionGroups, businesses) {
+function PositionsListCtrl(bserv, util, businesses) {
     var vm = this;
 
-    vm.positionGroups = positionGroups;
     vm.businesses = businesses;
 
     vm.util = util;
+
+    vm.deletePosition = function(business, position) {
+        bserv.deletePosition(business.id, position.id)
+            .then(function() {
+                for(var i = 0; i < business.positions.length; i++) {
+                    var p = business.positions[i];
+                    if(p.id === position.id) {
+                        business.positions.splice(i, 1);
+                    }
+                }
+            });
+    };
 }

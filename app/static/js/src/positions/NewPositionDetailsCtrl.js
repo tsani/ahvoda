@@ -1,6 +1,9 @@
 function NewPositionDetailsCtrl($state, business, positions, bserv) {
     var vm = this;
 
+    vm.business = business;
+    vm.positionId = undefined;
+
     vm.data = {};
     vm.fields = [
         {
@@ -63,8 +66,10 @@ function NewPositionDetailsCtrl($state, business, positions, bserv) {
                             iso_name: k
                         };
                     })
-        }).then(function(data) {
+        }).then(function(position) {
             vm.form.$setSubmitted();
+            vm.positionId = vm.data.position;
+            vm.position = position;
         });
     };
 }

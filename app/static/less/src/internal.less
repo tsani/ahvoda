@@ -8,40 +8,6 @@ form {
     > div {
         margin: 1em 0;
     }
-
-    /*
-    input[type='radio'].radio-button {
-        display: none;
-    }
-
-    input[type='radio'].radio-button + label {
-        margin: 0.25em 0;
-        padding: 0.25em 0.5em;
-        text-align: center;
-        border-radius: 5px;
-        border: 1px solid @fg-main;
-        display: block;
-        width: 100%;
-    }
-
-    input[type='radio'].radio-button:hover + label {
-        background-color: @light-blue;
-    }
-
-    input[type='radio'].radio-button:checked + label {
-        background-color: @base-blue;
-    }
-
-    input[type='radio'].radio-button + input[type='text']#position-new-text {
-        background-color: @trans-bg;
-        text-align: center;
-    }
-
-    input[type='radio'].radio-button:checked + input[type='text']#position-new-text {
-        background-color: @base-blue;
-        border: 1px solid @fg-main;
-    }
-    */
 }
 
 .card {
@@ -136,6 +102,16 @@ dl.listings-list {
 dl.listing-content {
     dd {
         padding: 0 2em;
+    }
+}
+
+.new-listing-positions-list {
+    .display-flex();
+    .flex-direction(row);
+    .flex-wrap(wrap);
+
+    > * {
+        margin: 0.25em;
     }
 }
 
