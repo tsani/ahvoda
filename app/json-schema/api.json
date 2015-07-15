@@ -1016,8 +1016,12 @@
                                     },
                                     "PATCH": {
                                         "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "$ref": "#/definitions/listing_instance_request"
+                                        },
                                         "responses": {
                                             "204": {},
+                                            "400": { "$ref": "#/errors/message" },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" },
                                             "409": { "$ref": "#/errors/message" }
@@ -1248,37 +1252,10 @@
                                     "POST": {
                                         "accountTypes": [ "manager" ],
                                         "request": {
-                                            "type": "object",
-                                            "properties": {
-                                                "pay": {
-                                                    "$ref": "#/definitions/salary"
-                                                },
-                                                "duration": {
-                                                    "type": "number",
-                                                    "minimum": 0
-                                                },
-                                                "details": {
-                                                    "type": "string"
-                                                },
-                                                "position": {
-                                                    "$ref": "#/definitions/id"
-                                                },
-                                                "languages": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "#/definitions/language"
-                                                    },
-                                                    "minItems": 1
-                                                }
-                                            },
-                                            "required": [
-                                                "pay",
-                                                "duration",
-                                                "details",
-                                                "position",
-                                                "languages"
-                                            ],
-                                            "additionalProperties": false
+                                            "allOf": [
+                                                { "$ref": "#/definitions/listing_instance_request" },
+                                                { "$ref": "#/definitions/listing_instance_request_require_all" }
+                                            ]
                                         },
                                         "responses": {
                                             "202": {
@@ -1643,6 +1620,43 @@
                 }
             },
             "additionalProperties": false
+        },
+        "listing_instance_request": {
+            "type": "object",
+            "description": "Lists the properties for creating a listing, without requiring any of them.",
+            "properties": {
+                "pay": {
+                    "$ref": "#/definitions/salary"
+                },
+                "duration": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "details": {
+                    "type": "string"
+                },
+                "position": {
+                    "$ref": "#/definitions/id"
+                },
+                "languages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/language"
+                    },
+                    "minItems": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "listing_instance_request_require_all": {
+            "type": "object",
+            "required": [
+                "pay",
+                "duration",
+                "details",
+                "position",
+                "languages"
+            ]
         }
     },
     "errors": {

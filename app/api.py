@@ -514,6 +514,116 @@ def get_job(business_id, listing_id, login):
     )
 
 @decorate_with(
+        endpoints['business']['listing']['instance'].handles_action('PATCH'),
+)
+def patch_job(business_id, listing_id, login):
+    business = models.business.Business.query.get(business_id)
+    job = models.business.Job.query.get(listing_id)
+    account = login.get_account()
+
+    if business is None or \
+            job is None or \
+            job.business_id != business.id or \
+            login.is_employee() or \
+            login.is_manager() and business not in account.businesses:
+        return util.json_die(
+                'No such listing.',
+                404,
+        )
+
+    if job.status.name != 'pending':
+        return util.json_die(
+                'This listing can no longer be updated.',
+                400,
+        )
+
+    data = request.get_json()
+    with ignored(KeyError):
+        job.pay = data['pay']
+
+    with ignored(KeyError):
+        job.details = data['details']
+
+    try:
+        position_id = data['position']
+    except KeyError:
+        pass
+    else:
+        position = models.business.Position.query.get(position_id)
+        if position is None:
+            return util.json_die(
+                    'No such position.',
+                    404,
+            )
+        job.position = position
+
+    try:
+        langs = data['languages']
+    except KeyError:
+        pass
+    else:
+        ls = []
+        for lang in langs:
+            try:
+                ls.append(
+                        models.data.Language.query.filter_by(
+                            iso_name=lang['iso_name'],
+                        ).one(),
+                )
+            except NoResultFound:
+                return util.json_die(
+                        'No such language "%s".' % (
+                            lang['iso_name'],
+                        ),
+                        404,
+                )
+            except MultipleResultsFound:
+                return util.json_die(
+                        'Error: more than one language with code "%s".' % (
+                            lang['iso_name'],
+                        ),
+                        500,
+                )
+        job.languages = ls
+
+    with ignored(KeyError):
+        job.duration = data['duration']
+
+    db.session.add(job)
+    db.session.commit()
+
+    return Response(status=204)
+
+@decorate_with(
+        endpoints['business']['listing']['instance'].handles_action('DELETE'),
+)
+def delete_job(business_id, listing_id, login):
+    business = models.business.Business.query.get(business_id)
+    job = models.business.Job.query.get(listing_id)
+    account = login.get_account()
+
+    if business is None or \
+            job is None or \
+            job.business_id != business.id or \
+            login.is_employee() or \
+            login.is_manager() and business not in account.businesses:
+        return util.json_die(
+                'No such listing.',
+                404,
+        )
+
+    if job.status.name != 'pending':
+        return util.json_die(
+                'This listing can no longer be deleted.',
+                400,
+        )
+
+    db.session.delete(job)
+    db.session.commit()
+
+    return Response(status=204)
+
+@decorate_with(
         endpoints['business']['position']['collection'].handles_action('GET')
 )
 def get_positions(business_id, login):
