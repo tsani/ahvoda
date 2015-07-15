@@ -64,12 +64,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
             key: 'gender',
             type: 'select',
             templateOptions: {
-                choices: genders.map(function(g) {
-                    return {
-                        name: g.name,
-                        value: g.id
-                    }
-                }),
+                choices: genders,
                 label: 'Gender',
                 required: true
             }
@@ -94,7 +89,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
                 name: b.name + ' (' +
                           vm.util.formatAddress(b.location) +
                           ')',
-                value: b.id
+                id: b.id
             };
         });
 
@@ -131,7 +126,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
         manager.associateBusiness = function() {
             bserv.addManagerToBusiness(
                 manager.username,
-                manager.formModel.business)
+                manager.formModel.business.id)
                 .then(function(business) {
                     manager.businesses.push(business);
                 });
@@ -174,7 +169,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
             password: m.password,
             first_name: m.firstName,
             last_name: m.lastName,
-            gender_id: parseInt(m.gender),
+            gender_id: m.gender.id,
             birth_date: m.birthDate + 'T00:00:00Z',
             email_address: m.emailAddress,
             phone_number: m.phoneNumber

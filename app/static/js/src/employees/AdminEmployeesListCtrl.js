@@ -64,12 +64,7 @@ function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locat
             key: 'gender',
             type: 'select',
             templateOptions: {
-                choices: genders.map(function(g) {
-                    return {
-                        name: g.name,
-                        value: g.id
-                    };
-                }),
+                choices: genders,
                 label: 'Gender',
                 required: true
             }
@@ -105,12 +100,7 @@ function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locat
             key: 'country',
             type: 'select',
             templateOptions: {
-                choices: locationData.countries.map(function(c) {
-                    return {
-                        name: c.name,
-                        value: c.id
-                    };
-                }),
+                choices: locationData.countries,
                 label: 'Country'
             }
         },
@@ -118,12 +108,7 @@ function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locat
             key: 'province',
             type: 'select',
             templateOptions: {
-                choices: locationData.states.map(function(c) {
-                    return {
-                        name: c.name,
-                        value: c.id
-                    };
-                }),
+                choices: locationData.states,
                 label: 'State/Province'
             }
         },
@@ -131,12 +116,7 @@ function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locat
             key: 'city',
             type: 'select',
             templateOptions: {
-                choices: locationData.cities.map(function(c) {
-                    return {
-                        name: c.name,
-                        value: c.id
-                    };
-                }),
+                choices: locationData.cities,
                 label: 'City'
             }
         },
@@ -169,10 +149,10 @@ function AdminEmployeesListCtrl($timeout, bserv, util, languages, genders, locat
             postal_code: m.postalCode,
             first_name: m.firstName,
             last_name: m.lastName,
-            gender_id: parseInt(m.gender),
+            gender_id: m.gender.id,
             birth_date: m.birthDate + 'T00:00:00Z',
             address: m.address,
-            city_id: parseInt(m.city),
+            city_id: m.city.id,
             languages:
                 Object.keys(m.languages)
                     .filter(function(k) {

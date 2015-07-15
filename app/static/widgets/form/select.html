@@ -1,9 +1,6 @@
 <label ng-show='to.label' for='{{ id }}'>
     {{ to.label }}
 </label>
-<select ng-model='model[options.key]' ng-change='to.onChange()'>
-    <option ng-repeat='choice in to.choices' ng-value='choice.value'
-            ng-selected='choice.selected'>
-        {{ choice.name }}
-    </option>
+<select ng-model='model[options.key]' ng-change='to.onChange()'
+        ng-options='choice.name for choice in to.choices'>
 </select>

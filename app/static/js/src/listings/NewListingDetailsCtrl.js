@@ -48,13 +48,7 @@ function NewListingDetailsCtrl(
             key: 'position',
             type: 'select',
             templateOptions: {
-                choices: positions.map(function(p) {
-                    return {
-                        value: p.id,
-                        name: p.name,
-                        selected: p.id === vm.defaultPosition.id
-                    };
-                }),
+                choices: positions,
                 label: 'Position',
                 required: true,
                 onChange: vm.updateFieldDefaults
@@ -119,7 +113,7 @@ function NewListingDetailsCtrl(
                         iso_name: k
                     };
                 }),
-            position: parseInt(vm.data.position)
+            position: vm.data.position.id
         };
 
         bserv.createListing(business, listingData)

@@ -62,12 +62,7 @@ function AdminBusinessListCtrl(
                 type: 'select',
                 templateOptions: {
                     label: 'Country',
-                    choices: locationData.countries.map(function(c) {
-                        return {
-                            name: c.name,
-                            value: c.id
-                        }
-                    })
+                    choices: locationData.countries
                 }
             },
             {
@@ -75,12 +70,7 @@ function AdminBusinessListCtrl(
                 type: 'select',
                 templateOptions: {
                     label: 'State/Province',
-                    choices: locationData.states.map(function(c) {
-                        return {
-                            name: c.name,
-                            value: c.id
-                        };
-                    })
+                    choices: locationData.states
                 }
             },
             {
@@ -88,12 +78,7 @@ function AdminBusinessListCtrl(
                 type: 'select',
                 templateOptions: {
                     label: 'City',
-                    choices: locationData.cities.map(function(c) {
-                        return {
-                            name: c.name,
-                            value: c.id
-                        };
-                    })
+                    choices: locationData.cities
                 }
             },
             {
@@ -135,7 +120,7 @@ function AdminBusinessListCtrl(
             description: m.description,
             location: {
                 address: m.address,
-                city_id: parseInt(m.city),
+                city_id: m.city.id,
                 postal_code: m.postalCode
             },
             contact_info: {

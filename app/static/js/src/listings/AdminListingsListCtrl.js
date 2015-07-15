@@ -4,6 +4,14 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
 
     vm.listings = listings;
 
+    function decorateEmployee(e) {
+        e.name = e.human.first_name + ' ' + e.human.last_name;
+    }
+
+    for(var i = 0; i < employees.length; i++) {
+        decorateEmployee(employees[i]);
+    }
+
     function registerListing(listing) {
         listing.employeeFormModel = {};
         listing.employeeFormFields = [
@@ -11,19 +19,14 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
                 key: 'employee',
                 type: 'select',
                 templateOptions: {
-                    choices: employees.map(function(e) {
-                        return {
-                            name: e.human.first_name + ' ' + e.human.last_name,
-                            value: e.username
-                        };
-                    }),
+                    choices: employees,
                     required: true
                 }
             }
         ];
 
         listing.associateEmployee = function() {
-            bserv.approveEmployee(listing, listing.employeeFormModel.employee)
+            bserv.approveEmployee(listing, listing.employeeFormModel.employee.username)
                 .then(function(updatedListing) {
                     // TODO check that a more sophisticated merging isn't
                     // required.
