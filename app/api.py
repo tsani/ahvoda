@@ -775,6 +775,18 @@ def approve_employee(business_id, listing_id, login):
                 400,
         )
 
+
+    try:
+        submitted_status = models.business.JobStatus.query.filter_by(
+                name='submitted',
+        ).one()
+    except (NoResultFound, MultipleResultsFound) as e:
+        return util.json_die(
+                "Approval succeeded, but job status could not be updated.",
+                500,
+        )
+
+    job.status = submitted_status
     job.employee = employee_to_approve
 
     db.session.add(job)

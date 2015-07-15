@@ -28,9 +28,8 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
         listing.associateEmployee = function() {
             bserv.approveEmployee(listing, listing.employeeFormModel.employee.username)
                 .then(function(updatedListing) {
-                    // TODO check that a more sophisticated merging isn't
-                    // required.
                     listing.employee = updatedListing.employee;
+                    listing.status = updatedListing.status;
                 });
         };
     }
