@@ -2,5 +2,5 @@
     {{ to.label }}
 </label>
 <select ng-model='model[options.key]' ng-change='to.onChange()'
-        ng-options='choice.name for choice in to.choices'>
+        ng-options='choice.name for choice in to.choices track by choice.id'>
 </select>
