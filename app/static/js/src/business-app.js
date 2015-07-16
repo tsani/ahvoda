@@ -20,7 +20,7 @@ angular
                                         .then(function(bs) {
                                             return $q.all(bs.map(function(b) {
                                                 return $q.all([
-                                                    bserv.getPositions(b)
+                                                    bserv.getPositions(b.id)
                                                         .then(function(ps) {
                                                             b.positions = ps;
                                                             return ps;
@@ -78,7 +78,7 @@ angular
                                         .then(function(bs) {
                                             return $q.all(bs.map(function(b) {
                                                 return $q.all([
-                                                    bserv.getPositions(b)
+                                                    bserv.getPositions(b.id)
                                                         .then(function(ps) {
                                                             b.positions = ps;
                                                             return ps;
@@ -122,7 +122,7 @@ angular
                                 'BusinessService',
                                 'business',
                                 function(bserv, business) {
-                                    return bserv.getPositions(business);
+                                    return bserv.getPositions(business.id);
                                 }
                             ],
                             defaultPosition: [
@@ -167,7 +167,7 @@ angular
                                 'business',
                                 'BusinessService',
                                 function(business, bserv) {
-                                    return bserv.getPositions(business);
+                                    return bserv.getPositions(business.id);
                                 }
                             ]
                         },

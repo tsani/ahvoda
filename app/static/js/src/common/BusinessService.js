@@ -88,7 +88,7 @@ function BusinessService($q, $http) {
 
     srv.getPositionGroups = function(businesses) {
         return $q.all(businesses.map(function(b) {
-            return srv.getPositions(b)
+            return srv.getPositions(b.id)
                 .then(function(positions) {
                     return {
                         business: b,
@@ -130,6 +130,14 @@ function BusinessService($q, $http) {
                 return response.data;
             });
     }
+
+    srv.getListing = function(businessId, listingId) {
+        return $http.get(
+                '/api/businesses/' + businessId + '/listings/' + listingId)
+            .then(function(response) {
+                return response.data;
+            });
+    };
 
     srv.getListings = function(business) {
         var qs = {}
@@ -177,21 +185,35 @@ function BusinessService($q, $http) {
                 });
     };
 
-    srv.createListing = function(business, listing) {
+    srv.createListing = function(businessId, data) {
         return $http.post(
-                '/api/businesses/' + business.id + '/listings', listing)
+                '/api/businesses/' + businessId + '/listings', data)
             .then(function(response) {
                 return response.data;
             });
     }
+
+    /** Update an existing listing.
+     *
+     * @param {int} businessId - The id of the business to which the listing
+     * belongs.
+     * @param {int} listingId - The id of the listing to update.
+     * @param {object} data - The listing data to update.
+     * @see {@link API_SPEC}
+     */
+    srv.patchListing = function(businessId, listingId, data) {
+        return $http.patch(
+                '/api/businesses/' + businessId + '/listings/' + listingId,
+                data);
+    };
 
     srv.deleteListing = function(businessId, listingId) {
         return $http.delete(
                 '/api/businesses/' + businessId + '/listings/' + listingId);
     };
 
-    srv.getPositions = function(business) {
-        return $http.get('/api/businesses/' + business.id + '/positions')
+    srv.getPositions = function(businessId) {
+        return $http.get('/api/businesses/' + businessId + '/positions')
             .then(function(response) {
                 return response.data.positions;
             });

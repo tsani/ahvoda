@@ -116,7 +116,7 @@ function NewListingDetailsCtrl(
             position: vm.data.position.id
         };
 
-        bserv.createListing(business, listingData)
+        bserv.createListing(business.id, listingData)
             .then(function(response) {
                 vm.form.$setSubmitted();
                 vm.success = true;
