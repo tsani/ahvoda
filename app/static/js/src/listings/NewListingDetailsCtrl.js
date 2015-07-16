@@ -12,7 +12,6 @@
  * not enforced.
  */
 function NewListingDetailsCtrl(
-    $state,
     bserv,
     lfserv,
     business,
