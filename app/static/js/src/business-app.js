@@ -144,6 +144,7 @@ angular
                         controller: [
                             '$state',
                             'BusinessService',
+                            'ListingFormService',
                             'business',
                             'positions',
                             'defaultPosition',
@@ -184,6 +185,10 @@ angular
     ])
     .service('BusinessService', ['$q', '$http', BusinessService])
     .service('UtilityService', UtilityService)
+    .service('ListingFormService', [
+        'BusinessService',
+        ListingFormService
+    ])
     .controller('NavCtrl', ['BusinessService', NavCtrl])
     .directive('ahMulticheckbox', ahMulticheckbox)
     .run(['formlyConfig', function(formlyConfig) {
