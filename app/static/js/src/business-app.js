@@ -27,8 +27,22 @@ angular
                                                         }),
                                                     bserv.getListings(b)
                                                         .then(function(ls) {
-                                                            b.listings = ls;
-                                                            return ls;
+                                                            b.listings = ls.map(function(l) {
+                                                                l.delete = function() {
+                                                                    bserv.deleteListing(b.id, l.id)
+                                                                        .then(function() {
+                                                                            for(var i = 0; i < b.listings.length; i++) {
+                                                                                var q = b.listings[i];
+                                                                                if(q.id === l.id) {
+                                                                                    b.listings.splice(i, 1);
+                                                                                    return;
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                };
+                                                                return l;
+                                                            });
+                                                            return b.listings;
                                                         })
                                                 ])
                                                 .then(function(bss) {

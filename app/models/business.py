@@ -32,7 +32,7 @@ class JobMatch(db.Model):
     __tablename__ = 'jobmatch'
 
     __table_args__ = (
-            db.UniqueConstraint(
+            db.PrimaryKeyConstraint(
                 'employee_id',
                 'job_id',
             ),
@@ -40,9 +40,8 @@ class JobMatch(db.Model):
 
     id = db.Column(
             db.Integer,
-            unique=True,
             nullable=False,
-            primary_key=True,
+            unique=True,
     )
 
     create_date = db.Column(
@@ -55,7 +54,6 @@ class JobMatch(db.Model):
             db.Boolean,
             nullable=False,
             server_default='f',
-            index=True,
     )
 
     is_true_match = db.Column(
@@ -65,26 +63,30 @@ class JobMatch(db.Model):
 
     employee_id = db.Column(
             db.Integer,
-            db.ForeignKey('employee.id'),
+            db.ForeignKey('employee.id', ondelete='CASCADE'),
             nullable=False,
-            index=True,
     )
 
     job_id = db.Column(
             db.Integer,
-            db.ForeignKey('job.id'),
+            db.ForeignKey('job.id', ondelete='CASCADE'),
             nullable=False,
-            index=True,
     )
 
     employee = db.relationship(
             'Employee',
-            backref='employee_matches',
+            backref=db.backref(
+                'employee_matches',
+                cascade='all, delete-orphan',
+            ),
     )
 
     job = db.relationship(
             'Job',
-            backref='job_matches',
+            backref=db.backref(
+                'job_matches',
+                cascade='all, delete-orphan',
+            )
     )
 
 class Rating(db.Model):

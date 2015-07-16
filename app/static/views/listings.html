@@ -37,6 +37,9 @@
                             </div>
                         </div>
                         <div>
+                            <button ng-click='listing.delete()'>
+                                Delete
+                            </button>
                             <p class='listing-pay'> {{ listing.pay }}$/h </p>
                             <p class='listing-status'> {{ listing.status.friendly_name }} </p>
                         </div>

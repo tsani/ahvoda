@@ -185,6 +185,11 @@ function BusinessService($q, $http) {
             });
     }
 
+    srv.deleteListing = function(businessId, listingId) {
+        return $http.delete(
+                '/api/businesses/' + businessId + '/listings/' + listingId);
+    };
+
     srv.getPositions = function(business) {
         return $http.get('/api/businesses/' + business.id + '/positions')
             .then(function(response) {

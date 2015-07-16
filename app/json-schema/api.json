@@ -1031,6 +1031,7 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "204": {},
+                                            "400": { "$ref": "#/errors/message" },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" },
                                             "409": { "$ref": "#/errors/message" }
