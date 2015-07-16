@@ -176,5 +176,42 @@ function businessAppConfig($stateProvider, $urlRouterProvider) {
                 NewPositionDetailsCtrl
             ],
             controllerAs: 'vm'
+        })
+        .state('edit-listing', {
+            url: '/edit-listing/:businessId?listingId',
+            templateUrl: '/static/views/edit-listing.html',
+            resolve: {
+                business: [
+                    '$stateParams',
+                    'BusinessService',
+                    function($stateParams, bserv) {
+                        return bserv.getBusiness($stateParams.businessId)
+                    }
+                ],
+                positions: [
+                    'BusinessService',
+                    'business',
+                    function(bserv, b) {
+                        return bserv.getPositions(b.id);
+                    }
+                ],
+                listing: [
+                    '$stateParams',
+                    'BusinessService',
+                    'business',
+                    function($stateParams, bserv, b) {
+                        return bserv.getListing(b.id, $stateParams.listingId);
+                    }
+                ]
+            },
+            controller: [
+                'BusinessService',
+                'ListingFormService',
+                'business',
+                'listing',
+                'positions',
+                ListingEditCtrl
+            ],
+            controllerAs: 'vm'
         });
 }

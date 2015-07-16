@@ -37,9 +37,15 @@
                             </div>
                         </div>
                         <div>
-                            <button ng-click='listing.delete()'>
-                                Delete
-                            </button>
+                            <div>
+                                <button ng-click='listing.delete()'>
+                                    Delete
+                                </button>
+                                <a class='button'
+                                        ui-sref='edit-listing({businessId: business.id, listingId: listing.id})'>
+                                    Edit
+                                </a>
+                            </div>
                             <p class='listing-pay'> {{ listing.pay }}$/h </p>
                             <p class='listing-status'> {{ listing.status.friendly_name }} </p>
                         </div>
