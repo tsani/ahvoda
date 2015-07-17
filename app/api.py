@@ -1041,7 +1041,7 @@ def apply_to_job(business_id, listing_id, login):
 
     data = request.get_json()
 
-    if login.is_employee() and loin.username != data['name']:
+    if login.is_employee() and login.username != data['name']:
         return util.json_die(
                 "This account is not authorized to use that employee id.",
                 403,
