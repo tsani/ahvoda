@@ -1,0 +1,25 @@
+{
+  "name": "ahvoda-web",
+  "version": "0.0.1",
+  "description": "Setup =====",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "dependencies": {
+    "cssnext": "^1.8.1",
+    "less": "^2.4.0",
+    "less-plugin-autoprefix": "^1.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ahvoda@localhost:remote.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
