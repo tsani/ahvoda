@@ -1,21 +1,14 @@
 @import "main.less";
 
 .flex-row {
-    .display-flex();
-    .flex-direction(row);
-    .align-items(center);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
 
     > * {
         margin: 1em auto;
     }
-}
-
-.flex-nowrap {
-    .flex-nowrap();
-}
-
-.flex-wrap {
-    .flex-wrap(wrap);
 }
 
 .space-items {
@@ -25,11 +18,11 @@
 }
 
 .flex-spaced {
-    .display-flex;
-    .flex-direction(row);
-    .flex-nowrap();
-    .align-items(center);
-    .justify-content(space-between);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 section.screenful {

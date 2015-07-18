@@ -10,8 +10,8 @@ LESSSRC=static/less/src
 LESSDIST=static/less/dist
 
 # LESS compiler and its settings
-LESSC=lessc
-LESSFLAGS=
+LESSC=node_modules/less/bin/lessc
+LESSFLAGS=--autoprefix='> 5%'
 
 # JavaScript "compiler" (compressor and mangler) and settings
 JSC=node_modules/uglifyjs/bin/uglifyjs
