@@ -30,10 +30,10 @@ src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
     <ul class='left flat'>
         {% raw %}
         <li>
-        <h3 ng-if='nav.manager'>
+        <h3 ng-if='nav.manager.human'>
             {{ nav.manager.human.first_name }} {{ nav.manager.human.last_name }}
         </h3>
-        <h3 ng-if='nav.employee'>
+        <h3 ng-if='nav.employee.human'>
             {{ nav.employee.human.first_name }} {{ nav.employee.human.last_name }}
         </h3>
         <h3 ng-if='nav.administrator'>
