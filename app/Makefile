@@ -14,10 +14,11 @@ LESSC=lessc
 LESSFLAGS=
 
 # JavaScript "compiler" (compressor and mangler) and settings
-JSC=uglifyjs
+JSC=node_modules/uglifyjs/bin/uglifyjs
 JSFLAGS=-c --enclose
 
-CSSC=uglifycss
+# CSS compressor and mangler
+CSS_UGLY=node_modules/uglifycss/uglifycss
 
 # The JavaScript source files
 JSSRCFILES=$(shell find $(JSSRC) -name '*.js' -type f)
@@ -65,7 +66,7 @@ $(LESSDIST)/%.css: $(LESSSRC)/%.less
 	$(LESSC) $(LESSFLAGS) $< $@
 
 %.min.css: %.css
-	$(CSSC) $< > $@
+	$(CSS_UGLY) $< > $@
 
 # Inject the dependency files into this makefile.
 -include $(LESSDEPFILES)

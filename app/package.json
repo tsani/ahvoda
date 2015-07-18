@@ -10,7 +10,9 @@
   "dependencies": {
     "cssnext": "^1.8.1",
     "less": "^2.4.0",
-    "less-plugin-autoprefix": "^1.4.2"
+    "less-plugin-autoprefix": "^1.4.2",
+    "uglifycss": "0.0.15",
+    "uglifyjs": "^2.4.10"
   },
   "devDependencies": {},
   "scripts": {
