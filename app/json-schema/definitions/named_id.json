@@ -1,0 +1,16 @@
+{
+    "description": "A convenience type for objects consisting of just an id and a name.",
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "id.json"
+        },
+        "name": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "name"
+    ]
+}

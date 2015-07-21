@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "description": "A state, which is contained within a country.",
+    "required": [
+        "name",
+        "country"
+    ],
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "country": {
+            "$ref": "country.json"
+        },
+        "id": {
+            "$ref": "id.json"
+        }
+    }
+}

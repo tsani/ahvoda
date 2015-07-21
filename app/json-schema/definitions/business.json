@@ -1,0 +1,40 @@
+{
+    "additionalProperties": false,
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "languages": {
+            "items": {
+                "$ref": "language.json"
+            },
+            "type": "array"
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "description": {
+            "type": "string"
+        },
+        "location": {
+            "$ref": "fixed_location.json"
+        },
+        "contact_info": {
+            "$ref": "contact_info.json"
+        },
+        "company": {
+            "$ref": "company.json"
+        },
+        "is_verified": {
+            "type": "boolean"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "description",
+        "location",
+        "is_verified"
+    ]
+}

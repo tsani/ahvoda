@@ -1,0 +1,17 @@
+{
+    "properties": {
+        "name": {
+            "$ref": "job_status_name.json"
+        },
+        "priority": {
+            "type": "number"
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "friendly_name": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}

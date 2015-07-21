@@ -1,0 +1,19 @@
+{
+    "properties": {
+        "state": {
+            "$ref": "state.json"
+        },
+        "name": {
+            "type": "string"
+        },
+        "id": {
+            "$ref": "id.json"
+        }
+    },
+    "required": [
+        "name",
+        "state"
+    ],
+    "description": "A city, which is contained within a state.",
+    "type": "object"
+}

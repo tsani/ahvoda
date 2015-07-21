@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema$",
+    "additionalProperties": false,
+    "properties": {
+        "gender": {
+            "$ref": "gender.json"
+        },
+        "contact_info": {
+            "$ref": "contact_info.json"
+        },
+        "first_name": {
+            "type": "string"
+        },
+        "last_name": {
+            "type": "string"
+        },
+        "birth_date": {
+            "$ref": "date_time.json"
+        }
+    },
+    "type": "object",
+    "description": "Represents a physical person."
+}

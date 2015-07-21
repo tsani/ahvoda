@@ -1,0 +1,15 @@
+{
+    "additionalProperties": false,
+    "properties": {
+        "username": {
+            "type": "string"
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "human": {
+            "$ref": "human.json"
+        }
+    },
+    "type": "object"
+}

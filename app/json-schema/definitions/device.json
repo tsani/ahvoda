@@ -1,0 +1,12 @@
+{
+    "properties": {
+        "reg": {
+            "type": "string"
+        },
+        "id": {
+            "$ref": "id.json"
+        }
+    },
+    "type": "object",
+    "additionalProperties": false
+}

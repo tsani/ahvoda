@@ -1,0 +1,45 @@
+{
+    "additionalProperties": false,
+    "properties": {
+        "default_languages": {
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "$ref": "language.json"
+            }
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "default_details": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "name": {
+            "type": "string"
+        },
+        "default_pay": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "$ref": "salary.json"
+                }
+            ]
+        },
+        "create_date": {
+            "$ref": "date_time.json"
+        }
+    },
+    "type": "object",
+    "required": [
+        "id",
+        "name",
+        "create_date"
+    ]
+}

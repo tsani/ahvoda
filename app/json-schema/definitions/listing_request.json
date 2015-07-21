@@ -1,0 +1,27 @@
+{
+    "additionalProperties": false,
+    "type": "object",
+    "properties": {
+        "position": {
+            "$ref": "id.json"
+        },
+        "duration": {
+            "type": "number",
+            "minimum": 0
+        },
+        "languages": {
+            "items": {
+                "$ref": "language.json"
+            },
+            "type": "array",
+            "minItems": 1
+        },
+        "details": {
+            "type": "string"
+        },
+        "pay": {
+            "$ref": "salary.json"
+        }
+    },
+    "description": "Lists the properties for creating a listing, without requiring any of them."
+}

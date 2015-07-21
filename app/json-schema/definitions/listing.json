@@ -1,0 +1,74 @@
+{
+    "type": "object",
+    "properties": {
+        "manager": {
+            "$ref": "manager.json"
+        },
+        "duration": {
+            "type": "number",
+            "minimum": 0
+        },
+        "create_date": {
+            "$ref": "date_time.json"
+        },
+        "status": {
+            "$ref": "job_status.json"
+        },
+        "languages": {
+            "items": {
+                "$ref": "language.json"
+            },
+            "type": "array",
+            "minItems": 1
+        },
+        "details": {
+            "type": "string"
+        },
+        "pay": {
+            "$ref": "salary.json"
+        },
+        "position": {
+            "$ref": "position.json"
+        },
+        "employee": {
+            "$ref": "employee.json"
+        },
+        "rating": {
+            "type": "object",
+            "properties": {
+                "ofEmployee": {
+                    "$ref": "rating.json"
+                },
+                "ofEmployer": {
+                    "$ref": "rating.json"
+                }
+            },
+            "additionalProperties": false
+        },
+        "departure_date": {
+            "$ref": "date_time.json"
+        },
+        "arrival_date": {
+            "$ref": "date_time.json"
+        },
+        "business": {
+            "$ref": "business.json"
+        },
+        "id": {
+            "$ref": "id.json"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "pay",
+        "details",
+        "create_date",
+        "duration",
+        "position",
+        "business",
+        "rating",
+        "status",
+        "languages"
+    ]
+}

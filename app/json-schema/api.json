@@ -25,7 +25,7 @@
                                                     "genders": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/gender"
+                                                            "$ref": "definitions/gender.json"
                                                         }
                                                     }
                                                 },
@@ -45,7 +45,7 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/gender"
+                                                "$ref": "definitions/gender.json"
                                             },
                                             "404": {
                                                 "$ref": "#/errors/message"
@@ -73,7 +73,7 @@
                                                     "countries": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/country"
+                                                            "$ref": "definitions/country.json"
                                                         }
                                                     }
                                                 },
@@ -93,7 +93,7 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/country"
+                                                "$ref": "definitions/country.json"
                                             }
                                         }
                                     }
@@ -127,7 +127,7 @@
                                                     "states": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/state"
+                                                            "$ref": "definitions/state.json"
                                                         }
                                                     }
                                                 },
@@ -150,7 +150,7 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/state"
+                                                "$ref": "definitions/state.json"
                                             },
                                             "404": {
                                                 "$ref": "#/errors/message"
@@ -178,7 +178,7 @@
                                                     "cities": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/city"
+                                                            "$ref": "definitions/city.json"
                                                         }
                                                     }
                                                 },
@@ -198,7 +198,7 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/city"
+                                                "$ref": "definitions/city.json"
                                             },
                                             "404": {
                                                 "$ref": "#/errors/message"
@@ -226,7 +226,7 @@
                                                     "languages": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/language"
+                                                            "$ref": "definitions/language.json"
                                                         }
                                                     }
                                                 },
@@ -246,7 +246,7 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/language"
+                                                "$ref": "definitions/language.json"
                                             }
                                         }
                                     }
@@ -273,7 +273,7 @@
                                             "devices": {
                                                 "type": "array",
                                                 "items": {
-                                                    "$ref": "#/definitions/device"
+                                                    "$ref": "definitions/device.json"
                                                 }
                                             }
                                         },
@@ -299,7 +299,7 @@
                                 },
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/device"
+                                        "$ref": "definitions/device.json"
                                     },
                                     "400": {
                                         "$ref": "#/errors/message"
@@ -333,7 +333,7 @@
                                             "managers": {
                                                 "type": "array",
                                                 "items": {
-                                                    "$ref": "#/definitions/manager"
+                                                    "$ref": "definitions/manager.json"
                                                 }
                                             }
                                         },
@@ -352,7 +352,7 @@
                                         "first_name": { "type": "string" },
                                         "last_name": { "type": "string" },
                                         "gender_id": {
-                                            "$ref": "#/definitions/id"
+                                            "$ref": "definitions/id.json"
                                         },
                                         "birth_date": {
                                             "type": "string",
@@ -363,7 +363,7 @@
                                             "format": "email"
                                         },
                                         "phone_number": {
-                                            "$ref": "#/definitions/phone_number"
+                                            "$ref": "definitions/phone_number.json"
                                         }
                                     },
                                     "required": [
@@ -380,7 +380,7 @@
                                 },
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/manager"
+                                        "$ref": "definitions/manager.json"
                                     },
                                     "400": {
                                         "$ref": "#/errors/message"
@@ -404,7 +404,7 @@
                                 "accountTypes": [ "manager" ],
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/manager"
+                                        "$ref": "definitions/manager.json"
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -439,7 +439,7 @@
                                                     "businesses": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/business"
+                                                            "$ref": "definitions/business.json"
                                                         }
                                                     },
                                                     "required": "businesses",
@@ -467,9 +467,9 @@
                         "query_string": {
                             "type": "object",
                             "properties": {
-                                "status": { "$ref": "#/definitions/job_status_name" },
-                                "since": { "$ref": "#/definitions/date_time" },
-                                "before": { "$ref": "#/definitions/date_time" },
+                                "status": { "$ref": "definitions/job_status_name.json" },
+                                "since": { "$ref": "definitions/date_time.json" },
+                                "before": { "$ref": "definitions/date_time.json" },
                                 "max": { "type": "string" },
                                 "created_by": {
                                     "description": "Username of the manager that created the listing.",
@@ -494,7 +494,7 @@
                                     "listings": {
                                         "type": "array",
                                         "items": {
-                                            "$ref": "#/definitions/listing"
+                                            "$ref": "definitions/listing.json"
                                         }
                                     }
                                 },
@@ -525,7 +525,7 @@
                                             "employees": {
                                                 "type": "array",
                                                 "items": {
-                                                    "$ref": "#/definitions/employee"
+                                                    "$ref": "definitions/employee.json"
                                                 }
                                             }
                                         },
@@ -547,7 +547,7 @@
                                         "first_name": { "type": "string" },
                                         "last_name": { "type": "string" },
                                         "gender_id": {
-                                            "$ref": "#/definitions/id"
+                                            "$ref": "definitions/id.json"
                                         },
                                         "birth_date": {
                                             "type": "string",
@@ -558,7 +558,7 @@
                                             "format": "email"
                                         },
                                         "phone_number": {
-                                            "$ref": "#/definitions/phone_number"
+                                            "$ref": "definitions/phone_number.json"
                                         },
                                         "postal_code": {
                                             "type": "string",
@@ -568,12 +568,12 @@
                                             "type": "string"
                                         },
                                         "city_id": {
-                                            "$ref": "#/definitions/id"
+                                            "$ref": "definitions/id.json"
                                         },
                                         "languages": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/language"
+                                                "$ref": "definitions/language.json"
                                             }
                                         }
                                     },
@@ -595,7 +595,7 @@
                                 },
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/employee"
+                                        "$ref": "definitions/employee.json"
                                     },
                                     "400": {
                                         "$ref": "#/errors/message"
@@ -616,7 +616,7 @@
                                 "accountTypes": [ "employee", "manager" ],
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/employee"
+                                        "$ref": "definitions/employee.json"
                                     },
                                     "403": {
                                         "$ref": "#/errors/message"
@@ -629,7 +629,7 @@
                             "PATCH": {
                                 "accountTypes": [ "employee" ],
                                 "request": {
-                                    "$ref": "#/definitions/employee"
+                                    "$ref": "definitions/employee.json"
                                 },
                                 "responses": {
                                     "204": {},
@@ -652,7 +652,7 @@
                                 "accountTypes": [ "employee", "manager" ],
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/minimalLocation"
+                                        "$ref": "definitions/location.json"
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -662,12 +662,12 @@
                             "PUT": {
                                 "accountTypes": [ "employee" ],
                                 "request": {
-                                    "$ref": "#/definitions/minimalLocation"
+                                    "$ref": "definitions/location.json"
                                 },
                                 "responses": {
                                     "204": {},
                                     "400": {
-                                        "$ref": "#/definitions/minimalLocation"
+                                        "$ref": "definitions/location.json"
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -690,7 +690,7 @@
                                 "accountTypes": [ "employee", "manager" ],
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/business"
+                                        "$ref": "definitions/business.json"
                                     },
                                     "403": {
                                         "$ref": "#/errors/message"
@@ -703,7 +703,7 @@
                             "PATCH": {
                                 "accountTypes": [ "manager" ],
                                 "request": {
-                                    "$ref": "#/definitions/business"
+                                    "$ref": "definitions/business.json"
                                 },
                                 "responses": {
                                     "204": {},
@@ -731,7 +731,7 @@
                                             "businesses": {
                                                 "type": "array",
                                                 "items": {
-                                                    "$ref": "#/definitions/business"
+                                                    "$ref": "definitions/business.json"
                                                 }
                                             },
                                             "required": [ "businesses" ],
@@ -751,7 +751,7 @@
                                             "type": "object",
                                             "properties": {
                                                 "address": { "type": "string" },
-                                                "city_id": { "$ref": "#/definitions/id" },
+                                                "city_id": { "$ref": "definitions/id.json" },
                                                 "postal_code": {
                                                     "type": "string",
                                                     "format": "postal-code"
@@ -768,7 +768,7 @@
                                                     "format": "email"
                                                 },
                                                 "phone_number": {
-                                                    "$ref": "#/definitions/phone_number"
+                                                    "$ref": "definitions/phone_number.json"
                                                 }
                                             },
                                             "required": [ "email_address", "phone_number" ],
@@ -778,7 +778,7 @@
                                             "type": "array",
                                             "minItems": 1,
                                             "items": {
-                                                "$ref": "#/definitions/language"
+                                                "$ref": "definitions/language.json"
                                             }
                                         }
                                     },
@@ -793,7 +793,7 @@
                                 },
                                 "responses": {
                                     "200": {
-                                        "$ref": "#/definitions/business"
+                                        "$ref": "definitions/business.json"
                                     },
                                     "403": { "$ref": "#/errors/message" }
                                 }
@@ -817,7 +817,7 @@
                                                     "managers": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/manager"
+                                                            "$ref": "definitions/manager.json"
                                                         }
                                                     },
                                                     "required": [ "managers" ],
@@ -841,7 +841,7 @@
                                         },
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/business"
+                                                "$ref": "definitions/business.json"
                                             },
                                             "400": {
                                                 "$ref": "#/errors/message"
@@ -888,7 +888,7 @@
                                                     "type": "string"
                                                 },
                                                 "default_pay": {
-                                                    "$ref": "#/definitions/salary"
+                                                    "$ref": "definitions/salary.json"
                                                 },
                                                 "default_details": {
                                                     "type": "string"
@@ -896,7 +896,7 @@
                                                 "default_languages": {
                                                     "type": "array",
                                                     "items": {
-                                                        "$ref": "#/definitions/language"
+                                                        "$ref": "definitions/language.json"
                                                     },
                                                     "minItems": 1
                                                 }
@@ -911,7 +911,7 @@
                                         },
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/position"
+                                                "$ref": "definitions/position.json"
                                             },
                                             "400": { "$ref": "#/errors/message" },
                                             "403": { "$ref": "#/errors/message" },
@@ -927,7 +927,7 @@
                                                     "positions": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/position"
+                                                            "$ref": "definitions/position.json"
                                                         }
                                                     }
                                                 }
@@ -947,7 +947,7 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/position"
+                                                "$ref": "definitions/position.json"
                                             },
                                             "403": {
                                                 "$ref": "#/errors/message"
@@ -1009,7 +1009,7 @@
                                     "GET": {
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
-                                            "200": { "$ref": "#/definitions/listing" },
+                                            "200": { "$ref": "definitions/listing.json" },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" }
                                         }
@@ -1017,7 +1017,7 @@
                                     "PATCH": {
                                         "accountTypes": [ "manager" ],
                                         "request": {
-                                            "$ref": "#/definitions/listing_instance_request"
+                                            "$ref": "definitions/listing_request.json"
                                         },
                                         "responses": {
                                             "204": {},
@@ -1056,7 +1056,7 @@
                                         },
                                         "responses": {
                                             "200": {
-                                                "$ref": "#/definitions/listing"
+                                                "$ref": "definitions/listing.json"
                                             },
                                             "400": {
                                                 "$ref": "#/errors/message"
@@ -1081,7 +1081,7 @@
                                                     "applicants": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/employee"
+                                                            "$ref": "definitions/employee.json"
                                                         }
                                                     }
                                                 },
@@ -1109,7 +1109,7 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "time": {
-                                                            "$ref": "#/definitions/date_time"
+                                                            "$ref": "definitions/date_time.json"
                                                         }
                                                     },
                                                     "required": [ "time" ],
@@ -1117,7 +1117,7 @@
                                                 },
                                                 "responses": {
                                                     "200": {
-                                                        "$ref": "#/definitions/listing"
+                                                        "$ref": "definitions/listing.json"
                                                     },
                                                     "400": {
                                                         "$ref": "#/errors/message"
@@ -1146,7 +1146,7 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "time": {
-                                                            "$ref": "#/definitions/date_time"
+                                                            "$ref": "definitions/date_time.json"
                                                         }
                                                     },
                                                     "required": [ "time" ],
@@ -1154,7 +1154,7 @@
                                                 },
                                                 "responses": {
                                                     "200": {
-                                                        "$ref": "#/definitions/listing"
+                                                        "$ref": "definitions/listing.json"
                                                     },
                                                     "400": {
                                                         "$ref": "#/errors/message"
@@ -1191,7 +1191,7 @@
                                                 },
                                                 "responses": {
                                                     "200": {
-                                                        "$ref": "#/definitions/listing"
+                                                        "$ref": "definitions/listing.json"
                                                     },
                                                     "400": {
                                                         "$ref": "#/errors/message"
@@ -1211,7 +1211,7 @@
                                                 "accountTypes": [ "manager" ],
                                                 "responses": {
                                                     "200": {
-                                                        "$ref": "#/definitions/employee"
+                                                        "$ref": "definitions/employee.json"
                                                     },
                                                     "403": {
                                                         "$ref": "#/errors/message"
@@ -1239,7 +1239,7 @@
                                                     "listings": {
                                                         "type": "array",
                                                         "items": {
-                                                            "$ref": "#/definitions/listing"
+                                                            "$ref": "definitions/listing.json"
                                                         }
                                                     }
                                                 },
@@ -1254,13 +1254,13 @@
                                         "accountTypes": [ "manager" ],
                                         "request": {
                                             "allOf": [
-                                                { "$ref": "#/definitions/listing_instance_request" },
-                                                { "$ref": "#/definitions/listing_instance_request_require_all" }
+                                                { "$ref": "definitions/listing_request.json" },
+                                                { "$ref": "definitions/listing_request_req.json" }
                                             ]
                                         },
                                         "responses": {
                                             "202": {
-                                                "$ref": "#/definitions/listing"
+                                                "$ref": "definitions/listing.json"
                                             },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" }
@@ -1272,392 +1272,6 @@
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "id": {
-            "type": "integer",
-            "minimum": 0
-        },
-        "named_id": {
-            "type": "object",
-            "description": "A convenience type for objects consisting of just an id and a name.",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "required": [ "id", "name" ]
-        },
-        "gender": {
-            "$ref": "#/definitions/named_id"
-        },
-        "company": {
-            "$ref": "#/definitions/named_id"
-        },
-        "language": {
-            "type": "object",
-            "description": "Represents a spoken human language.",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "iso_name": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": false
-        },
-        "contact_info": {
-            "type": "object",
-            "description": "All information to use to contact someone.",
-            "properties": {
-                "phone_number": {
-                    "$ref": "#/definitions/phone_number"
-                },
-                "email_address": {
-                    "type": "string",
-                    "format": "email"
-                }
-            },
-            "additionalProperties": false
-        },
-        "human": {
-            "type": "object",
-            "description": "Represents a physical person.",
-            "properties": {
-                "first_name": { "type": "string" },
-                "last_name": { "type": "string" },
-                "birth_date": { "$ref": "#/definitions/date_time" },
-                "gender": { "$ref": "#/definitions/gender" },
-                "contact_info": { "$ref": "#/definitions/contact_info" }
-            },
-            "additionalProperties": false
-        },
-        "employee": {
-            "type": "object",
-            "description": "A representation of an employee.",
-            "properties": {
-                "id": { "$ref": "#/definitions/id" },
-                "username": { "type": "string" },
-                "human": { "$ref": "#/definitions/human" },
-                "is_verified": {
-                    "type": "boolean"
-                },
-                "create_date": {
-                    "type": "string",
-                    "format": "date_time"
-                },
-                "home_location": { "$ref": "#/definitions/fixed_location" },
-                "languages": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": { "$ref": "#/definitions/language" }
-                }
-            },
-            "additionalProperties": false
-        },
-        "longitude": {
-            "type": "number",
-            "minimum": -180,
-            "maximum": 180
-        },
-        "latitude": {
-            "type": "number",
-            "minimum": -90,
-            "maximum": 90
-        },
-        "location": {
-            "type": "object",
-            "properties": {
-                "longitude": {
-                    "$ref": "#/definitions/longitude"
-                },
-                "latitude": {
-                    "$ref": "#/definitions/latitude"
-                }
-            },
-            "required": [ "longitude", "latitude" ]
-        },
-        "country": {
-            "$ref": "#/definitions/named_id"
-        },
-        "state": {
-            "type": "object",
-            "description": "A state, which is contained within a country.",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "country": {
-                    "$ref": "#/definitions/country"
-                }
-            },
-            "required": [ "name", "country" ]
-        },
-        "city": {
-            "type": "object",
-            "description": "A city, which is contained within a state.",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "state": {
-                    "$ref": "#definitions/state"
-                }
-            },
-            "required": [ "name", "state" ]
-        },
-        "fixed_location": {
-            "type": "object",
-            "description": "Represents a legally fixed location, with an address as well as geographical coordinates.",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "address": {
-                    "type": "string"
-                },
-                "city": {
-                    "$ref": "#/definitions/city"
-                },
-                "postal_code": {
-                    "type": "string",
-                    "format": "postal-code"
-                },
-                "location": {
-                    "$ref": "#/definitions/location"
-                }
-            }
-        },
-        "date_time": {
-            "type": "string",
-            "format": "date-time"
-        },
-        "business": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "location": {
-                    "$ref": "#/definitions/fixed_location"
-                },
-                "is_verified": {
-                    "type": "boolean"
-                },
-                "company": {
-                    "$ref": "#/definitions/company"
-                },
-                "contact_info": {
-                    "$ref": "#/definitions/contact_info"
-                },
-                "languages": {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/language" }
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "id",
-                "name",
-                "description",
-                "location",
-                "is_verified"
-            ]
-        },
-        "rating": {
-            "type": [ "object", "null" ],
-            "properties": {
-                "value": {
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 1
-                },
-                "comment": {
-                    "type": [ "string", "null" ]
-                }
-            },
-            "required": [ "value", "comment" ],
-            "additionalProperties": false
-        },
-        "listing": {
-            "type": "object",
-            "properties": {
-                "id": { "$ref": "#/definitions/id" },
-                "pay": {
-                    "$ref": "#/definitions/salary"
-                },
-                "details": { "type": "string" },
-                "create_date": { "$ref": "#/definitions/date_time" },
-                "arrival_date": { "$ref": "#/definitions/date_time" },
-                "departure_date": { "$ref": "#/definitions/date_time" },
-                "duration": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "position": { "$ref": "#/definitions/position" },
-                "rating": {
-                    "type": "object",
-                    "properties": {
-                        "ofEmployer": { "$ref": "#/definitions/rating" },
-                        "ofEmployee": { "$ref": "#/definitions/rating" }
-                    },
-                    "additionalProperties": false
-                },
-                "business": { "$ref": "#/definitions/business" },
-                "manager": { "$ref": "#/definitions/manager" },
-                "employee": { "$ref": "#/definitions/employee" },
-                "status": { "$ref": "#/definitions/job_status" },
-                "languages": {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/language" },
-                    "minItems": 1
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "id",
-                "pay",
-                "details",
-                "create_date",
-                "duration",
-                "position",
-                "business",
-                "rating",
-                "status",
-                "languages"
-            ]
-        },
-        "manager": {
-            "type": "object",
-            "properties": {
-                "id": { "$ref": "#/definitions/id" },
-                "username": { "type": "string" },
-                "human": { "$ref": "#/definitions/human" }
-            },
-            "additionalProperties": false
-        },
-        "salary": {
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true
-        },
-        "position": {
-            "type": "object",
-            "properties": {
-                "id": { "$ref": "#/definitions/id" },
-                "name": { "type": "string" },
-                "create_date": { "$ref": "#/definitions/date_time" },
-                "default_pay": {
-                    "anyOf": [
-                        { "type": "null" },
-                        { "$ref": "#/definitions/salary" }
-                    ]
-                },
-                "default_details": {
-                    "type": [ "null", "string" ]
-                },
-                "default_languages": {
-                    "type": [ "null", "array" ],
-                    "items": {
-                        "$ref": "#/definitions/language"
-                    }
-                }
-            },
-            "required": [ "id", "name", "create_date" ],
-            "additionalProperties": false
-        },
-        "job_status": {
-            "type": "object",
-            "properties": {
-                "id": { "$ref": "#/definitions/id" },
-                "friendly_name": { "type": "string" },
-                "name": { "$ref": "#/definitions/job_status_name" },
-                "priority": { "type": "number" }
-            }
-        },
-        "job_status_name": {
-            "enum": [
-                "pending",
-                "submitted",
-                "inProgress",
-                "cancelled",
-                "completed",
-                "stale",
-                "aborted"
-            ]
-        },
-        "phone_number": {
-            "type": "string",
-            "format": "phone-number"
-        },
-        "device": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "$ref": "#/definitions/id"
-                },
-                "reg": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": false
-        },
-        "listing_instance_request": {
-            "type": "object",
-            "description": "Lists the properties for creating a listing, without requiring any of them.",
-            "properties": {
-                "pay": {
-                    "$ref": "#/definitions/salary"
-                },
-                "duration": {
-                    "type": "number",
-                    "minimum": 0
-                },
-                "details": {
-                    "type": "string"
-                },
-                "position": {
-                    "$ref": "#/definitions/id"
-                },
-                "languages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/language"
-                    },
-                    "minItems": 1
-                }
-            },
-            "additionalProperties": false
-        },
-        "listing_instance_request_require_all": {
-            "type": "object",
-            "required": [
-                "pay",
-                "duration",
-                "details",
-                "position",
-                "languages"
-            ]
         }
     },
     "errors": {

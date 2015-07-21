@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "$ref": "id.json"
+        },
+        "city": {
+            "$ref": "city.json"
+        },
+        "address": {
+            "type": "string"
+        },
+        "location": {
+            "$ref": "location.json"
+        },
+        "postal_code": {
+            "type": "string",
+            "format": "postal-code"
+        }
+    },
+    "description": "Represents a legally fixed location, with an address as well as geographical coordinates."
+}

@@ -1,0 +1,33 @@
+{
+    "additionalProperties": false,
+    "type": "object",
+    "description": "A representation of an employee.",
+    "properties": {
+        "human": {
+            "$ref": "human.json"
+        },
+        "is_verified": {
+            "type": "boolean"
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "username": {
+            "type": "string"
+        },
+        "home_location": {
+            "$ref": "fixed_location.json"
+        },
+        "languages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "language.json"
+            }
+        },
+        "create_date": {
+            "format": "date_time",
+            "type": "string"
+        }
+    }
+}

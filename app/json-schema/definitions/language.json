@@ -1,0 +1,16 @@
+{
+    "description": "Represents a spoken human language.",
+    "type": "object",
+    "properties": {
+        "iso_name": {
+            "type": "string"
+        },
+        "id": {
+            "$ref": "id.json"
+        },
+        "name": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

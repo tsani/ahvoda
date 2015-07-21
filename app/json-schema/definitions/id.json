@@ -1,0 +1,6 @@
+{
+    "description": "Represents a unique numerical identifier.",
+    "minimum": 0,
+    "type": "integer",
+    "$schema": "http://json-schema.org/draft-04/schema$"
+}

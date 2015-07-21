@@ -1,0 +1,14 @@
+{
+    "additionalProperties": false,
+    "properties": {
+        "email_address": {
+            "type": "string",
+            "format": "email"
+        },
+        "phone_number": {
+            "$ref": "phone_number.json"
+        }
+    },
+    "type": "object",
+    "description": "All information to use to contact someone."
+}

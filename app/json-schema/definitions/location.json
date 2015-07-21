@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {
+        "latitude": {
+            "$ref": "latitude.json"
+        },
+        "longitude": {
+            "$ref": "longitude.json"
+        }
+    },
+    "required": [
+        "longitude",
+        "latitude"
+    ]
+}
