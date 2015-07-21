@@ -22,6 +22,8 @@ src="{{ url_for('bower.static', filename='api-check/dist/api-check.js') }}">
 <script
 src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
 </script>
+<link href="{{ url_for('bower.static', filename='spinkit/css/spinkit.css') }}"
+    rel='stylesheet'>
 <script src="/static/js/dist/ahvoda-app.min.js"></script>
 {% endblock %}
 
@@ -54,5 +56,20 @@ src="{{ url_for('bower.static', filename='angular-formly/dist/formly.js') }}">
 {% endblock %}
 
 {% block contents %}
-<div ui-view></div>
+<div ng-controller='MasterViewCtrl as mvc'>
+    <div ng-if='mvc.error'>
+        <p> error </p>
+        {% raw %}
+        <pre>
+{{ mvc.error | json }}
+        </pre>
+        {% endraw %}
+    </div>
+    <div ng-if='!mvc.error'>
+        <div ng-hide='mvc.loading' ui-view>
+        </div>
+        <div ng-show='mvc.loading' class='sk-spinner sk-spinner-rotating-plane'>
+        </div>
+    </div>
+</div>
 {% endblock %}

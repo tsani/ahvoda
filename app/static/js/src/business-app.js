@@ -21,6 +21,10 @@ angular
         'BusinessService',
         NavCtrl
     ])
+    .controller('MasterViewCtrl', [
+        '$rootScope',
+        MasterViewCtrl
+    ])
     .directive('ahMulticheckbox', [
         ahMulticheckbox
     ])
