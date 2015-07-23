@@ -177,8 +177,18 @@ class Company(db.Model):
             nullable=False,
     )
 
+    is_available = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default="t",
+    )
+
     businesses = db.relationship(
             'Business', backref='company')
+
+    @classmethod
+    def available(cls):
+        return cls.query.filter_by(is_available=True)
 
     def to_dict(self):
         return dict(
@@ -207,6 +217,12 @@ class Business(db.Model):
     is_verified = db.Column(
             db.Boolean,
             nullable=False,
+    )
+
+    is_available = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default='t',
     )
 
     fixed_location_id = db.Column(
@@ -264,6 +280,10 @@ class Business(db.Model):
             uselist=False,
             lazy='joined',
     )
+
+    @classmethod
+    def available(cls):
+        return cls.query.filter_by(is_available=True)
 
     def to_dict(self):
         result = dict(
@@ -346,6 +366,10 @@ class Position(db.Model):
             backref='created_positions',
     )
 
+    @classmethod
+    def available(cls):
+        return cls.query.filter_by(is_available=True)
+
     def to_dict(self):
         return dict(
                 id=self.id,
@@ -398,6 +422,12 @@ class Job(db.Model):
     duration = db.Column(
             db.Float,
             nullable=False,
+    )
+
+    is_available = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default="t",
     )
 
     position_id = db.Column(
@@ -489,6 +519,10 @@ class Job(db.Model):
             'Employee',
             secondary='applicant',
     )
+
+    @classmethod
+    def available(cls):
+        return cls.query.filter_by(is_available=True)
 
     def to_dict(self):
         result = dict(

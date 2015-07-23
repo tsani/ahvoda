@@ -31,6 +31,16 @@ class Login(db.Model):
             server_default=db.func.now(),
     )
 
+    is_available = db.Column(
+            db.Boolean,
+            nullable=False,
+            server_default="t",
+    )
+
+    @classmethod
+    def available(cls):
+        return cls.query.filter_by(is_available=True)
+
     def is_employee(self):
         return bool(self.employee_account)
 
