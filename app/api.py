@@ -1031,7 +1031,7 @@ def post_employee_arrival(business_id, listing_id, login):
         endpoints['business']['collection'].handles_action('GET')
 )
 def get_businesses(login):
-    businesses = models.business.Business.query.all()
+    businesses = models.business.Business.available().all()
     return jsonify(
             dict(
                 businesses=[
