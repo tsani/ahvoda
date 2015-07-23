@@ -747,7 +747,7 @@
                                     "properties": {
                                         "name": { "type": "string" },
                                         "description": { "type": "string" },
-                                        "location": {
+                                        "fixed_location": {
                                             "type": "object",
                                             "properties": {
                                                 "address": { "type": "string" },
@@ -785,7 +785,7 @@
                                     "required": [
                                         "name",
                                         "description",
-                                        "location",
+                                        "fixed_location",
                                         "contact_info",
                                         "languages"
                                     ],

@@ -87,7 +87,7 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
         var bs = businesses.map(function(b) {
             return {
                 name: b.name + ' (' +
-                          vm.util.formatAddress(b.location) +
+                          vm.util.formatAddress(b.fixed_location) +
                           ')',
                 id: b.id
             };

@@ -26,16 +26,16 @@
                 </div>
                 <ul class='flat'>
                     <li>
-                        <i class='fa fa-envelope'></i>
+                        <i class='fa fa-envelope'></i>&nbsp;
                         {{ business.contact_info.email_address }}
                     </li>
                     <li>
-                        <i class='fa fa-phone'></i>
+                        <i class='fa fa-phone'></i>&nbsp;
                         {{ business.contact_info.phone_number }}
                     </li>
                     <li>
-                        <i class='fa fa-building'></i>
-                        {{ vm.util.formatAddress(business.location) }}
+                        <i class='fa fa-building'></i>&nbsp;
+                        {{ vm.util.formatAddress(business.fixed_location) }}
                     </li>
                 </ul>
             </div>

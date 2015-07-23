@@ -15,8 +15,11 @@
         "username": {
             "type": "string"
         },
-        "home_location": {
+        "fixed_location": {
             "$ref": "fixed_location.json"
+        },
+        "current_location": {
+            "$ref": "geolocation.json"
         },
         "languages": {
             "type": "array",

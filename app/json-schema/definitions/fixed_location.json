@@ -10,8 +10,8 @@
         "address": {
             "type": "string"
         },
-        "location": {
-            "$ref": "location.json"
+        "geolocation": {
+            "$ref": "geolocation.json"
         },
         "postal_code": {
             "type": "string",

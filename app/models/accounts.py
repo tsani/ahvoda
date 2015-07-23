@@ -136,14 +136,34 @@ class Employee(db.Model):
             unique=True,
     )
 
-    home_location_id = db.Column(
+    fixed_location_id = db.Column(
             db.Integer,
-            db.ForeignKey('location.id'),
+            db.ForeignKey('fixedlocation.id'),
             nullable=False,
+            unique=True,
     )
 
-    home_location = db.relationship(
-            'Location',
+    current_location_id = db.Column(
+            db.Integer,
+            db.ForeignKey('geolocation.id'),
+            nullable=False,
+            unique=True,
+    )
+
+    fixed_location = db.relationship(
+            'FixedLocation',
+            backref=db.backref(
+                'employee',
+                uselist=False,
+            ),
+    )
+
+    current_location = db.relationship(
+            'Geolocation',
+            backref=db.backref(
+                'employee',
+                uselist=False,
+            ),
     )
 
     languages = db.relationship(
@@ -174,7 +194,8 @@ class Employee(db.Model):
                 username=self.login.username,
                 is_verified=self.is_verified,
                 human=self.human.to_dict(),
-                home_location=self.home_location.to_dict(),
+                fixed_location=self.fixed_location.to_dict(),
+                current_location=self.current_location.to_dict(),
                 languages=[
                     lang.to_dict()
                     for lang

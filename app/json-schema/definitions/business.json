@@ -17,7 +17,7 @@
         "description": {
             "type": "string"
         },
-        "location": {
+        "fixed_location": {
             "$ref": "fixed_location.json"
         },
         "contact_info": {
@@ -34,7 +34,7 @@
         "id",
         "name",
         "description",
-        "location",
+        "fixed_location",
         "is_verified"
     ]
 }

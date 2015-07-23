@@ -3,7 +3,7 @@
     <dt>
         <h2> {{ business.name }} </h2>
         <p>
-        {{ vm.util.formatAddress(business.location) }}
+        {{ vm.util.formatAddress(business.fixed_location) }}
         </p>
         <p ng-if='business.positions.length == 0'>
         This location has no positions yet.

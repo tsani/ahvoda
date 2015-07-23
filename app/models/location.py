@@ -84,8 +84,45 @@ class Country(db.Model):
                 name=self.name,
         )
 
-class Location(db.Model):
-    __tablename__ = 'location'
+class Geolocation(db.Model):
+    """ Class of locations on the Earth, represented by a latitude and a
+    longitude. Many objects that require storing ephemeral latitude/longitude
+    pairs should use this class.
+    """
+    __tablename__ = 'geolocation'
+
+    id = db.Column(
+            db.Integer,
+            primary_key=True,
+    )
+
+    latitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'latitude > -90.0 AND latitude < 90.0',
+                name='latitude',
+            ),
+            nullable=False,
+    )
+
+    longitude = db.Column(
+            db.Float,
+            db.CheckConstraint(
+                'longitude > -180.0 AND longitude < 180.0',
+                name='longitude',
+            ),
+            nullable=False,
+    )
+
+    def to_dict(self):
+        return dict(
+                latitude=self.latitude,
+                longitude=self.longitude,
+        )
+
+class FixedLocation(db.Model):
+    """ Class of fixed locations on the Earth, tied to a legal address. """
+    __tablename__ = 'fixedlocation'
 
     id = db.Column(
             db.Integer,
@@ -112,22 +149,17 @@ class Location(db.Model):
             'City',
     )
 
-    latitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'latitude > -90.0 AND latitude < 90.0',
-                name='latitude',
-            ),
+    geolocation_id = db.Column(
+            db.Integer,
+            db.ForeignKey('geolocation.id'),
             nullable=False,
+            unique=True,
     )
 
-    longitude = db.Column(
-            db.Float,
-            db.CheckConstraint(
-                'longitude > -180.0 AND longitude < 180.0',
-                name='longitude',
-            ),
-            nullable=False,
+    geolocation = db.relationship(
+            'Geolocation',
+            uselist=False,
+            backref='fixed_location'
     )
 
     def to_dict(self):
@@ -136,8 +168,5 @@ class Location(db.Model):
             address=self.address,
             city=self.city.to_dict(),
             postal_code=self.postal_code,
-            location=dict(
-                latitude=self.latitude,
-                longitude=self.longitude,
-            ),
+            geolocation=self.geolocation.to_dict(),
         )

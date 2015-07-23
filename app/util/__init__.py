@@ -28,7 +28,7 @@ def from_rfc3339(rfc3339):
     return datetime.utcfromtimestamp(rfc3339_to_timestamp(rfc3339))
 
 def format_location(location):
-    """ Format a dictionary representation of a models.location.Location
+    """ Format a dictionary representation of a models.location.FixedLocation
     object.
     """
     return ', '.join([

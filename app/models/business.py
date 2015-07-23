@@ -209,10 +209,11 @@ class Business(db.Model):
             nullable=False,
     )
 
-    location_id = db.Column(
+    fixed_location_id = db.Column(
             db.Integer,
-            db.ForeignKey('location.id'),
+            db.ForeignKey('fixedlocation.id'),
             nullable=False,
+            unique=True,
     )
 
     industry_id = db.Column(
@@ -243,10 +244,12 @@ class Business(db.Model):
             backref='businesses',
     )
 
-    location = db.relationship(
-            'Location',
-            backref='business',
-            uselist=False,
+    fixed_location = db.relationship(
+            'FixedLocation',
+            backref=db.backref(
+                'business',
+                uselist=False,
+            ),
     )
 
     languages = db.relationship(
@@ -267,7 +270,7 @@ class Business(db.Model):
                 id=self.id,
                 name=self.name,
                 description=self.description,
-                location=self.location.to_dict(),
+                fixed_location=self.fixed_location.to_dict(),
                 is_verified=self.is_verified,
                 contact_info=self.contact_info.to_dict(),
                 languages=[

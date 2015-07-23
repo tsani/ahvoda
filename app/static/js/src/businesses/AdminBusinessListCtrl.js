@@ -118,7 +118,7 @@ function AdminBusinessListCtrl(
         bserv.createBusiness({
             name: m.name,
             description: m.description,
-            location: {
+            fixed_location: {
                 address: m.address,
                 city_id: m.city.id,
                 postal_code: m.postalCode

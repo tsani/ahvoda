@@ -116,10 +116,17 @@ def new_employee(login):
     geocoding = Geocoding.lookup(full_address)
     best_match = geocoding.results[0]
 
-    location = models.location.Location(
+    location = models.location.FixedLocation(
             address=data['address'],
             postal_code=data['postal_code'],
             city=city,
+            geolocation=models.location.Geolocation(
+                latitude=best_match.position.latitude,
+                longitude=best_match.position.longitude,
+            ),
+    )
+
+    current_location = models.location.Geolocation(
             latitude=best_match.position.latitude,
             longitude=best_match.position.longitude,
     )
@@ -143,9 +150,10 @@ def new_employee(login):
     employee = models.accounts.Employee(
             login=new_login,
             human=human,
-            home_location=location,
+            fixed_location=location,
             languages=languages,
-            is_verified=False
+            is_verified=False,
+            current_location=current_location,
     )
 
     db.session.add(employee)
@@ -241,7 +249,7 @@ def patch_employee(login, employee_name):
                 data['human']['contact_info']['email_address']
 
     with ignored(KeyError):
-        account.home_location.postal_code = \
+        account.fixed_location.postal_code = \
                 data['human']['contact_info']['postal_code']
 
     with ignored(KeyError):
@@ -262,20 +270,12 @@ def patch_employee(login, employee_name):
         account.languages = languages
 
     with ignored(KeyError):
-        home_location = data['home_location']
+        fixed_location = data['fixed_location']
 
         with ignored(KeyError):
-            account.home_location.address = home_location['address']
+            account.fixed_location.address = fixed_location['address']
         with ignored(KeyError):
-            account.home_location.postal_code = home_location['postal_code']
-
-        with ignored(KeyError):
-            location = home_location['location']
-
-            with ignored(KeyError):
-                account.home_location.latitude = location['latitude']
-            with ignored(KeyError):
-                account.home_location.longitude = location['longitude']
+            account.fixed_location.postal_code = fixed_location['postal_code']
 
         with ignored(KeyError):
             city_data = home_location['city']
@@ -291,7 +291,7 @@ def patch_employee(login, employee_name):
                             "No such country '%s'." % (
                                 country_data['name'],
                             ),
-                            400,
+                            404,
                     )
 
                 state = models.location.State.query.filter_by(
@@ -303,7 +303,7 @@ def patch_employee(login, employee_name):
                             "No such state '%s'." % (
                                 state_data['name'],
                             ),
-                            400,
+                            404,
                     )
 
                 city = models.location.City.query.filter_by(
@@ -315,10 +315,10 @@ def patch_employee(login, employee_name):
                             "No such city '%s'." % (
                                 city_data['name'],
                             ),
-                            400,
+                            404,
                     )
 
-                account.home_location.city = city
+                account.fixed_location.city = city
             except KeyError:
                 return util.json_die(
                         "Incomplete address specification.",
@@ -352,8 +352,8 @@ def put_employee_location(employee_name, login):
 
     data = request.get_json()
 
-    employee.home_location.latitude = data['latitude']
-    employee.home_location.longitude = data['longitude']
+    employee.current_location.latitude = data['latitude']
+    employee.current_location.longitude = data['longitude']
 
     db.session.add(employee)
     db.session.commit()
@@ -383,8 +383,8 @@ def get_employee_location(employee_name, login):
 
     return jsonify(
             dict(
-                latitude=employee.home_location.latitude,
-                longitude=employee.home_location.longitude,
+                latitude=employee.current_location.latitude,
+                longitude=employee.current_location.longitude,
             ),
     )
 
@@ -1074,7 +1074,7 @@ def new_business(login):
 
     data = request.get_json()
 
-    city = models.location.City.query.get(data['location']['city_id'])
+    city = models.location.City.query.get(data['fixed_location']['city_id'])
 
     if city is None:
         return util.json_die(
@@ -1084,7 +1084,7 @@ def new_business(login):
 
     full_address = util.format_location(
             dict(
-                address=data['location']['address'],
+                address=data['fixed_location']['address'],
                 city=city.to_dict(),
             ),
     )
@@ -1098,12 +1098,14 @@ def new_business(login):
             (full_address, best_match),
     )
 
-    location = models.location.Location(
-            address=data['location']['address'],
-            postal_code=data['location']['postal_code'],
+    fixed_location = models.location.FixedLocation(
+            address=data['fixed_location']['address'],
+            postal_code=data['fixed_location']['postal_code'],
             city=city,
-            latitude=best_match.position.latitude,
-            longitude=best_match.position.longitude,
+            geolocation=models.location.Geolocation(
+                latitude=best_match.position.latitude,
+                longitude=best_match.position.longitude,
+            ),
     )
 
     contact_info = models.data.ContactInfo(
@@ -1127,7 +1129,7 @@ def new_business(login):
             name=data['name'],
             description=data['description'],
             is_verified=False,
-            location=location,
+            fixed_location=fixed_location,
             industry=industry,
             contact_info=contact_info,
             languages=languages,
