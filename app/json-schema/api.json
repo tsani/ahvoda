@@ -714,6 +714,15 @@
                                         "$ref": "#/errors/message"
                                     }
                                 }
+                            },
+                            "DELETE": {
+                                "accountTypes": [ "administrator" ],
+                                "responses": {
+                                    "204": {},
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
                             }
                         }
                     },

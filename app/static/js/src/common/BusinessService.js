@@ -158,6 +158,10 @@ function BusinessService($q, $http) {
             });
     };
 
+    srv.deleteBusiness = function(businessId) {
+        return $http.delete('/api/businesses/' + businessId);
+    };
+
     srv.createManager = function(data) {
         return $http.post('/api/managers', data)
             .then(function(response) {

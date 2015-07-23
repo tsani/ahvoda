@@ -1143,6 +1143,27 @@ def new_business(login):
     )
 
 @decorate_with(
+        endpoints['business']['instance'].handles_action('DELETE')
+)
+def delete_business(business_id, login):
+    business = models.business.Business.query.get(business_id)
+    if business is None:
+        return util.json_die(
+                'No such business.',
+                404,
+        )
+
+    # Mark the business as deleted.
+    business.is_available = False
+
+    db.session.add(business)
+    db.session.commit()
+
+    return Response(
+            status=204,
+    )
+
+@decorate_with(
         endpoints['business']['listing']['apply'].handles_action('POST')
 )
 def apply_to_job(business_id, listing_id, login):
