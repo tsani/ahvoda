@@ -20,24 +20,31 @@
     <ul class='flat business-list'>
         <li class='card' ng-repeat='business in vm.businesses'
                 id='business-li-{{ business.id }}'>
-            <div class='account-header'>
+            <div class='account-header detail-header'>
                 <div>
-                    <h2> {{ business.name }} </h2>
+                    <div>
+                        <h2> {{ business.name }} </h2>
+                    </div>
+                    <ul class='flat'>
+                        <li>
+                            <i class='fa fa-envelope'></i>&nbsp;
+                            {{ business.contact_info.email_address }}
+                        </li>
+                        <li>
+                            <i class='fa fa-phone'></i>&nbsp;
+                            {{ business.contact_info.phone_number }}
+                        </li>
+                        <li>
+                            <i class='fa fa-building'></i>&nbsp;
+                            {{ vm.util.formatAddress(business.fixed_location) }}
+                        </li>
+                    </ul>
                 </div>
-                <ul class='flat'>
-                    <li>
-                        <i class='fa fa-envelope'></i>&nbsp;
-                        {{ business.contact_info.email_address }}
-                    </li>
-                    <li>
-                        <i class='fa fa-phone'></i>&nbsp;
-                        {{ business.contact_info.phone_number }}
-                    </li>
-                    <li>
-                        <i class='fa fa-building'></i>&nbsp;
-                        {{ vm.util.formatAddress(business.fixed_location) }}
-                    </li>
-                </ul>
+                <div>
+                    <button ng-click='business.delete()'>
+                        Delete
+                    </button>
+                </div>
             </div>
             <div class='detail' ng-if='business.managers'>
                 <p ng-if='business.managers.length === 0'>

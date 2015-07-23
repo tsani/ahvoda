@@ -18,6 +18,18 @@ function AdminBusinessListCtrl(
             .then(function(managers) {
                 business.managers = managers;
             });
+        business.delete = function() {
+            return bserv.deleteBusiness(business.id)
+                .then(function() {
+                    for(var i = 0; i < vm.businesses.length; i++) {
+                        if(vm.businesses[i].id === business.id) {
+                            vm.businesses.splice(i, 1)
+                            return;
+                        }
+                    }
+                    console.log("wtf: couldn't find business to delete")
+                });
+        }
     }
 
     for(var i = 0; i < vm.businesses.length; i++) {
