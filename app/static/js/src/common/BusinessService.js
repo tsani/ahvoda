@@ -7,35 +7,35 @@ function BusinessService($q, $http) {
     srv.getCities = function() {
         return $http.get('/api/data/cities')
             .then(function(response) {
-                return response.data.cities;
+                return response.data;
             });
     };
 
     srv.getStates = function() {
         return $http.get('/api/data/states')
             .then(function(response) {
-                return response.data.states;
+                return response.data;
             });
     };
 
     srv.getCountries = function() {
         return $http.get('/api/data/countries')
             .then(function(response) {
-                return response.data.countries;
+                return response.data;
             });
     };
 
     srv.getLanguages = function() {
         return $http.get('/api/data/languages')
             .then(function(response) {
-                return response.data.languages;
+                return response.data;
             });
     };
 
     srv.getGenders = function() {
         return $http.get('/api/data/genders')
             .then(function(response) {
-                return response.data.genders;
+                return response.data;
             });
     };
 
@@ -58,14 +58,14 @@ function BusinessService($q, $http) {
 
         return $http.get('/api/managers/' + username + '/businesses')
             .then(function(response) {
-                return response.data.businesses;
+                return response.data;
             });
     };
 
     srv.getBusinessManagers = function(businessId) {
         return $http.get('/api/businesses/' + businessId + '/managers')
             .then(function(response) {
-                return response.data.managers;
+                return response.data;
             });
     };
 
@@ -106,21 +106,21 @@ function BusinessService($q, $http) {
     srv.getEmployees = function() {
         return $http.get('/api/employees')
             .then(function(response) {
-                return response.data.employees;
+                return response.data;
             });
     };
 
     srv.getManagers = function() {
         return $http.get('/api/managers')
             .then(function(response) {
-                return response.data.managers;
+                return response.data;
             });
     };
 
     srv.getBusinesses = function() {
         return $http.get('/api/businesses')
             .then(function(response) {
-                return response.data.businesses;
+                return response.data;
             });
     };
 
@@ -147,7 +147,7 @@ function BusinessService($q, $http) {
         return $http.get('/api/listings', {
             params: qs
         }).then(function(response) {
-            return response.data.listings;
+            return response.data;
         });
     }
 
@@ -219,7 +219,7 @@ function BusinessService($q, $http) {
     srv.getPositions = function(businessId) {
         return $http.get('/api/businesses/' + businessId + '/positions')
             .then(function(response) {
-                return response.data.positions;
+                return response.data;
             });
     }
 

@@ -1,11 +1,18 @@
-from flask import request, abort, jsonify
+from flask import request, abort
 
 from functools import wraps
 import json, os, sys
 import jsonschema
 
 from app import app, basedir, auth
-from app.util import decorate_with, register_to, json_die, flat_dict
+from app.util import (
+        decorate_with,
+        register_to,
+        json_die,
+        flat_dict,
+        jsonify,
+        remove_cruft,
+)
 
 def load_api_data(path):
     """ Loads the API JSON and creates a RefResolver for it.
@@ -288,7 +295,7 @@ class EndpointHandler:
                 data_string = raw_data.decode('utf-8')
 
                 try:
-                    data = json.loads(data_string)
+                    data = json.loads(remove_cruft(data_string, strict=True))
                 except ValueError as e:
                     raise ServerValidationError(
                             "Failed to parse JSON response: %s" % (

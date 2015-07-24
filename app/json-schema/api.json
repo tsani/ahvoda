@@ -20,17 +20,10 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "genders": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/gender.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "genders" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/gender.json"
+                                                }
                                             }
                                         }
                                     }
@@ -68,17 +61,10 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "countries": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/country.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "countries" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/country.json"
+                                                }
                                             }
                                         }
                                     }
@@ -122,17 +108,10 @@
                                         },
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "states": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/state.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "states" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/state.json"
+                                                }
                                             },
                                             "404": {
                                                 "$ref": "#/errors/message"
@@ -173,17 +152,10 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "cities": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/city.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "cities" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/city.json"
+                                                }
                                             }
                                         }
                                     }
@@ -221,17 +193,10 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "languages": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/language.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "languages" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/language.json"
+                                                }
                                             }
                                         }
                                     }
@@ -268,17 +233,10 @@
                                 "accountTypes": [ "administrator" ],
                                 "responses": {
                                     "200": {
-                                        "type": "object",
-                                        "properties": {
-                                            "devices": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/device.json"
-                                                }
-                                            }
-                                        },
-                                        "required": [ "devices" ],
-                                        "additionalProperties": false
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/device.json"
+                                        }
                                     }
                                 }
                             },
@@ -328,17 +286,10 @@
                                 "accountTypes": [ "administrator" ],
                                 "responses": {
                                     "200": {
-                                        "type": "object",
-                                        "properties": {
-                                            "managers": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/manager.json"
-                                                }
-                                            }
-                                        },
-                                        "required": [ "managers" ],
-                                        "additionalProperties": false
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/manager.json"
+                                        }
                                     }
                                 }
                             },
@@ -434,16 +385,9 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "businesses": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/business.json"
-                                                        }
-                                                    },
-                                                    "required": "businesses",
-                                                    "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/business.json"
                                                 }
                                             },
                                             "404": {
@@ -489,17 +433,10 @@
                         },
                         "responses": {
                             "200": {
-                                "type": "object",
-                                "properties": {
-                                    "listings": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "definitions/listing.json"
-                                        }
-                                    }
-                                },
-                                "required": [ "listings" ],
-                                "additionalProperties": false
+                                "type": "array",
+                                "items": {
+                                    "$ref": "definitions/listing.json"
+                                }
                             },
                             "400": { "$ref": "#/errors/message" },
                             "403": { "$ref": "#/errors/message" },
@@ -520,17 +457,10 @@
                                 "accountTypes": [ "administrator" ],
                                 "responses": {
                                     "200": {
-                                        "type": "object",
-                                        "properties": {
-                                            "employees": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/employee.json"
-                                                }
-                                            }
-                                        },
-                                        "required": [ "employees" ],
-                                        "additionalProperties": false
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/employee.json"
+                                        }
                                     },
                                     "404": {
                                         "$ref": "#/errors/message"
@@ -735,16 +665,9 @@
                                 "accountTypes": [ "administrator" ],
                                 "responses": {
                                     "200": {
-                                        "type": "object",
-                                        "properties": {
-                                            "businesses": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/business.json"
-                                                }
-                                            },
-                                            "required": [ "businesses" ],
-                                            "additionalProperties": "false"
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/business.json"
                                         }
                                     }
                                 }
@@ -821,16 +744,9 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "managers": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/manager.json"
-                                                        }
-                                                    },
-                                                    "required": [ "managers" ],
-                                                    "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/manager.json"
                                                 }
                                             },
                                             "404": {
@@ -931,14 +847,9 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "positions": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/position.json"
-                                                        }
-                                                    }
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/position.json"
                                                 }
                                             },
                                             "403": { "$ref": "#/errors/message" },
@@ -1085,17 +996,10 @@
                                         "accountTypes": [ "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "applicants": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/employee.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "applicants" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/employee.json"
+                                                }
                                             },
                                             "404": {
                                                 "$ref": "#/errors/message"
@@ -1243,17 +1147,10 @@
                                         "accountTypes": [ "employee", "manager" ],
                                         "responses": {
                                             "200": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "listings": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "$ref": "definitions/listing.json"
-                                                        }
-                                                    }
-                                                },
-                                                "required": [ "properties" ],
-                                                "additionalProperties": false
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "definitions/listing.json"
+                                                }
                                             },
                                             "403": { "$ref": "#/errors/message" },
                                             "404": { "$ref": "#/errors/message" }

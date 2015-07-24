@@ -1,4 +1,4 @@
-from flask import jsonify, request, Response
+from flask import request, Response
 
 import datetime, json, os
 
@@ -28,6 +28,7 @@ from app.util import (
         ignored,
         decorate_with,
         from_rfc3339,
+        jsonify,
 )
 
 from app.geocoding import (
@@ -49,13 +50,11 @@ endpoints = load_api(
 def get_employees(login):
     employees = models.accounts.Employee.query.all()
     return jsonify(
-            dict(
-                employees=[
-                    e.to_dict()
-                    for e
-                    in employees
-                ],
-            ),
+            [
+                e.to_dict()
+                for e
+                in employees
+            ],
     )
 
 @decorate_with(
@@ -642,14 +641,12 @@ def get_positions(business_id, login):
         )
 
     return jsonify(
-            dict(
-                positions=[
-                    p.to_dict()
-                    for p
-                    in business.positions
-                    if p.is_available
-                ]
-            )
+            [
+                p.to_dict()
+                for p
+                in business.positions
+                if p.is_available
+            ],
     )
 
 @decorate_with(
@@ -1033,13 +1030,11 @@ def post_employee_arrival(business_id, listing_id, login):
 def get_businesses(login):
     businesses = models.business.Business.available().all()
     return jsonify(
-            dict(
-                businesses=[
-                    b.to_dict()
-                    for b
-                    in businesses
-                ],
-            ),
+            [
+                b.to_dict()
+                for b
+                in businesses
+            ],
     )
 
 @decorate_with(
@@ -1258,13 +1253,11 @@ def get_business_managers(business_id, login):
         )
 
     return jsonify(
-            dict(
-                managers=[
-                    manager.to_dict()
-                    for manager
-                    in business.managers
-                ],
-            ),
+            [
+                manager.to_dict()
+                for manager
+                in business.managers
+            ],
     )
 
 @decorate_with(
@@ -1373,13 +1366,11 @@ def get_managed_businesses(manager_name, login):
         manager = manager_login.get_account()
 
     return jsonify(
-            dict(
-                businesses=[
-                    business.to_dict()
-                    for business
-                    in manager.businesses
-                ],
-            ),
+            [
+                business.to_dict()
+                for business
+                in manager.businesses
+            ],
     )
 
 @decorate_with(
@@ -1388,13 +1379,11 @@ def get_managed_businesses(manager_name, login):
 def get_managers(login):
     managers = models.accounts.Manager.query.all()
     return jsonify(
-            dict(
-                managers=[
-                    m.to_dict()
-                    for m
-                    in managers
-                ],
-            ),
+            [
+                m.to_dict()
+                for m
+                in managers
+            ],
     )
 
 @decorate_with(
@@ -1613,13 +1602,11 @@ def get_listings(login):
     results = results_query.all()
 
     return jsonify(
-            dict(
-                listings=[
-                    listing.to_dict()
-                    for listing
-                    in results
-                ],
-            ),
+            [
+                listing.to_dict()
+                for listing
+                in results
+            ],
     )
 
 @decorate_with(
@@ -1628,13 +1615,11 @@ def get_listings(login):
 def get_languages(login):
     languages = models.data.Language.query.all()
     return jsonify(
-            dict(
-                languages=[
-                    lang.to_dict()
-                    for lang
-                    in languages
-                ],
-            ),
+            [
+                lang.to_dict()
+                for lang
+                in languages
+            ],
     )
 
 @decorate_with(
@@ -1666,13 +1651,11 @@ def get_language(iso_name, login):
 def get_genders(login):
     genders = models.data.Gender.query.all()
     return jsonify(
-            dict(
-                genders=[
-                    g.to_dict()
-                    for g
-                    in genders
-                ],
-            ),
+            [
+                g.to_dict()
+                for g
+                in genders
+            ],
     )
 
 @decorate_with(
@@ -1695,13 +1678,11 @@ def get_gender(gender_id, name):
 def get_countries(login):
     countries = models.location.Country.query.all()
     return jsonify(
-            dict(
-                countries=[
-                    c.to_dict()
-                    for c
-                    in countries
-                ],
-            ),
+            [
+                c.to_dict()
+                for c
+                in countries
+            ],
     )
 
 @decorate_with(
@@ -1724,13 +1705,11 @@ def get_country(country_id, login):
 def get_states(login):
     states = models.location.State.query.all()
     return jsonify(
-            dict(
-                states=[
-                    s.to_dict()
-                    for s
-                    in states
-                ],
-            ),
+            [
+                s.to_dict()
+                for s
+                in states
+            ],
     )
 
 @decorate_with(
@@ -1753,13 +1732,11 @@ def get_state(state_id, login):
 def get_cities(login):
     cities = models.location.City.query.all()
     return jsonify(
-            dict(
-                cities=[
-                    c.to_dict()
-                    for c
-                    in cities
-                ],
-            ),
+            [
+                c.to_dict()
+                for c
+                in cities
+            ],
 
     )
 
@@ -1783,13 +1760,11 @@ def get_city(city_id, login):
 def get_devices(login):
     devices = models.accounts.AndroidDevice.query.all()
     return jsonify(
-            dict(
-                devices=[
-                    d.to_dict()
-                    for d
-                    in devices
-                ],
-            ),
+            [
+                d.to_dict()
+                for d
+                in devices
+            ],
     )
 
 @decorate_with(

@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 
 from flask import (
-        jsonify,
         render_template,
+        Response,
 )
 
 from strict_rfc3339 import rfc3339_to_timestamp, timestamp_to_rfc3339_utcoffset
@@ -12,6 +12,10 @@ from datetime import datetime, date
 from functools import wraps
 
 from itertools import chain
+
+import json
+
+XSRF_CRUFT = ")]}',\n"
 
 def to_rfc3339(dt):
     """ Represent a datetime or date object in rfc3339 with UTC offset. """
@@ -80,6 +84,32 @@ def ignored(exc):
     except exc:
         pass
 
+def prepend_cruft(string):
+    """ Prepend an anti-XSRF marker to a string, usually JSON text. """
+    return XSRF_CRUFT + string
+
+def remove_cruft(string, strict=False):
+    """ Remove an anti-XSRF marker from the beginning of a string.
+
+    If strict is True, then a ValueError will be raised if the string does not
+    begin with an anti-XSRF marker.
+    """
+    if string.startswith(XSRF_CRUFT):
+        return string[len(XSRF_CRUFT):]
+    elif strict:
+        raise ValueError('String does not being with anti-XSRF marker.')
+    else:
+        return string
+
+def jsonify(data, status_code=200):
+    return Response(
+            prepend_cruft(json.dumps(data)),
+            status=status_code,
+            headers={
+                'Content-type': 'application/json',
+            },
+    )
+
 def json_die(message, status_code):
     """ Produce a Response object with the given status code and enclosing a
     JSON object with one property named "message".
@@ -92,11 +122,12 @@ def json_die(message, status_code):
         status_code (type: int):
             The HTTP status code to assign to the response.
     """
-    response = jsonify({
-        'message': message
-    })
-    response.status_code = status_code
-    return response
+    return jsonify(
+            dict(
+                message=message,
+            ),
+            status_code,
+    )
 
 def throw(exc):
     raise exc
