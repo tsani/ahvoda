@@ -401,13 +401,11 @@ def get_business_listings(business_id, login):
         )
 
     return jsonify(
-            dict(
-                listings=[
-                    job.to_dict()
-                    for job
-                    in business.jobs
-                ],
-            ),
+            [
+                job.to_dict()
+                for job
+                in business.jobs
+            ],
     )
 
 @decorate_with(
@@ -1232,13 +1230,11 @@ def get_applicants(business_id, listing_id, login):
         )
 
     return jsonify(
-            dict(
-                applicants=[
-                    applicant.to_dict()
-                    for applicant
-                    in job.applicants
-                ],
-            ),
+            [
+                applicant.to_dict()
+                for applicant
+                in job.applicants
+            ],
     )
 
 @decorate_with(
