@@ -295,7 +295,13 @@ class EndpointHandler:
                 data_string = raw_data.decode('utf-8')
 
                 try:
-                    data = json.loads(remove_cruft(data_string, strict=True))
+                    # Check whether cruft needs to be removed.
+                    if app.config['XSRF_CRUFT_HEADER'] in response.headers:
+                        remove_cruft_ = remove_cruft
+                    else:
+                        remove_cruft_ = lambda x, **kwargs: x
+
+                    data = json.loads(remove_cruft_(data_string, strict=True))
                 except ValueError as e:
                     raise ServerValidationError(
                             "Failed to parse JSON response: %s" % (

@@ -1,8 +1,11 @@
 from contextlib import contextmanager
 
+from app import app
+
 from flask import (
         render_template,
         Response,
+        request,
 )
 
 from strict_rfc3339 import rfc3339_to_timestamp, timestamp_to_rfc3339_utcoffset
@@ -14,8 +17,15 @@ from functools import wraps
 from itertools import chain
 
 import json
+import base64
+
+import operator as op
 
 XSRF_CRUFT = ")]}',\n"
+
+def noop(x):
+    """ Identity/no-op function. Simply returns its argument unchanged. """
+    return x
 
 def to_rfc3339(dt):
     """ Represent a datetime or date object in rfc3339 with UTC offset. """
@@ -97,17 +107,68 @@ def remove_cruft(string, strict=False):
     if string.startswith(XSRF_CRUFT):
         return string[len(XSRF_CRUFT):]
     elif strict:
-        raise ValueError('String does not being with anti-XSRF marker.')
+        raise ValueError('String does not begin with anti-XSRF marker.')
     else:
         return string
 
-def jsonify(data, status_code=200):
+def jsonify(
+        data,
+        status_code=200,
+        check_headers=True,
+        add_cruft=True,
+        extra_headers={}
+):
+    """ Serialize a Python dictionary into a Flask Response object.
+
+    If cruft is added, then an additional header 'X-xsrf-cruft' is added
+    to the Response. Its value is the cruft that is prepended, but
+    base64-encoded.
+
+    Arguments:
+        data (type: dict):
+            The data to serialize.
+        status_code (type: int, default: 200):
+            The status code of the response.
+        check_headers (type: bool, default: False):
+            If set, the request headers will be analyzed to determine whether
+            the response should automatically be tweaked. For instance, if the
+            header "User-Agent" is set to "AhvodaContractorApp", then a JSON
+            unparseable cruft will not be prepended to the serialized output,
+            as is the norm.
+            Warning: if this flag is set, then the function will access the
+            request and app globals. Hence, the function will fail outside of a
+            request context!
+        add_cruft (type: bool, default: True):
+            Prepend an unparseable cruft to the front of the serialized output
+            to prevent the JSON XSRF attack.
+            If `check_headers` is set, then the value of `add_cruft` is
+            ignored.
+        extra_headers (type: dict):
+            Additional headers to add to the Response.
+    """
+    if check_headers:
+        add_cruft = not op.eq(
+                request.headers.get('User-Agent', True),
+                app.config.get('APP_USER_AGENT', False),
+        )
+
+    headers = {
+            'Content-type': 'application/json',
+    }
+
+    if add_cruft:
+        headers[
+                app.config['XSRF_CRUFT_HEADER']
+        ] = base64.b64encode(
+                XSRF_CRUFT.encode('utf-8'),
+        )
+
+    headers.update(extra_headers)
+
     return Response(
-            prepend_cruft(json.dumps(data)),
+            (prepend_cruft if add_cruft else noop)(json.dumps(data)),
             status=status_code,
-            headers={
-                'Content-type': 'application/json',
-            },
+            headers=headers,
     )
 
 def json_die(message, status_code):
