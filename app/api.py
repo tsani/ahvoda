@@ -972,7 +972,13 @@ def post_employee_arrival(business_id, listing_id, login):
 
     data = request.get_json()
 
-    job.employee.arrival_date = from_rfc3339(data['time'])
+    if job.arrival_date is not None:
+        return util.json_die(
+                "The employee has already been marked as arrived.",
+                400,
+        )
+
+    job.arrival_date = from_rfc3339(data['time'])
 
     db.session.add(job)
     db.session.commit()
@@ -1013,7 +1019,13 @@ def post_employee_arrival(business_id, listing_id, login):
 
     data = request.get_json()
 
-    job.employee.departure_date = from_rfc3339(data['time'])
+    if job.departure_date is not None:
+        return util.json_die(
+                "The employee has already been marked as left.",
+                400,
+        )
+
+    job.departure_date = from_rfc3339(data['time'])
 
     db.session.add(job)
     db.session.commit()
@@ -1190,15 +1202,27 @@ def apply_to_job(business_id, listing_id, login):
                 403,
         )
 
-    employee = models.accounts.Employee.query.filter_by(
-            username=data['name'],
+    no_employee = lambda: util.json_die(
+            "No such employee.",
+            404,
     )
 
-    if employee is None:
+    try:
+        employee_login = models.auth.Login.query.filter_by(
+                username=data['name'],
+        ).one()
+    except NoResultFoundError:
+        return no_employee()
+    except MultipleResultsFound:
         return util.json_die(
-                "No such employee.",
-                404,
+                "Unexpected server error.",
+                500,
         )
+
+    if not employee_login.is_employee():
+        return no_employee()
+
+    employee = employee_login.get_account()
 
     employee.applications.append(job)
 
