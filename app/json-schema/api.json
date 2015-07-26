@@ -274,6 +274,141 @@
                     }
                 }
             },
+            "position": {
+                "type": "directory",
+                "contents": {
+                    "collection": {
+                        "type": "endpoint",
+                        "url": "/api/positions",
+                        "description": "Create a new position.",
+                        "verbs": {
+                            "POST": {
+                                "accountTypes": [ "manager" ],
+                                "request": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "business": {
+                                            "$ref": "definitions/id.json"
+                                        },
+                                        "default_pay": {
+                                            "$ref": "definitions/salary.json"
+                                        },
+                                        "default_details": {
+                                            "type": "string"
+                                        },
+                                        "default_languages": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "definitions/language.json"
+                                            },
+                                            "minItems": 1
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "business",
+                                        "default_pay",
+                                        "default_details",
+                                        "default_languages"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "definitions/position.json"
+                                    },
+                                    "400": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" }
+                                }
+                            },
+                            "GET": {
+                                "accountTypes": [ "manager" ],
+                                "query_string": {
+                                    "type": "object",
+                                    "properties": {
+                                        "business": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/position.json"
+                                        }
+                                    },
+                                    "400": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" }
+                                }
+                            }
+                        }
+                    },
+                    "instance": {
+                        "type": "endpoint",
+                        "url": "/api/positions/<int:position_id>",
+                        "description": "Instance of a single position.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "manager" ],
+                                "responses": {
+                                    "200": {
+                                        "$ref": "definitions/position.json"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "PATCH": {
+                                "accountTypes": [ "manager" ],
+                                "request": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "204": {},
+                                    "400": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "DELETE": {
+                                "accountTypes": [ "manager" ],
+                                "responses": {
+                                    "204": {},
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "manager": {
                 "type": "directory",
                 "contents": {
@@ -284,6 +419,15 @@
                         "verbs": {
                             "GET": {
                                 "accountTypes": [ "administrator" ],
+                                "query_string": {
+                                    "type": "object",
+                                    "properties": {
+                                        "business": {
+                                            "$ref": "definitions/id.json"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
                                 "responses": {
                                     "200": {
                                         "type": "array",
@@ -401,46 +545,278 @@
                     }
                 }
             },
-            "listings": {
-                "type": "endpoint",
-                "url": "/api/listings",
-                "description": "Global readonly collection of listings.",
-                "verbs": {
-                    "GET": {
-                        "accountTypes": [ "employee", "manager" ],
-                        "query_string": {
-                            "type": "object",
-                            "properties": {
-                                "status": { "$ref": "definitions/job_status_name.json" },
-                                "since": { "$ref": "definitions/date_time.json" },
-                                "before": { "$ref": "definitions/date_time.json" },
-                                "max": { "type": "string" },
-                                "created_by": {
-                                    "description": "Username of the manager that created the listing.",
-                                    "type": "string"
+            "listing": {
+                "type": "directory",
+                "contents": {
+                    "collection": {
+                        "type": "endpoint",
+                        "url": "/api/listings",
+                        "description": "Global readonly collection of listings.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "query_string": {
+                                    "$ref": "definitions/listing_query_string.json"
                                 },
-                                "business": { "type": "string" },
-                                "dispatched_to": {
-                                    "description": "Username of the employee receiving the listing.",
-                                    "type": "string"
-                                },
-                                "worked_by": {
-                                    "description": "Username of the employee associated with the listing.",
-                                    "type": "string"
+                                "responses": {
+                                    "200": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/listing.json"
+                                        }
+                                    },
+                                    "400": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" }
                                 }
                             },
-                            "additionalProperties": false
-                        },
-                        "responses": {
-                            "200": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "definitions/listing.json"
+                            "POST": {
+                                "accountTypes": [ "manager" ],
+                                "request": {
+                                    "allOf": [
+                                        { "$ref": "definitions/listing_request.json" },
+                                        { "$ref": "definitions/listing_request_req.json" }
+                                    ]
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "definitions/listing.json"
+                                    },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "400": { "$ref": "#/errors/message" }
+                                }
+                            }
+                        }
+                    },
+                    "instance": {
+                        "type": "endpoint",
+                        "url":
+                        "/api/listings/<int:listing_id>",
+                        "description": "Detailed information about a listing.",
+                        "verbs": {
+                            "GET": {
+                                "accountTypes": [ "employee", "manager" ],
+                                "responses": {
+                                    "200": { "$ref": "definitions/listing.json" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" }
                                 }
                             },
-                            "400": { "$ref": "#/errors/message" },
-                            "403": { "$ref": "#/errors/message" },
-                            "404": { "$ref": "#/errors/message" }
+                            "PATCH": {
+                                "accountTypes": [ "manager" ],
+                                "request": {
+                                    "$ref": "definitions/listing_request.json"
+                                },
+                                "responses": {
+                                    "204": {},
+                                    "400": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" },
+                                    "409": { "$ref": "#/errors/message" }
+                                }
+                            },
+                            "DELETE": {
+                                "accountTypes": [ "manager" ],
+                                "responses": {
+                                    "204": {},
+                                    "400": { "$ref": "#/errors/message" },
+                                    "403": { "$ref": "#/errors/message" },
+                                    "404": { "$ref": "#/errors/message" },
+                                    "409": { "$ref": "#/errors/message" }
+                                }
+                            }
+                        }
+                    },
+                    "employee": {
+                        "type": "directory",
+                        "contents": {
+                            "arrival": {
+                                "type": "endpoint",
+                                "url": "/api/listings/<int:listing_id>/employee/arrival",
+                                "description": "The arrival time of an employee.",
+                                "verbs": {
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "time": {
+                                                    "$ref": "definitions/date_time.json"
+                                                }
+                                            },
+                                            "required": [ "time" ],
+                                            "additinalProperties": false
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "definitions/listing.json"
+                                            },
+                                            "400": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "403": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "409": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "departure": {
+                                "type": "endpoint",
+                                "url": "/api/listings/<int:listing_id>/employee/departure",
+                                "description": "The departure time of an employee.",
+                                "verbs": {
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "time": {
+                                                    "$ref": "definitions/date_time.json"
+                                                }
+                                            },
+                                            "required": [ "time" ],
+                                            "additinalProperties": false
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "definitions/listing.json"
+                                            },
+                                            "400": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "403": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "409": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "approve": {
+                                "type": "endpoint",
+                                "url": "/api/listings/<int:listing_id>/employee",
+                                "description": "The employee selected for the job.",
+                                "verbs": {
+                                    "POST": {
+                                        "accountTypes": [ "manager" ],
+                                        "request": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [ "name" ],
+                                            "additionalProperties": false
+                                        },
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "definitions/listing.json"
+                                            },
+                                            "400": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "403": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "409": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    },
+                                    "GET": {
+                                        "accountTypes": [ "manager" ],
+                                        "responses": {
+                                            "200": {
+                                                "$ref": "definitions/employee.json"
+                                            },
+                                            "403": {
+                                                "$ref": "#/errors/message"
+                                            },
+                                            "404": {
+                                                "$ref": "#/errors/message"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "applicant": {
+                "type": "directory",
+                "contents": {
+                    "collection": {
+                        "type": "endpoint",
+                        "description": "Apply to a job.",
+                        "url": "/api/applicants",
+                        "verbs": {
+                            "POST": {
+                                "accountTypes": [ "employee" ],
+                                "request": {
+                                    "$ref": "definitions/application_request.json"
+                                },
+                                "responses": {
+                                    "200": {
+                                        "$ref": "definitions/listing.json"
+                                    },
+                                    "400": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "403": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    },
+                                    "409": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            },
+                            "GET": {
+                                "accountTypes": [ "manager" ],
+                                "query_string": {
+                                    "type": "object",
+                                    "properties": {
+                                        "job_id": {
+                                            "$ref": "definitions/id.json"
+                                        },
+                                        "employee_name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "responses": {
+                                    "200": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "definitions/application.json"
+                                        }
+                                    },
+                                    "404": {
+                                        "$ref": "#/errors/message"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -740,20 +1116,6 @@
                                 "url": "/api/businesses/<int:business_id>/managers",
                                 "description": "Collection of managers at a business.",
                                 "verbs": {
-                                    "GET": {
-                                        "accountTypes": [ "employee", "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/manager.json"
-                                                }
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    },
                                     "POST": {
                                         "accountTypes": [ "manager" ],
                                         "request": {
@@ -790,386 +1152,6 @@
                                             "404": {
                                                 "$ref": "#/errors/message"
                                             }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "position": {
-                        "type": "directory",
-                        "contents": {
-                            "collection": {
-                                "type": "endpoint",
-                                "url": "/api/businesses/<int:business_id>/positions",
-                                "description": "Create a new position.",
-                                "verbs": {
-                                    "POST": {
-                                        "accountTypes": [ "manager" ],
-                                        "request": {
-                                            "type": "object",
-                                            "properties": {
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "default_pay": {
-                                                    "$ref": "definitions/salary.json"
-                                                },
-                                                "default_details": {
-                                                    "type": "string"
-                                                },
-                                                "default_languages": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "definitions/language.json"
-                                                    },
-                                                    "minItems": 1
-                                                }
-                                            },
-                                            "required": [
-                                                "name",
-                                                "default_pay",
-                                                "default_details",
-                                                "default_languages"
-                                            ],
-                                            "additionalProperties": false
-                                        },
-                                        "responses": {
-                                            "200": {
-                                                "$ref": "definitions/position.json"
-                                            },
-                                            "400": { "$ref": "#/errors/message" },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" }
-                                        }
-                                    },
-                                    "GET": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/position.json"
-                                                }
-                                            },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" }
-                                        }
-                                    }
-                                }
-                            },
-                            "instance": {
-                                "type": "endpoint",
-                                "url": "/api/businesses/<int:business_id>/positions/<int:position_id>",
-                                "description": "Instance of a single position within a business.",
-                                "verbs": {
-                                    "GET": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "$ref": "definitions/position.json"
-                                            },
-                                            "403": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    },
-                                    "PATCH": {
-                                        "accountTypes": [ "manager" ],
-                                        "request": {
-                                            "type": "object",
-                                            "properties": {
-                                                "name": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "additionalProperties": false
-                                        },
-                                        "responses": {
-                                            "204": {},
-                                            "400": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "403": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    },
-                                    "DELETE": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "204": {},
-                                            "403": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "listing": {
-                        "type": "directory",
-                        "contents": {
-                            "instance": {
-                                "type": "endpoint",
-                                "url":
-                                "/api/businesses/<int:business_id>/listings/<int:listing_id>",
-                                "description": "Detailed information about a listing.",
-                                "verbs": {
-                                    "GET": {
-                                        "accountTypes": [ "employee", "manager" ],
-                                        "responses": {
-                                            "200": { "$ref": "definitions/listing.json" },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" }
-                                        }
-                                    },
-                                    "PATCH": {
-                                        "accountTypes": [ "manager" ],
-                                        "request": {
-                                            "$ref": "definitions/listing_request.json"
-                                        },
-                                        "responses": {
-                                            "204": {},
-                                            "400": { "$ref": "#/errors/message" },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" },
-                                            "409": { "$ref": "#/errors/message" }
-                                        }
-                                    },
-                                    "DELETE": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "204": {},
-                                            "400": { "$ref": "#/errors/message" },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" },
-                                            "409": { "$ref": "#/errors/message" }
-                                        }
-                                    }
-                                }
-                            },
-                            "apply": {
-                                "type": "endpoint",
-                                "description": "Apply to a job.",
-                                "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/applicants",
-                                "verbs": {
-                                    "POST": {
-                                        "accountTypes": [ "employee" ],
-                                        "request": {
-                                            "type": "object",
-                                            "properties": {
-                                                "name": { "type": "string" }
-                                            },
-                                            "required": [ "name" ],
-                                            "additionalProperties": "false"
-                                        },
-                                        "responses": {
-                                            "200": {
-                                                "$ref": "definitions/listing.json"
-                                            },
-                                            "400": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "403": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            },
-                                            "409": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    },
-                                    "GET": {
-                                        "accountTypes": [ "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/employee.json"
-                                                }
-                                            },
-                                            "404": {
-                                                "$ref": "#/errors/message"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "employee": {
-                                "type": "directory",
-                                "contents": {
-                                    "arrival": {
-                                        "type": "endpoint",
-                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee/arrival",
-                                        "description": "The arrival time of an employee.",
-                                        "verbs": {
-                                            "POST": {
-                                                "accountTypes": [ "manager" ],
-                                                "request": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "time": {
-                                                            "$ref": "definitions/date_time.json"
-                                                        }
-                                                    },
-                                                    "required": [ "time" ],
-                                                    "additinalProperties": false
-                                                },
-                                                "responses": {
-                                                    "200": {
-                                                        "$ref": "definitions/listing.json"
-                                                    },
-                                                    "400": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "403": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "404": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "409": {
-                                                        "$ref": "#/errors/message"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "departure": {
-                                        "type": "endpoint",
-                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee/departure",
-                                        "description": "The departure time of an employee.",
-                                        "verbs": {
-                                            "POST": {
-                                                "accountTypes": [ "manager" ],
-                                                "request": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "time": {
-                                                            "$ref": "definitions/date_time.json"
-                                                        }
-                                                    },
-                                                    "required": [ "time" ],
-                                                    "additinalProperties": false
-                                                },
-                                                "responses": {
-                                                    "200": {
-                                                        "$ref": "definitions/listing.json"
-                                                    },
-                                                    "400": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "403": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "404": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "409": {
-                                                        "$ref": "#/errors/message"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "approve": {
-                                        "type": "endpoint",
-                                        "url": "/api/businesses/<int:business_id>/listings/<int:listing_id>/employee",
-                                        "description": "The employee selected for the job.",
-                                        "verbs": {
-                                            "POST": {
-                                                "accountTypes": [ "manager" ],
-                                                "request": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "name": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "required": [ "name" ],
-                                                    "additionalProperties": false
-                                                },
-                                                "responses": {
-                                                    "200": {
-                                                        "$ref": "definitions/listing.json"
-                                                    },
-                                                    "400": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "403": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "404": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "409": {
-                                                        "$ref": "#/errors/message"
-                                                    }
-                                                }
-                                            },
-                                            "GET": {
-                                                "accountTypes": [ "manager" ],
-                                                "responses": {
-                                                    "200": {
-                                                        "$ref": "definitions/employee.json"
-                                                    },
-                                                    "403": {
-                                                        "$ref": "#/errors/message"
-                                                    },
-                                                    "404": {
-                                                        "$ref": "#/errors/message"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "collection": {
-                                "type": "endpoint",
-                                "url": "/api/businesses/<int:business_id>/listings",
-                                "description": "Collection of listings.",
-                                "verbs": {
-                                    "GET": {
-                                        "accountTypes": [ "employee", "manager" ],
-                                        "responses": {
-                                            "200": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "definitions/listing.json"
-                                                }
-                                            },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" }
-                                        }
-                                    },
-                                    "POST": {
-                                        "accountTypes": [ "manager" ],
-                                        "request": {
-                                            "allOf": [
-                                                { "$ref": "definitions/listing_request.json" },
-                                                { "$ref": "definitions/listing_request_req.json" }
-                                            ]
-                                        },
-                                        "responses": {
-                                            "202": {
-                                                "$ref": "definitions/listing.json"
-                                            },
-                                            "403": { "$ref": "#/errors/message" },
-                                            "404": { "$ref": "#/errors/message" }
                                         }
                                     }
                                 }

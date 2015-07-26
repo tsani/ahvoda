@@ -456,6 +456,15 @@ class EndpointHandler:
                     )
             )
 
+        if method in self.handlers:
+            raise ValueError(
+                    "Method %s already registered on endpoint %s by %s." % (
+                        method,
+                        self.url,
+                        self.handlers[method].__name__,
+                    ),
+            )
+
         def decorator(f):
             d = decorate_with(
                 register_to(self.handlers, method),
@@ -509,9 +518,61 @@ class EndpointHandler:
                     (self.url,),
             )
 
+def _artistic_endpoints(endpoints, level=0):
+    halftab = '  '
+    tab = halftab * 2
+    ws = tab * level
+    keys = sorted(endpoints.keys())
+
+    s = ''
+
+    if not keys:
+        s = ws + 'EMPTY'
+    for k in keys:
+        e = endpoints[k]
+        if isinstance(e, dict):
+            s += ws + k + ':\n' + _artistic_endpoints(
+                    e,
+                    level + 1,
+            )
+        else:
+            s += (
+                    ws + k + ' @ ' + e.url +
+                    ('' if e.is_complete() else ' (incomplete) ') +
+                    ': ' + (
+                        '\n' + '\n'.join([
+                            ws + tab + method + ': ' +
+                            getattr(
+                                e.handlers.get(
+                                    method,
+                                    None,
+                                ),
+                                '__name__',
+                                '<empty>',
+                            )
+                            for method
+                            in sorted(e.verbs.keys())
+                        ])
+                        if e.handlers else
+                        '<empty>'
+                    ) +
+                    '\n'
+            )
+
+
+    return s
+
 def register_all(endpoints, app, strict=False):
+    """ Helper function to register the routes associated with all the
+    endpoints.
+    """
+    route_count = 0
+    method_count = 0
+
     for endpoint in flat_dict(endpoints):
         endpoint.register_route(app, strict=strict)
+        route_count += 1
+        method_count += len(endpoint.handlers)
 
 ### Exceptions
 

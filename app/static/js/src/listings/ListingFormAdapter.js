@@ -17,6 +17,7 @@ function ListingFormAdapter(model) {
      */
     adapter.adapt = function() {
         return {
+            business: adapter.model.businessId,
             details: this.model.details,
             pay: parseFloat(this.model.pay),
             duration: parseFloat(adapter.model.duration),

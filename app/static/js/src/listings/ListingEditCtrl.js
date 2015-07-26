@@ -24,12 +24,13 @@ function ListingEditCtrl(
     var lpAdapter = new ListingPositionAdapter(listing);
 
     vm.form = new lfserv.ListingForm({
+        businessId: business.id,
         positions: positions,
         languages: business.languages
     }, lpAdapter.adapt());
 
     vm.submit = function() {
-        lfserv.submit(vm.form, business.id, listing.id)
+        lfserv.submit(vm.form, listing.id)
             .then(function(newListing) {
                 vm.form.ctrl.$setSubmitted();
                 vm.success = true;

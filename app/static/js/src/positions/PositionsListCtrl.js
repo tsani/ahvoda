@@ -6,7 +6,7 @@ function PositionsListCtrl(bserv, util, businesses) {
     vm.util = util;
 
     vm.deletePosition = function(business, position) {
-        bserv.deletePosition(business.id, position.id)
+        bserv.deletePosition(position.id)
             .then(function() {
                 for(var i = 0; i < business.positions.length; i++) {
                     var p = business.positions[i];

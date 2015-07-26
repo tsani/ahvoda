@@ -26,7 +26,9 @@ function AdminListingsListCtrl(bserv, util, employees, listings) {
         ];
 
         listing.associateEmployee = function() {
-            bserv.approveEmployee(listing, listing.employeeFormModel.employee.username)
+            bserv.approveEmployee(
+                    listing.id,
+                    listing.employeeFormModel.employee.username)
                 .then(function(updatedListing) {
                     listing.employee = updatedListing.employee;
                     listing.status = updatedListing.status;

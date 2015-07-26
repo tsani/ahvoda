@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema$",
+    "description": "The query string for searching for listings.",
+    "type": "object",
+    "properties": {
+        "status": { "$ref": "job_status_name.json" },
+        "since": { "$ref": "date_time.json" },
+        "before": { "$ref": "date_time.json" },
+        "max": { "type": "string" },
+        "created_by": {
+            "description": "Username of the manager that created the listing.",
+            "type": "string"
+        },
+        "business": { "type": "string" },
+        "dispatched_to": {
+            "description": "Username of the employee receiving the listing.",
+            "type": "string"
+        },
+        "worked_by": {
+            "description": "Username of the employee associated with the listing.",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

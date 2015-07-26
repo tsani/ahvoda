@@ -52,7 +52,8 @@ function NewPositionDetailsCtrl($state, business, positions, bserv) {
     ];
 
     vm.submit = function() {
-        bserv.createPosition(business, {
+        bserv.createPosition({
+            business: business.id,
             name: vm.data.positionName,
             default_pay: vm.data.defaultPay,
             default_details: vm.data.defaultDetails,

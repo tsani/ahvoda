@@ -21,12 +21,13 @@ function NewListingDetailsCtrl(
     var vm = this;
 
     vm.form = new lfserv.ListingForm({
+        businessId: business.id,
         positions: positions,
         languages: business.languages
     }, defaultPosition);
 
     vm.submit = function() {
-        lfserv.submit(vm.form, business.id)
+        lfserv.submit(vm.form)
             .then(function(newListing) {
                 vm.form.ctrl.$setSubmitted();
                 vm.success = true;

@@ -2,11 +2,13 @@
  *
  * @constructor
  * @param {object} data - The static data to populate certain form elements
- * with. 
+ * with.
  * @param {object} data.languages[] - The {@link Language}s to include in the
  * form.
  * @param {object} data.positions[] - The {@link Position}s to include in the
  * form.
+ * @param {int} data.businessId - Identifies the business under which to create
+ * the position.
  * @param {object} [defaultPosition] - The {@link Position} to start the form
  * pre-filled with. This SHOULD be an item from `data.positions`, although this
  * is not enforced.
@@ -18,7 +20,9 @@ function ListingForm(data, defaultPosition) {
 
     /** The form's model, which is to be provided to formly.
      */
-    form.data = {};
+    form.data = {
+        businessId: data.businessId
+    };
 
     /** The {@link ListingFormAdapter} to convert this form's model into a
      * format suitable for consumption by the backend.
@@ -159,16 +163,15 @@ function ListingFormService(bserv) {
      * @returns {promise} A promise yielding the created/updated {@link
      * Listing} object.
      */
-    srv.submit = function(lf, businessId, listingId) {
+    srv.submit = function(lf, listingId) {
         var data = lf.adapter.adapt();
 
-        if(typeof(listingId) === 'undefined') {
-            return bserv.createListing(businessId, data);
-        }
+        if(typeof(listingId) === 'undefined')
+            return bserv.createListing(data);
         else {
-            return bserv.patchListing(businessId, listingId, data)
+            return bserv.patchListing(listingId, data)
                 .then(function() {
-                    return bserv.getListing(businessId, listingId);
+                    return bserv.getListing(listingId);
                 })
                 .then(function(l) {
                     return l;

@@ -37,8 +37,10 @@ Bower(app)
 _syslog_handler = SysLogHandler("/dev/log")
 
 if app.debug:
+    app.logger.setLevel(logging.DEBUG)
     _syslog_handler.setLevel(logging.DEBUG)
 else:
+    app.logger.setLevel(logging.INFO)
     _syslog_handler.setLevel(logging.INFO)
     # TODO log to emails for messages of at least WARNING level
 

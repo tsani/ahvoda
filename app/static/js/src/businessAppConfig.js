@@ -16,17 +16,18 @@ function businessAppConfig($stateProvider, $urlRouterProvider) {
                         return bserv.getManagerBusinesses()
                             .then(function(bs) {
                                 return $q.all(bs.map(function(b) {
+                                    var id = b.id;
                                     return $q.all([
-                                        bserv.getPositions(b.id)
+                                        bserv.getPositions(id)
                                             .then(function(ps) {
                                                 b.positions = ps;
                                                 return ps;
                                             }),
-                                        bserv.getListings(b)
+                                        bserv.getListings(id)
                                             .then(function(ls) {
                                                 b.listings = ls.map(function(l) {
                                                     l.delete = function() {
-                                                        bserv.deleteListing(b.id, l.id)
+                                                        bserv.deleteListing(l.id)
                                                             .then(function() {
                                                                 for(var i = 0; i < b.listings.length; i++) {
                                                                     var q = b.listings[i];
@@ -200,7 +201,7 @@ function businessAppConfig($stateProvider, $urlRouterProvider) {
                     'BusinessService',
                     'business',
                     function($stateParams, bserv, b) {
-                        return bserv.getListing(b.id, $stateParams.listingId);
+                        return bserv.getListing($stateParams.listingId);
                     }
                 ]
             },

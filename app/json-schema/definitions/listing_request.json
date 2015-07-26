@@ -2,6 +2,9 @@
     "additionalProperties": false,
     "type": "object",
     "properties": {
+        "business": {
+            "$ref": "id.json"
+        },
         "position": {
             "$ref": "id.json"
         },

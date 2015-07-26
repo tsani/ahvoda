@@ -69,40 +69,6 @@ function BusinessService($q, $http) {
             });
     };
 
-    srv.getListingGroups = function(businesses) {
-        return $q.all(businesses.map(function(b) {
-            return srv.getListings(b)
-                .then(function(listings) {
-                    return {
-                        business: b,
-                        listings: listings
-                    };
-                });
-        })).then(function(listingGroups) {
-            var ret = {};
-            for(var i = 0; i < listingGroups.length; i++)
-                ret[listingGroups[i].business.name] = listingGroups[i].listings;
-            return ret;
-        });
-    };
-
-    srv.getPositionGroups = function(businesses) {
-        return $q.all(businesses.map(function(b) {
-            return srv.getPositions(b.id)
-                .then(function(positions) {
-                    return {
-                        business: b,
-                        positions: positions
-                    };
-                });
-        })).then(function(positionGroups) {
-            var ret = {};
-            for(var i = 0; i < positionGroups.length; i++)
-                ret[positionGroups[i].business.name] = positionGroups[i].positions;
-            return ret;
-        });
-    };
-
     srv.getEmployees = function() {
         return $http.get('/api/employees')
             .then(function(response) {
@@ -131,24 +97,23 @@ function BusinessService($q, $http) {
             });
     }
 
-    srv.getListing = function(businessId, listingId) {
+    srv.getListing = function(listingId) {
         return $http.get(
-                '/api/businesses/' + businessId + '/listings/' + listingId)
+                '/api/listings/' + listingId)
             .then(function(response) {
                 return response.data;
             });
     };
 
-    srv.getListings = function(business) {
+    srv.getListings = function(businessId) {
         var qs = {}
-        if(typeof(business) !== 'undefined')
-            qs.business = business.id;
+        if(typeof businessId !== 'undefined')
+            qs.business = businessId;
 
-        return $http.get('/api/listings', {
-            params: qs
-        }).then(function(response) {
-            return response.data;
-        });
+        return $http.get('/api/listings', { params: qs })
+            .then(function(response) {
+                return response.data;
+            });
     }
 
     srv.createBusiness = function(data) {
@@ -180,18 +145,16 @@ function BusinessService($q, $http) {
             });
     };
 
-    srv.approveEmployee = function(listing, employeeUsername) {
-        return $http.post('/api/businesses/' + listing.business.id +
-                '/listings/' + listing.id + '/employee', {
+    srv.approveEmployee = function(listingId, employeeUsername) {
+        return $http.post('/api/listings/' + listingId + '/employee', {
                     name: employeeUsername
                 }).then(function(response) {
                     return response.data;
                 });
     };
 
-    srv.createListing = function(businessId, data) {
-        return $http.post(
-                '/api/businesses/' + businessId + '/listings', data)
+    srv.createListing = function(data) {
+        return $http.post('/api/listings', data)
             .then(function(response) {
                 return response.data;
             });
@@ -199,68 +162,67 @@ function BusinessService($q, $http) {
 
     /** Update an existing listing.
      *
-     * @param {int} businessId - The id of the business to which the listing
-     * belongs.
      * @param {int} listingId - The id of the listing to update.
      * @param {object} data - The listing data to update.
      * @see {@link API_SPEC}
      */
-    srv.patchListing = function(businessId, listingId, data) {
-        return $http.patch(
-                '/api/businesses/' + businessId + '/listings/' + listingId,
-                data);
+    srv.patchListing = function(listingId, data) {
+        return $http.patch('/api/listings/' + listingId, data);
     };
 
-    srv.deleteListing = function(businessId, listingId) {
-        return $http.delete(
-                '/api/businesses/' + businessId + '/listings/' + listingId);
+    srv.deleteListing = function(listingId) {
+        return $http.delete('/api/listings/' + listingId);
     };
 
     srv.getPositions = function(businessId) {
-        return $http.get('/api/businesses/' + businessId + '/positions')
+        var qs = {};
+
+        if(typeof businessId !== 'undefined')
+            qs.business = businessId
+
+        return $http.get('/api/positions', { params: qs })
             .then(function(response) {
                 return response.data;
             });
     }
 
-    srv.getPosition = function(business, positionId) {
-        return $http.get(
-                '/api/businesses/' + business.id + '/positions/' + positionId)
+    srv.getPosition = function(positionId) {
+        return $http.get('/api/positions/' + positionId)
             .then(function(response) {
                 return response.data;
             });
     }
 
-    srv.createPosition = function(business, position) {
-        return $http.post(
-                '/api/businesses/' + business.id + '/positions',
-                position)
+    srv.createPosition = function(data) {
+        return $http.post('/api/positions', data)
             .then(function(response) {
                 return response.data;
             });
     }
 
-    srv.patchPosition = function(business, positionId, name) {
-        return $http.patch(
-                '/api/businesses/' + business.id + '/positions/' + positionId, {
-                    name: name
-                });
+    srv.patchPosition = function(positionId, data) {
+        return $http.patch('/api/positions/' + positionId, data);
     }
 
-    srv.deletePosition = function(businessId, positionId) {
-        return $http.delete(
-                '/api/businesses/' + businessId + '/positions/' + positionId);
+    srv.deletePosition = function(positionId) {
+        return $http.delete('/api/positions/' + positionId);
     }
 
-    srv.getManager = function() {
-        return $http.get('/api/managers/' + srv.username)
+    srv.getManager = function(name) {
+        if(typeof name === 'undefined')
+            name = srv.username;
+
+        return $http.get('/api/managers/' + name)
             .then(function(response) {
                 return response.data;
             });
     }
 
-    srv.getEmployee = function() {
-        return $http.get('/api/employees/' + srv.username)
+    srv.getEmployee = function(name) {
+        if(typeof name === 'undefined')
+            name = srv.username
+
+        return $http.get('/api/employees/' + name)
             .then(function(response) {
                 return response.data;
             });

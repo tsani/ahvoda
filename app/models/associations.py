@@ -23,6 +23,20 @@ class Applicant(db.Model):
             nullable=False,
     )
 
+    employee = db.relationship(
+            'Employee',
+    )
+
+    job = db.relationship(
+            'Job',
+    )
+
+    def to_dict(self):
+        return dict(
+                employee=self.employee.to_dict(),
+                listing=self.job.to_dict(),
+        )
+
 class BusinessLanguageSet(db.Model):
     __tablename__ = 'businesslanguageset'
 
