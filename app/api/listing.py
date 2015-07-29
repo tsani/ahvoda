@@ -150,6 +150,17 @@ def get_listings(login):
             models.business.Job.create_date.desc(),
     )
 
+    # Apply some additional filtering in case the user is an employee
+    # In particular, keep only those jobs without approved employees or that
+    # the current user has already worked.
+    if login.is_employee():
+        results_query = results_query.filter(
+                db.or_(
+                    models.business.Job.employee_id == account.id,
+                    models.business.Job.employee_id == None,
+                ),
+        )
+
     try:
         max_count = int(request.args['max'])
     except KeyError:
