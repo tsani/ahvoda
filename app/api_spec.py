@@ -262,16 +262,19 @@ class EndpointHandler:
 
                 status_code = str(response.status_code)
 
+                raw_data = response.get_data()
+
                 try:
                     handler = self.response_handlers[status_code]
                 except KeyError:
                     raise ServerValidationError(
-                            "unhandled status code %s in response for %s" % (
-                                status_code, request.path
+                            "unhandled status code %s in response for %s\n"
+                            "response data: \n%s" % (
+                                status_code,
+                                request.path,
+                                raw_data,
                             )
                     )
-
-                raw_data = response.get_data()
 
                 if status_code in self.ResponseHandler \
                         .empty_response_status_codes:
