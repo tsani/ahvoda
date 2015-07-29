@@ -42,6 +42,9 @@ class JobMatch(db.Model):
             db.Integer,
             nullable=False,
             unique=True,
+            server_default=db.func.nextval(
+                db.text("'jobmatch_id_seq'::regclass"),
+            ),
     )
 
     create_date = db.Column(
