@@ -71,6 +71,12 @@ def apply_to_job(login):
 
     employee = employee_login.get_account()
 
+    if job in employee.applications:
+        return util.json_die(
+                "You have already applied to this listing.",
+                409,
+        )
+
     employee.applications.append(job)
 
     db.session.add(employee)
