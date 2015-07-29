@@ -7,6 +7,8 @@ from datetime import datetime
 
 from app import db, models
 
+from sqlalchemy.exc import IntegrityError
+
 redis = StrictRedis()
 
 def trivial_match_strategy(job, employee):
@@ -34,7 +36,7 @@ def get_job():
 
     return job
 
-if __name__ == '__main__':
+def main():
     while True:
         job = get_job()
         if job is None:
@@ -58,18 +60,29 @@ if __name__ == '__main__':
 
                 # Commit the JobMatch to the
                 db.session.add(job_match)
-                db.session.commit()
 
-                redis.lpush(
-                        JOB_DISPATCHER['list_name'],
-                        json.dumps(
-                            dict(
-                                id=job_match.id,
-                                job=job,
-                                employee=employee_dict,
-                                android_devices=employee.login.to_dict()[
-                                    'android_devices'
-                                ],
+                try:
+                    db.session.commit()
+                except IntegrityError as e:
+                    print("Integrity check failed. Skipping job.")
+                    db.session.rollback()
+                else:
+                    redis.lpush(
+                            JOB_DISPATCHER['list_name'],
+                            json.dumps(
+                                dict(
+                                    id=job_match.id,
+                                    job=job,
+                                    employee=employee_dict,
+                                    android_devices=employee.login.to_dict()[
+                                        'android_devices'
+                                    ],
+                                )
                             )
-                        )
-                )
+                    )
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Quitting.")
