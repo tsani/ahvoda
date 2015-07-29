@@ -792,12 +792,12 @@
                                 }
                             },
                             "GET": {
-                                "accountTypes": [ "manager" ],
+                                "accountTypes": [ "employee", "manager" ],
                                 "query_string": {
                                     "type": "object",
                                     "properties": {
                                         "job_id": {
-                                            "$ref": "definitions/id.json"
+                                            "type": "string"
                                         },
                                         "employee_name": {
                                             "type": "string"
