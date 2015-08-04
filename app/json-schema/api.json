@@ -305,6 +305,9 @@
                                                 "$ref": "definitions/language.json"
                                             },
                                             "minItems": 1
+                                        },
+                                        "default_duration": {
+                                            "$ref": "definitions/duration.json"
                                         }
                                     },
                                     "required": [
@@ -312,7 +315,8 @@
                                         "business",
                                         "default_pay",
                                         "default_details",
-                                        "default_languages"
+                                        "default_languages",
+                                        "default_duration"
                                     ],
                                     "additionalProperties": false
                                 },

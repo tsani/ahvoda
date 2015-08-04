@@ -3,15 +3,15 @@
 <form class='separate-form fullwidth'
         novalidate ng-submit='vm.submit()'>
     <formly-form
-            model='vm.data'
-            fields='vm.fields'
-            form='vm.form'>
+            model='vm.form.data'
+            fields='vm.form.fields'
+            form='vm.form.controller'>
         <div class='center-holder'>
-            <button type='submit' ng-disabled='vm.form.$invalid'
-                    ng-hide='vm.form.$submitted'>
+            <button type='submit' ng-disabled='vm.form.controller.$invalid'
+                    ng-hide='vm.form.controller.$submitted'>
                 Create
             </button>
-            <div ng-show='vm.form.$submitted'>
+            <div ng-show='vm.form.controller.$submitted'>
                 <p>
                     Created!
                 </p>

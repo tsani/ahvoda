@@ -143,6 +143,7 @@ def new_position(login):
             name=data['name'],
             default_pay=data['default_pay'],
             default_details=data['default_details'],
+            default_duration=data['default_duration'],
             default_languages=default_languages,
             business_id=business_id,
             manager_id=account.id if login.is_manager() else None

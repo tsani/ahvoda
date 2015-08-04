@@ -32,6 +32,16 @@
                 }
             ]
         },
+        "default_duration": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "$ref": "duration.json"
+                }
+            ]
+        },
         "create_date": {
             "$ref": "date_time.json"
         }

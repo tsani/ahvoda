@@ -156,8 +156,6 @@ function ListingFormService(bserv) {
     /** Create a new listing or update an existing listing from a form.
      *
      * @param {object} lf - The {@link ListingForm} to submit.
-     * @param {int} businessId - The id of the {@link Business} under which to
-     * submit the listing.
      * @param {int} [listingId] - If provided, the submission will update an
      * existing listing rather than create a new one.
      * @returns {promise} A promise yielding the created/updated {@link

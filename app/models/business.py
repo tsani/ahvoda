@@ -329,6 +329,10 @@ class Position(db.Model):
             db.String,
     )
 
+    default_duration = db.Column(
+            db.Float,
+    )
+
     default_languages = db.relationship(
             'Language',
             backref='positions',
@@ -385,6 +389,7 @@ class Position(db.Model):
                 ],
                 default_pay=self.default_pay,
                 default_details=self.default_details,
+                default_duration=self.default_duration,
         )
 
 class Job(db.Model):

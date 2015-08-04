@@ -17,6 +17,10 @@ angular
         'BusinessService',
         ListingFormService
     ])
+    .service('PositionFormService', [
+        'BusinessService',
+        PositionFormService
+    ])
     .controller('NavCtrl', [
         'BusinessService',
         NavCtrl

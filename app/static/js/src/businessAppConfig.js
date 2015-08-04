@@ -170,10 +170,9 @@ function businessAppConfig($stateProvider, $urlRouterProvider) {
                 ]
             },
             controller: [
-                '$state',
-                'business',
-                'positions',
                 'BusinessService',
+                'PositionFormService',
+                'business',
                 NewPositionDetailsCtrl
             ],
             controllerAs: 'vm'
