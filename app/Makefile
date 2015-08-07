@@ -23,6 +23,9 @@ CSS_UGLY=node_modules/uglifycss/uglifycss
 # The JavaScript source files
 JSSRCFILES=$(shell find $(JSSRC) -name '*.js' -type f)
 
+# The frontend javascript package manager (installed through npm)
+BOWER=node_modules/bower/bin/bower
+
 BUSINESSAPP=ahvoda-app
 
 # All the LESS source code.
@@ -45,11 +48,13 @@ $(JSDIST): $(JSDIST)/$(BUSINESSAPP).min.js $(JSDIST)/$(BUSINESSAPP).js
 # To build the minified business app, we concatenate all the JavaScript source
 # files and uglify them (mangle + compress).
 $(JSDIST)/$(BUSINESSAPP).min.js: $(JSSRCFILES)
+	mkdir -p $(JSDIST)
 	$(JSC) $^ -o $@ --source-map $@.map $(JSFLAGS)
 
 # To build the business app, all the JavaScript source files need to be put
 # through UglifyJS
 $(JSDIST)/$(BUSINESSAPP).js: $(JSSRCFILES)
+	mkdir -p $(JSDIST)
 	$(JSC) $^ -o $@ --source-map $@.map
 
 # To build the LESS distribution, we need to build the depfiles and finally the
@@ -63,6 +68,7 @@ $(LESSDIST): $(LESSDEPFILES) $(LESSDISTFILES)
 
 # Rule for transforming LESS into CSS
 $(LESSDIST)/%.css: $(LESSSRC)/%.less
+	mkdir -p $(LESSDIST)
 	$(LESSC) $(LESSFLAGS) $< $@
 
 %.min.css: %.css
@@ -77,4 +83,5 @@ clean:
 	-rm $(LESSSRC)/*.d
 
 dependencies:
-	bower install
+	npm install
+	$(BOWER) install
