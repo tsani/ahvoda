@@ -19,7 +19,13 @@ app = Flask(__name__)
 app.config.from_object('secret_config')
 
 # Create a redis session
-redis = Redis()
+redis = Redis(
+        **app.config.get('REDIS', {})
+)
+
+# Creating the connection pool does not verify that the cache actually exists,
+# so we issue a ping to crash the app if the connection fails.
+redis.ping()
 
 # Initialize Redis-based server-side sessions
 app.session_interface = RedisSessionInterface(
