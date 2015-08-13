@@ -20,14 +20,22 @@ function AdminBusinessListCtrl(
             });
         business.delete = function() {
             return bserv.deleteBusiness(business.id)
-                .then(function() {
-                    for(var i = 0; i < vm.businesses.length; i++) {
-                        if(vm.businesses[i].id === business.id) {
-                            vm.businesses.splice(i, 1)
-                            return;
+                .then(function(response) {
+                    if(response.status == 204) {
+                        for(var i = 0; i < vm.businesses.length; i++) {
+                            if(vm.businesses[i].id === business.id) {
+                                vm.businesses.splice(i, 1)
+                                return;
+                            }
                         }
+                        console.log('wtf: business delete succeeded server-' +
+                                'side, but the business could not be found' +
+                                ' client-side.');
                     }
-                    console.log("wtf: couldn't find business to delete")
+                    else {
+                        // TODO show this in the UI
+                        console.log('business delete failed');
+                    }
                 });
         }
     }

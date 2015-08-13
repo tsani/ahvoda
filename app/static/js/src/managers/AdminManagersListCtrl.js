@@ -116,10 +116,14 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
                                 return;
                             }
                         }
-                        console.log('wtf');
+                        console.log('wtf: dissociation succeeded server-side' +
+                                ' but the dissociated business could not be' +
+                                ' found client-side.');
                     }
-                    else
+                    else {
+                        // TODO show this in the UI
                         console.log('Delete failed.');
+                    }
                 });
         };
 
@@ -142,10 +146,14 @@ function AdminManagersListCtrl(util, bserv, genders, businesses, managers) {
                                 return;
                             }
                         }
-                        console.log('wtf!');
+                        console.log('wtf: manager deletion succeeded server-' +
+                                'side, but the deleted manager could not be ' +
+                                'found client-side.');
                     }
-                    else
+                    else {
+                        // TODO show this in the UI
                         console.log('failed to delete manager');
+                    }
                 });
         }
     }

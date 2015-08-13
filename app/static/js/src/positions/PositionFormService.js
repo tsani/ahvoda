@@ -73,10 +73,6 @@ function PositionForm(data, initial) {
 
     form.adapter = new PositionFormAdapter(form.data);
 
-    if(typeof initial !== 'undefined') {
-        console.log('setting default position to', initial.id);
-    }
-    
     if(typeof initial !== 'undefined')
         form.adapter.from(initial); 
 }

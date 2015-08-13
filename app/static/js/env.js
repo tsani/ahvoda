@@ -107,7 +107,6 @@ function formToObject(formElement) {
 
 function subscribeUser() {
     var data = formToObject($('#signup-form'));
-    console.log(JSON.stringify(data));
     $.ajax({
         url: "/api/subscribe",
         type: "POST",
@@ -135,10 +134,12 @@ function subscribeUser() {
                         "<p class='errors'>" + data.message + "</p>");
                 }
                 else {
+                    // TODO reflect this in UI
                     console.log("no offending name; ", data.message);
                 }
             }
             else {
+                // TODO reflect this in UI
                 console.log("no response json");
             }
         }

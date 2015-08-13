@@ -30,7 +30,6 @@ function ListingForm(data, defaultPosition) {
     form.adapter = new ListingFormAdapter(form.data);
 
     if(typeof(defaultPosition) !== 'undefined') {
-        console.log('setting default position to', defaultPosition.id);
         form.data.position = defaultPosition;
     }
 
@@ -41,8 +40,6 @@ function ListingForm(data, defaultPosition) {
      * to be set to.
      */
     function matchFieldsToPosition(p) {
-        console.log(JSON.stringify(p));
-
         if(p.default_pay) {
             form.data.pay = p.default_pay;
         }
@@ -56,7 +53,6 @@ function ListingForm(data, defaultPosition) {
             form.data.details = undefined;
 
         if(p.default_duration) {
-            console.log('setting duration', p.default_duration);
             form.data.duration = p.default_duration;
         }
         else
