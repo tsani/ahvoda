@@ -8,6 +8,11 @@ import time
 def before_request():
     g.request_start_time = time.perf_counter()
 
+@app.after_request
+def after_request(response):
+    g.status_code = response.status_code
+    return response
+
 @app.teardown_request
 def teardown_request(exc):
     try:
@@ -16,10 +21,11 @@ def teardown_request(exc):
         pass
     else:
         app.logger.info(
-                "%(method)s %(path)s processed in %(time)d ms.",
+                "%(method)s %(path)s %(code)d processed in %(time)d ms.",
                 dict(
                     method=request.method,
                     path=request.path,
-                    time=response_time
+                    time=response_time,
+                    code=g.status_code
                 ),
         )
