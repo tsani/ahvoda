@@ -13,7 +13,7 @@ PYTHON=venv/bin/python
 PIP=venv/bin/pip
 PIPFLAGS=-q
 
-all: dependencies app upgrade
+all: venv dependencies app upgrade
 
 migration:
 	$(PYTHON) manage.py db migrate
@@ -24,7 +24,7 @@ upgrade:
 app:
 	+$(MAKE) -C app
 
-dependencies: venv
+dependencies:
 	$(PIP) $(PIPFLAGS) install -r requirements.txt
 	+$(MAKE) -C app dependencies
 
