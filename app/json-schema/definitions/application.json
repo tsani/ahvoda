@@ -1,4 +1,5 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.Application",
     "$schema": "http://json-schema.org/draft-04/schema$",
     "description": "An applicantion of an employee to a listing.",
     "type": "object",

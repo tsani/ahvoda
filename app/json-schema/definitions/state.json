@@ -1,4 +1,5 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.State",
     "type": "object",
     "description": "A state, which is contained within a country.",
     "required": [

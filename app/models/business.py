@@ -544,6 +544,11 @@ class Job(db.Model):
                     ofEmployer=None,
                     ofEmployee=None,
                 ),
+                applicants=[
+                    applicant.to_dict()
+                    for applicant
+                    in self.applicants
+                ],
                 business=self.business.to_dict(),
                 status=self.status.to_dict(),
                 languages=[

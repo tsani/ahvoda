@@ -1,3 +1,4 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.Gender",
     "$ref": "named_id.json"
 }

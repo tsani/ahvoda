@@ -1,4 +1,5 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.NamedId",
     "description": "A convenience type for objects consisting of just an id and a name.",
     "type": "object",
     "properties": {

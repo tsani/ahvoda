@@ -5,7 +5,6 @@ JS2PVER = 0.4.13
 JS2P = bin/jsonschema2pojo-$(JS2PVER)/jsonschema2pojo
 JS2PFLAGS = \
 		--annotation-style "GSON" \
-		--class-prefix "Ah" \
 		--generate-constructors \
 		--joda-dates \
 		--source-type "JSONSCHEMA"
@@ -33,7 +32,7 @@ venv:
 	virtualenv venv
 
 clean:
-	rm java/pojos/*
+	rm -r java/pojos/*
 
 java/pojos: app/json-schema/definitions
 	# filter-json-api.py $< # extract essential parts of the json schema

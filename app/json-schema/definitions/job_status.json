@@ -1,4 +1,5 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.JobStatus",
     "properties": {
         "name": {
             "$ref": "job_status_name.json"

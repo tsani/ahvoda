@@ -1,4 +1,5 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.Business",
     "additionalProperties": false,
     "type": "object",
     "properties": {

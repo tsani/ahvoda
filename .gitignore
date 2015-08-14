@@ -11,3 +11,4 @@ __pycache__
 /docs/visualization
 /app/static/css
 /app/bower_components
+/java/pojos

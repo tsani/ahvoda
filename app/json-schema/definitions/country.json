@@ -1,3 +1,4 @@
 {
+    "javaType": "com.ahvoda.ahvodacontractor.api.basemodels.Country",
     "$ref": "named_id.json"
 }
