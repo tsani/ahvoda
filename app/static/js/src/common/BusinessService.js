@@ -63,8 +63,11 @@ function BusinessService($q, $http) {
     };
 
     srv.getBusinessManagers = function(businessId) {
-        return $http.get('/api/businesses/' + businessId + '/managers')
-            .then(function(response) {
+        return $http.get('/api/managers', {
+            params: {
+                business: businessId
+            }
+        }).then(function(response) {
                 return response.data;
             });
     };

@@ -60,7 +60,34 @@ def get_managed_businesses(manager_name, login):
         endpoints['manager']['collection'].handles_action('GET'),
 )
 def get_managers(login):
+    app.logger.debug('getting managers')
     managers = models.accounts.Manager.query.all()
+
+    try:
+        business_id = request.args['business']
+        business_id = int(business_id)
+    except AttributeError:
+        pass
+    except ValueError:
+        return util.json_die(
+                'Invalid business identifier "%s".' % (
+                    business_id,
+                ),
+                400,
+        )
+    else:
+        # TODO refactor this to use a JOIN in the database.
+        managers = [
+                m
+                for m
+                in managers
+                if any(
+                    b.id == business_id
+                    for b
+                    in m.businesses
+                )
+        ]
+
     return jsonify(
             [
                 m.to_dict()

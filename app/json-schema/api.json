@@ -427,7 +427,7 @@
                                     "type": "object",
                                     "properties": {
                                         "business": {
-                                            "$ref": "definitions/id.json"
+                                            "type": "string"
                                         }
                                     },
                                     "additionalProperties": false
@@ -438,6 +438,9 @@
                                         "items": {
                                             "$ref": "definitions/manager.json"
                                         }
+                                    },
+                                    "400": {
+                                        "$ref": "#/errors/message"
                                     }
                                 }
                             },
