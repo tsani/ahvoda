@@ -58,6 +58,7 @@ function businessAppConfig($stateProvider, $urlRouterProvider) {
                 ]
             },
             controller: [
+                'BusinessService',
                 'UtilityService',
                 'businesses',
                 ListingsListCtrl

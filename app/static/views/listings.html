@@ -63,6 +63,30 @@
                         </div>
                         <div ng-if='!listing.employee'>
                             <strong>No contractor is assigned yet.</strong>
+                            <div ng-if='listing.applicants'>
+                                <h4> Applicants </h4>
+                                <ul class='flat'>
+                                    <li class='listing-applicant' 
+                                            ng-repeat='applicant in listing.applicants'>
+                                        <div class='listing-header'>
+                                            <div>
+                                                <h5> {{ applicant.human.first_name }} {{ applicant.human.last_name }} </h5>
+                                            </div>
+                                            <div>
+                                                <button ng-click='vm.approveApplicant(listing, applicant)'>
+                                                    Approve
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <ul class='flat'>
+                                            <li<i class='fa fa-phone'></i> {{ applicant.human.contact_info.phone_number }} </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                            </div>
+                            <div ng-if='!listing.applicants'>
+                                <strong>No one has applied yet.</strong>
+                            </div>
                         </div>
                     </div>
                 </dd>
