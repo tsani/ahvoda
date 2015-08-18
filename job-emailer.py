@@ -1,12 +1,12 @@
 from redis import StrictRedis
 from smtplib import SMTP
-from secret_config import JOB_MAILER
+from secret_config import JOB_MAILER, REDIS
 
 import json, sys
 
 from datetime import datetime
 
-redis = StrictRedis()
+redis = StrictRedis(**REDIS)
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)

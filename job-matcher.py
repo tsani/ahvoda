@@ -1,5 +1,5 @@
 from redis import StrictRedis
-from secret_config import JOB_MATCHER, JOB_DISPATCHER
+from secret_config import JOB_MATCHER, JOB_DISPATCHER, REDIS
 
 import json, sys
 
@@ -9,7 +9,7 @@ from app import db, models
 
 from sqlalchemy.exc import IntegrityError
 
-redis = StrictRedis()
+redis = StrictRedis(**REDIS)
 
 def trivial_match_strategy(job, employee):
     """ The trivial match strategy matches every job with every employee.  """

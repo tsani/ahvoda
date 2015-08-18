@@ -1,5 +1,5 @@
 from redis import StrictRedis
-from secret_config import JOB_DISPATCHER, GOOGLE_API_KEY
+from secret_config import JOB_DISPATCHER, REDIS, GOOGLE_API_KEY
 
 import json, sys, requests
 
@@ -7,7 +7,7 @@ from datetime import datetime
 
 from app import db, models
 
-redis = StrictRedis()
+redis = StrictRedis(**REDIS)
 
 GCM_URL = 'https://gcm-http.googleapis.com/gcm/send'
 
